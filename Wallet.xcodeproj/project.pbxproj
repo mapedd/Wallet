@@ -17,6 +17,11 @@
 		04CCED7E28C2879800C68DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED5428C2879600C68DB8 /* ContentView.swift */; };
 		04CCED7F28C2879800C68DB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04CCED5528C2879800C68DB8 /* Assets.xcassets */; };
 		04CCED8028C2879800C68DB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04CCED5528C2879800C68DB8 /* Assets.xcassets */; };
+		04CCED9128C2881C00C68DB8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 04CCED9028C2881C00C68DB8 /* ComposableArchitecture */; };
+		04CCED9328C28E8D00C68DB8 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED9228C28E8D00C68DB8 /* EditorView.swift */; };
+		04CCED9428C28E8D00C68DB8 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED9228C28E8D00C68DB8 /* EditorView.swift */; };
+		04CCED9628C2AD6C00C68DB8 /* RecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED9528C2AD6C00C68DB8 /* RecordListView.swift */; };
+		04CCED9728C2AD6C00C68DB8 /* RecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED9528C2AD6C00C68DB8 /* RecordListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +54,8 @@
 		04CCED7328C2879800C68DB8 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04CCED7728C2879800C68DB8 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		04CCED7928C2879800C68DB8 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		04CCED9228C28E8D00C68DB8 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		04CCED9528C2AD6C00C68DB8 /* RecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04CCED9128C2881C00C68DB8 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +107,8 @@
 			children = (
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
+				04CCED9228C28E8D00C68DB8 /* EditorView.swift */,
+				04CCED9528C2AD6C00C68DB8 /* RecordListView.swift */,
 				04CCED5528C2879800C68DB8 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -157,6 +167,9 @@
 			dependencies = (
 			);
 			name = "Wallet (iOS)";
+			packageProductDependencies = (
+				04CCED9028C2881C00C68DB8 /* ComposableArchitecture */,
+			);
 			productName = "Wallet (iOS)";
 			productReference = 04CCED5A28C2879800C68DB8 /* Wallet.app */;
 			productType = "com.apple.product-type.application";
@@ -249,6 +262,9 @@
 				Base,
 			);
 			mainGroup = 04CCED4D28C2879600C68DB8;
+			packageReferences = (
+				04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = 04CCED5B28C2879800C68DB8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -299,6 +315,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04CCED9328C28E8D00C68DB8 /* EditorView.swift in Sources */,
+				04CCED9628C2AD6C00C68DB8 /* RecordListView.swift in Sources */,
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
 			);
@@ -308,6 +326,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04CCED9428C28E8D00C68DB8 /* EditorView.swift in Sources */,
+				04CCED9728C2AD6C00C68DB8 /* RecordListView.swift in Sources */,
 				04CCED7E28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7C28C2879800C68DB8 /* WalletApp.swift in Sources */,
 			);
@@ -701,6 +721,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.34.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		04CCED9028C2881C00C68DB8 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 04CCED4E28C2879600C68DB8 /* Project object */;
 }
