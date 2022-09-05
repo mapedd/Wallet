@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 struct EditorState: Equatable {
     @BindableState var text = "New Record"
+    @BindableState var amount = "$0.00"
     @BindableState var isExpense = true
     var addButtonDisabled = false
 }
@@ -26,7 +27,7 @@ struct EditorEnvironment {
 let editorReducer = Reducer<EditorState, EditorAction, EditorEnvironment> { state, action, _ in
     switch action {
     case .binding(\.$text):
-        state.addButtonDisabled = state.text.isEmpty
+        state.addButtonDisabled = state.text.isEmpty && Decimal(string: state.amount) != nil
         return .none
     case .addButtonTapped:
         return .none
@@ -41,6 +42,12 @@ struct EditorView: View {
     var body: some View {
         WithViewStore(self.store) { viewStore in
             VStack {
+                TextField(
+                    "Amount",
+                    text: viewStore.binding(\.$amount)
+                )
+                .padding()
+
                 HStack {
                     TextField(
                         "Untitled Todo",

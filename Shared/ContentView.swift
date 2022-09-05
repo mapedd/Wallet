@@ -86,7 +86,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
                     date: .init(),
                     title: state.editorState.text,
                     type: state.editorState.isExpense ? .expense : .income,
-                    amount: Decimal(123),
+                    amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
                     currency: .pln
                 )
                 state.recordListState.records.append(newRecord)

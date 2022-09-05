@@ -27,13 +27,29 @@ let recordListReducer = Reducer<RecordListState, RecordListAction, RecordListEnv
 
 struct RecordListView: View {
     var store: Store<RecordListState, RecordListAction>
+
     var body: some View {
         WithViewStore(self.store) { viewStore in
             List(viewStore.records) {
-                Text("\($0.title)")
+                Text($0.formattedCopy)
                     .foregroundColor($0.type == .income ? .green : .red)
             }
         }
+    }
+}
+
+let formatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.maximumFractionDigits = 2
+    formatter.minimumFractionDigits = 2
+    formatter.currencyCode = "USD"
+    formatter.numberStyle = .currency
+    return formatter
+}()
+
+extension MoneyRecord {
+    var formattedCopy : String {
+        "\(formatter.string(for: amount) ?? "") - \(title)"
     }
 }
 
