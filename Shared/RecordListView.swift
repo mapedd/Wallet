@@ -21,8 +21,12 @@ struct RecordListEnvironment {
 }
 
 
-let recordListReducer = Reducer<RecordListState, RecordListAction, RecordListEnvironment> { state, action, _ in
-        .none
+let recordListReducer = Reducer<
+    RecordListState,
+    RecordListAction,
+    RecordListEnvironment>
+{ state, action, _ in
+    return .none
 }
 
 struct RecordListView: View {

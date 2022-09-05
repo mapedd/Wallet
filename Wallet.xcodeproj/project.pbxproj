@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0421FC2D28C697A600487827 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0421FC2C28C697A600487827 /* SummaryView.swift */; };
+		0421FC2E28C697A600487827 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0421FC2C28C697A600487827 /* SummaryView.swift */; };
 		04CCED6C28C2879800C68DB8 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED6B28C2879800C68DB8 /* Tests_iOS.swift */; };
 		04CCED6E28C2879800C68DB8 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED6D28C2879800C68DB8 /* Tests_iOSLaunchTests.swift */; };
 		04CCED7828C2879800C68DB8 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED7728C2879800C68DB8 /* Tests_macOS.swift */; };
@@ -42,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0421FC2C28C697A600487827 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		04CCED5328C2879600C68DB8 /* WalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		04CCED5428C2879600C68DB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		04CCED5528C2879800C68DB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,6 +110,7 @@
 			children = (
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
+				0421FC2C28C697A600487827 /* SummaryView.swift */,
 				04CCED9228C28E8D00C68DB8 /* EditorView.swift */,
 				04CCED9528C2AD6C00C68DB8 /* RecordListView.swift */,
 				04CCED5528C2879800C68DB8 /* Assets.xcassets */,
@@ -317,6 +321,7 @@
 			files = (
 				04CCED9328C28E8D00C68DB8 /* EditorView.swift in Sources */,
 				04CCED9628C2AD6C00C68DB8 /* RecordListView.swift in Sources */,
+				0421FC2D28C697A600487827 /* SummaryView.swift in Sources */,
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
 			);
@@ -328,6 +333,7 @@
 			files = (
 				04CCED9428C28E8D00C68DB8 /* EditorView.swift in Sources */,
 				04CCED9728C2AD6C00C68DB8 /* RecordListView.swift in Sources */,
+				0421FC2E28C697A600487827 /* SummaryView.swift in Sources */,
 				04CCED7E28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7C28C2879800C68DB8 /* WalletApp.swift in Sources */,
 			);

@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct EditorState: Equatable {
     @BindableState var text = "New Record"
-    @BindableState var amount = "$0.00"
+    @BindableState var amount = "0.00"
     @BindableState var isExpense = true
     var addButtonDisabled = false
 }
