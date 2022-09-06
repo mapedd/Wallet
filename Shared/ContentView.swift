@@ -96,7 +96,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
           id: .init(),
           date: .init(),
           title: state.editorState.text,
-          type: state.editorState.isExpense ? .expense : .income,
+          type: state.editorState.recordType,
           amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
           currency: .pln
         )
@@ -149,6 +149,8 @@ struct MainView : View {
             action: MainAction.editorAction
           )
         )
+        .padding(20)
+
           List {
             ForEachStore(
               self.store.scope(state: \.records, action: MainAction.recordAction(id:action:))
