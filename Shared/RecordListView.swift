@@ -8,36 +8,37 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct RecordListState: Equatable {
-    var records: IdentifiedArrayOf<MoneyRecord> = []
+struct RecordState: Equatable, Identifiable {
+    var record: MoneyRecord
+    var id: UUID {
+        record.id
+    }
 }
 
-enum RecordListAction: Equatable {
+enum RecordAction: Equatable {
+   case deleteItem
+}
+
+struct RecordEnvironment {
 
 }
 
-struct RecordListEnvironment {
 
-}
-
-
-let recordListReducer = Reducer<
-    RecordListState,
-    RecordListAction,
-    RecordListEnvironment>
+let recordReducer = Reducer<
+    RecordState,
+    RecordAction,
+    RecordEnvironment>
 { state, action, _ in
     return .none
 }
 
-struct RecordListView: View {
-    var store: Store<RecordListState, RecordListAction>
+struct RecordView: View {
+    var store: Store<RecordState, RecordAction>
 
     var body: some View {
         WithViewStore(self.store) { viewStore in
-            List(viewStore.records) {
-                Text($0.formattedCopy)
-                    .foregroundColor($0.type == .income ? .green : .red)
-            }
+            Text(viewStore.record.formattedCopy)
+                .foregroundColor(viewStore.record.type == .income ? .green : .red)
         }
     }
 }
@@ -57,30 +58,22 @@ extension MoneyRecord {
     }
 }
 
-struct RecordListView_Previews: PreviewProvider {
+struct RecordView_Previews: PreviewProvider {
     static var previews: some View {
-        RecordListView(
+        RecordView(
             store: .init(
-                initialState: .init(records: [
-                    .init(
+                initialState: .init(
+                    record: .init(
                         id: .init(),
                         date: .init(),
-                        title: "Record 0",
-                        type: .income,
+                        title: "Record",
+                        type: .expense,
                         amount: Decimal(123),
                         currency: .usd
-                    ),
-                    .init(
-                        id: .init(),
-                        date: .init(),
-                        title: "Record 1",
-                        type: .expense,
-                        amount: Decimal(233),
-                        currency: .usd
                     )
-                ]),
-                reducer: recordListReducer,
-                environment: RecordListEnvironment()
+                ),
+                reducer: recordReducer,
+                environment: RecordEnvironment()
             )
         )
     }

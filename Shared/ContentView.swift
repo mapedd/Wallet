@@ -16,8 +16,9 @@ struct ContentView: View {
         store: .init(
           initialState: .init(
             editorState: .init(),
-            recordListState: .init(),
-            summaryState: .init()
+            records: [],
+            summaryState: .init(),
+            title: "Wallet"
           ),
           reducer: mainReducer,
           environment: MainEnvironment()
@@ -49,17 +50,19 @@ enum Currency: Equatable {
 
 struct MainState: Equatable {
   var editorState: EditorState
-  var recordListState: RecordListState
+  var records: IdentifiedArrayOf<RecordState>
   var summaryState: SummaryViewState
-  //    var title: String
-  //    var editMode: EditMode = .inactive
-
+  var title: String
+  var editMode: EditMode = .inactive
 }
 
 enum MainAction: Equatable {
   case editorAction(EditorAction)
-  case recordListAction(RecordListAction)
+  case recordAction(id: RecordState.ID, action: RecordAction)
   case summaryAction(SummaryViewAction)
+  case editModeChanged(EditMode)
+  case delete(IndexSet)
+  case move(IndexSet, Int)
 }
 
 struct MainEnvironment {
@@ -67,17 +70,16 @@ struct MainEnvironment {
 }
 
 let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
+    recordReducer.forEach(
+      state: \.records,
+      action: /MainAction.recordAction(id:action:),
+      environment: { _ in RecordEnvironment() }
+    ),
   editorReducer
     .pullback(
       state: \.editorState,
       action: /MainAction.editorAction,
       environment: { _ in EditorEnvironment() }
-    ),
-  recordListReducer
-    .pullback(
-      state: \.recordListState,
-      action: /MainAction.recordListAction,
-      environment: { _ in RecordListEnvironment() }
     ),
   summaryViewReducer
     .pullback(
@@ -98,10 +100,11 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
           amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
           currency: .pln
         )
-        state.recordListState.records.append(newRecord)
 
-        let sum = state.recordListState.records.reduce(Decimal.zero, { partialResult, record in
-          record.amount + partialResult
+        state.records.append(RecordState(record: newRecord))
+
+        let sum = state.records.reduce(Decimal.zero, { partialResult, recordState in
+            recordState.record.amount + partialResult
         })
 
         state.summaryState.total = sum
@@ -112,6 +115,23 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
         return .none
       }
 
+    case let .editModeChanged(editMode):
+      state.editMode = editMode
+      return .none
+    case let .delete(indexSet):
+      state.records.remove(atOffsets: indexSet)
+      return .none
+    case var .move(source, destination):
+      let source = IndexSet(
+        source
+          .map { state.records[$0] }
+          .compactMap { state.records.index(id: $0.id) }
+      )
+      let destination =
+        state.records.index(id: state.records[destination].id)
+        ?? destination
+      state.records.move(fromOffsets: source, toOffset: destination)
+        return .none
     default:
       return .none
     }
@@ -129,12 +149,15 @@ struct MainView : View {
             action: MainAction.editorAction
           )
         )
-        RecordListView(
-          store: self.store.scope(
-            state: \.recordListState,
-            action: MainAction.recordListAction
-          )
-        )
+          List {
+            ForEachStore(
+              self.store.scope(state: \.records, action: MainAction.recordAction(id:action:))
+            ) {
+              RecordView(store: $0)
+            }
+            .onDelete { viewStore.send(.delete($0)) }
+            .onMove { viewStore.send(.move($0, $1)) }
+          }
         SummaryView(
           store: self.store.scope(
             state: \.summaryState,
@@ -142,6 +165,17 @@ struct MainView : View {
           )
         )
       }
+      .toolbar(content: {
+        EditButton()
+      })
+      .environment(
+        \.editMode,
+        viewStore.binding(
+          get: \.editMode,
+          send: MainAction.editModeChanged
+        )
+      )
+      .navigationTitle(viewStore.title)
     }
   }
 }
