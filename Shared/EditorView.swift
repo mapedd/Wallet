@@ -25,6 +25,25 @@ struct EditorState: Equatable {
 
 }
 
+extension MoneyRecord.RecordType {
+  var color: UIColor {
+    switch self {
+    case .income:
+      return .green
+    case .expense:
+      return .red
+    }
+  }
+  var name: String {
+    switch self {
+    case .income:
+      return "arrow.down.square.fill"
+    case .expense:
+      return "arrow.up.square.fill"
+    }
+  }
+}
+
 enum EditorAction:BindableAction, Equatable {
   case binding(BindingAction<EditorState>)
   case changeRecordType(MoneyRecord.RecordType)
@@ -55,7 +74,7 @@ struct EditorView: View {
   var store: Store<EditorState, EditorAction>
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      VStack {
+      VStack(spacing: 4) {
         HStack {
           amountTextField(viewStore)
           addButton(viewStore)
@@ -87,6 +106,8 @@ struct EditorView: View {
       viewStore.send(.addButtonTapped)
     } label: {
       Text("Add")
+        .font(.title)
+        .bold()
     }.disabled(viewStore.addButtonDisabled)
   }
 
@@ -105,15 +126,23 @@ struct EditorView: View {
         send: EditorAction.changeRecordType
       )
     ) {
-      Image(systemName: "arrow.up.square.fill")
-        .tint(.red)
-        .tag(MoneyRecord.RecordType.expense)
-
-      Image(systemName: "arrow.down.square.fill")
-        .tint(.green)
-        .tag(MoneyRecord.RecordType.income)
+      imageView(record: .expense)
+      imageView(record: .income)
     }
     .pickerStyle(.segmented)
+  }
+
+  func config(color: UIColor) -> UIImage.SymbolConfiguration {
+    UIImage.SymbolConfiguration(paletteColors: [color])
+  }
+
+  func imageView(
+    record: MoneyRecord.RecordType
+  ) -> some View {
+    Image(uiImage: UIImage(systemName: record.name, withConfiguration:config(color: record.color))!)
+      .renderingMode(.template)
+      .foregroundColor(Color(record.color))
+      .tag(record)
   }
 }
 
