@@ -70,18 +70,18 @@ struct MainEnvironment {
 }
 
 let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
-    recordReducer.forEach(
-      state: \.records,
-      action: /MainAction.recordAction(id:action:),
-      environment: { _ in RecordEnvironment() }
-    ),
+  recordReducer.forEach(
+    state: \.records,
+    action: /MainAction.recordAction(id:action:),
+    environment: { _ in RecordEnvironment() }
+  ),
   editorReducer
     .pullback(
       state: \.editorState,
       action: /MainAction.editorAction,
       environment: { _ in EditorEnvironment() }
     ),
-  summaryViewReducer
+  summaryReducer
     .pullback(
       state: \.summaryState,
       action: /MainAction.summaryAction,
@@ -104,7 +104,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
         state.records.append(RecordState(record: newRecord))
 
         let sum = state.records.reduce(Decimal.zero, { partialResult, recordState in
-            recordState.record.amount + partialResult
+          recordState.record.amount + partialResult
         })
 
         state.summaryState.total = sum
@@ -128,10 +128,10 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
           .compactMap { state.records.index(id: $0.id) }
       )
       let destination =
-        state.records.index(id: state.records[destination].id)
-        ?? destination
+      state.records.index(id: state.records[destination].id)
+      ?? destination
       state.records.move(fromOffsets: source, toOffset: destination)
-        return .none
+      return .none
     default:
       return .none
     }
@@ -151,15 +151,15 @@ struct MainView : View {
         )
         .padding(20)
 
-          List {
-            ForEachStore(
-              self.store.scope(state: \.records, action: MainAction.recordAction(id:action:))
-            ) {
-              RecordView(store: $0)
-            }
-            .onDelete { viewStore.send(.delete($0)) }
-            .onMove { viewStore.send(.move($0, $1)) }
+        List {
+          ForEachStore(
+            self.store.scope(state: \.records, action: MainAction.recordAction(id:action:))
+          ) {
+            RecordView(store: $0)
           }
+          .onDelete { viewStore.send(.delete($0)) }
+          .onMove { viewStore.send(.move($0, $1)) }
+        }
         SummaryView(
           store: self.store.scope(
             state: \.summaryState,
@@ -172,10 +172,10 @@ struct MainView : View {
       })
       .environment(
         \.editMode,
-        viewStore.binding(
+         viewStore.binding(
           get: \.editMode,
           send: MainAction.editModeChanged
-        )
+         )
       )
       .navigationTitle(viewStore.title)
     }
