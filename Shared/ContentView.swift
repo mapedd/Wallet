@@ -56,7 +56,7 @@ struct MainState: Equatable {
   var editMode: EditMode = .inactive
 }
 
-enum MainAction: Equatable {
+enum MainAction {
   case editorAction(EditorAction)
   case recordAction(id: RecordState.ID, action: RecordAction)
   case summaryAction(SummaryViewAction)
@@ -70,7 +70,7 @@ struct MainEnvironment {
 }
 
 let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
-  recordReducer.forEach(
+  combinedRecordReducer.forEach(
     state: \.records,
     action: /MainAction.recordAction(id:action:),
     environment: { _ in RecordEnvironment() }

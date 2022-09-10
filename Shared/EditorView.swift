@@ -13,7 +13,7 @@ struct EditorState: Equatable {
   @BindableState var amount = "0.00"
   var currencySymbol = "$"
   @BindableState var recordType = MoneyRecord.RecordType.expense
-  var addButtonDisabled = false
+  var addButtonDisabled = true
 
   static let preview = Self.init(
     text: "Buying groceries",
@@ -54,10 +54,19 @@ struct EditorEnvironment {
 
 }
 
+extension EditorState {
+  static func addButtonDisabled(_ state: EditorState) -> Bool {
+    state.text.isEmpty && Decimal(string: state.amount) != nil
+  }
+}
+
 let editorReducer = Reducer<EditorState, EditorAction, EditorEnvironment> { state, action, _ in
   switch action {
   case .binding(\.$text):
-    state.addButtonDisabled = state.text.isEmpty && Decimal(string: state.amount) != nil
+    state.addButtonDisabled = EditorState.addButtonDisabled(state)
+    return .none
+  case .binding(\.$amount):
+    state.addButtonDisabled = EditorState.addButtonDisabled(state)
     return .none
   case .addButtonTapped:
     return .none
