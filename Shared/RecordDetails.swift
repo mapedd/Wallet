@@ -90,21 +90,42 @@ struct RecordDetailsView: View {
       NavigationView {
         ScrollView {
           VStack {
+            title(viewStore)
             amount(viewStore)
-            Text(viewStore.date.formatted())
           }
         }
+        .padding()
+        .navigationTitle(Text(viewStore.date.formatted()))
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationViewStyle(.stack)
       }
+
     }
   }
 
   func amount(_ viewStore: ViewStore<RecordDetailsState.RenderableState, RecordDetailsAction.RenderableAction>) -> some View {
     HStack(spacing: 0) {
-      Text(viewStore.title)
+      Text("Amount")
         .font(.title)
         .monospacedDigit()
       TextField(
-        "Amount",
+        "amount",
+        text: viewStore.binding(\.$amount)
+      )
+      .font(.title)
+      .monospacedDigit()
+      .keyboardType(.decimalPad)
+      .padding()
+    }
+  }
+
+  func title(_ viewStore: ViewStore<RecordDetailsState.RenderableState, RecordDetailsAction.RenderableAction>) -> some View {
+    HStack(spacing: 0) {
+      Text("Title")
+        .font(.title)
+        .monospacedDigit()
+      TextField(
+        "title",
         text: viewStore.binding(\.$title)
       )
       .font(.title)
