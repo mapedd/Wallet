@@ -11,6 +11,29 @@ import ComposableArchitecture
 struct RecordDetailsState: Equatable {
   var record: MoneyRecord
 
+  struct RenderableState: Equatable {
+    @BindableState var amount: String
+    @BindableState var title: String
+    @BindableState var date: Date
+  }
+
+  var renderableState: RenderableState {
+    set {
+      self.record.amount = Decimal(string: newValue.amount) ?? .zero
+      self.record.title = newValue.title
+      self.record.date = newValue.date
+    }
+    get {
+      .init(
+        amount: record.amount.formatted(),
+        title: record.title,
+        date: record.date
+      )
+    }
+  }
+
+
+
   static let preview = RecordDetailsState(
     record: .init(
       id: .init(),
@@ -24,7 +47,21 @@ struct RecordDetailsState: Equatable {
 }
 
 
-enum RecordDetailsAction {
+enum RecordDetailsAction: BindableAction {
+
+  case binding(BindingAction<RecordDetailsState>)
+
+  static func view(_ viewAction: RenderableAction) -> Self {
+    switch viewAction {
+    case let .binding(action):
+      return .binding(action.pullback(\.renderableState))
+    }
+  }
+
+
+  enum RenderableAction: BindableAction {
+    case binding(BindingAction<RecordDetailsState.RenderableState>)
+  }
 
 }
 
@@ -41,20 +78,39 @@ let recordDetailsReducer = Reducer
 { state, action , _ in
   return .none
 }
+.binding()
 
 struct RecordDetailsView: View {
   var store: Store<RecordDetailsState, RecordDetailsAction>
 
   var body: some View {
-    WithViewStore(self.store) { viewStore in
+    WithViewStore(
+      self.store, observe: \.renderableState, send: RecordDetailsAction.view
+    ) { viewStore in
       NavigationView {
         ScrollView {
           VStack {
-            Text(viewStore.record.title)
-            Text(viewStore.record.date.formatted())
+            amount(viewStore)
+            Text(viewStore.date.formatted())
           }
         }
       }
+    }
+  }
+
+  func amount(_ viewStore: ViewStore<RecordDetailsState.RenderableState, RecordDetailsAction.RenderableAction>) -> some View {
+    HStack(spacing: 0) {
+      Text(viewStore.title)
+        .font(.title)
+        .monospacedDigit()
+      TextField(
+        "Amount",
+        text: viewStore.binding(\.$title)
+      )
+      .font(.title)
+      .monospacedDigit()
+      .keyboardType(.decimalPad)
+      .padding()
     }
   }
 }

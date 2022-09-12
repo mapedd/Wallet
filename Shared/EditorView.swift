@@ -44,7 +44,7 @@ extension MoneyRecord.RecordType {
   }
 }
 
-enum EditorAction:BindableAction, Equatable {
+enum EditorAction:BindableAction {
   case binding(BindingAction<EditorState>)
   case changeRecordType(MoneyRecord.RecordType)
   case addButtonTapped

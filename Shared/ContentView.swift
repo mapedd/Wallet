@@ -33,15 +33,15 @@ struct MoneyRecord: Equatable, Identifiable {
     case income
     case expense
   }
-  let id: UUID
-  let date: Date
-  let title: String
-  let type: RecordType
-  let amount: Decimal
-  let currency: Currency
+  var id: UUID
+  var date: Date
+  var title: String
+  var type: RecordType
+  var amount: Decimal
+  var currency: Currency
 }
 
-enum Currency: Equatable {
+enum Currency: String, Equatable {
   case pln
   case usd
   case eur
