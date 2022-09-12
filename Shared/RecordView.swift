@@ -42,6 +42,9 @@ let recordReducer = Reducer<
     state.details = .init(record: state.record)
     return .none
   case .setSheet(isPresented: false):
+    if let updatedRecord = state.details?.record {
+      state.record = updatedRecord
+    }
     state.details = nil
     return .none
   default:
