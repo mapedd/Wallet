@@ -23,6 +23,12 @@ struct MainState: Equatable {
   var summaryState: SummaryViewState
   var title: String
   var editMode: EditMode = .inactive
+  var statistics: StatisticsState?
+
+  var showStatistics: Bool {
+    statistics != nil
+  }
+
 }
 
 enum MainAction {
@@ -32,6 +38,9 @@ enum MainAction {
   case editModeChanged(MainState.EditMode)
   case delete(IndexSet)
   case move(IndexSet, Int)
+  case statisticsAction(StatisticsAction)
+  case showStatistics
+  case hideStatistics
 }
 
 struct MainEnvironment {
@@ -55,6 +64,13 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       state: \.summaryState,
       action: /MainAction.summaryAction,
       environment: { _ in SummaryViewEnvironment() }
+    ),
+  statisticsReducer
+    .optional()
+    .pullback(
+      state: \.statistics,
+      action: /MainAction.statisticsAction,
+      environment:{ _ in  StatisticsEnvironment() }
     ),
   .init { state, action, _ in
     switch action {
@@ -107,6 +123,27 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       ?? destination
       state.records.move(fromOffsets: source, toOffset: destination)
       return .none
+
+    case .showStatistics:
+
+      state.statistics = .init(records: state.records)
+      return .none
+    case .hideStatistics:
+      state.statistics = nil
+      return .none
+
+    case .summaryAction(let summaryAction):
+      switch summaryAction {
+      case .showSummaryButtonTapped:
+        return .task {
+          return .showStatistics
+        }
+      case .hideSummary:
+        return .task {
+          return .hideStatistics
+        }
+      }
+
     default:
       return .none
     }

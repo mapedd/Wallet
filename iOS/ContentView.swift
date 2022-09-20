@@ -16,7 +16,7 @@ struct ContentView: View {
         store: .init(
           initialState: .init(
             editorState: .init(),
-            records: IdentifiedArray(uniqueElements: RecordState.sample),
+            records: [],//IdentifiedArray(uniqueElements: RecordState.sample),
             summaryState: .init(),
             title: "Wallet"
           ),

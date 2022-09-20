@@ -47,6 +47,21 @@ struct MainView : View {
       .toolbar(content: {
         EditButton()
       })
+      .sheet(
+        isPresented: viewStore.binding(
+          get: \.showStatistics,
+          send: { $0 ? MainAction.showStatistics : MainAction.hideStatistics }
+        )
+      ) {
+        IfLetStore(
+          self.store.scope(
+            state: \.statistics,
+            action: MainAction.statisticsAction
+          )
+        ) {
+          StatisticsView(store: $0)
+        }
+      }
       .environment(
         \.editMode,
          viewStore.binding(

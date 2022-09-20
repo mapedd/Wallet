@@ -32,21 +32,6 @@ struct SummaryView: View {
             }
           }
         )
-        .sheet(
-          isPresented: viewStore.binding(
-            get: \.showStatistics,
-            send: { $0 ? .showSummaryButtonTapped : .hideSummary }
-          )
-        ) {
-          IfLetStore(
-            self.store.scope(
-              state: \.statistics,
-              action: SummaryViewAction.statisticsAction
-            )
-          ) {
-            StatisticsView(store: $0)
-          }
-        }
       }
       .padding()
     }

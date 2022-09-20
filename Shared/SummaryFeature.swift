@@ -9,31 +9,17 @@ import Foundation
 import ComposableArchitecture
 
 struct SummaryViewState: Equatable {
-  var statistics: StatisticsState?
-  var showStatistics: Bool {
-    statistics != nil
-  }
   var total = Decimal.zero
 }
 
 enum SummaryViewAction {
   case showSummaryButtonTapped
   case hideSummary
-  case statisticsAction(StatisticsAction)
 }
 
 struct SummaryViewEnvironment {}
 
-let summaryReducer = statisticsReducer
-  .optional()
-  .pullback(
-    state: \.statistics,
-    action: /SummaryViewAction.statisticsAction,
-    environment:{ _ in  StatisticsEnvironment() }
-  )
-  .combined(with: summaryViewReducer)
-
-let summaryViewReducer = Reducer
+let summaryReducer = Reducer
 <
   SummaryViewState,
   SummaryViewAction,
@@ -41,12 +27,8 @@ let summaryViewReducer = Reducer
 > { state, action, _ in
   switch action {
   case .showSummaryButtonTapped:
-    state.statistics = .init(records: [])
     return .none
   case .hideSummary:
-    state.statistics = nil
-    return .none
-  default:
     return .none
   }
 }
