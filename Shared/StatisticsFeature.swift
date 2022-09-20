@@ -27,8 +27,6 @@ struct StatisticsState: Equatable {
   var showDateFilter = false
 
   var formattedFilteredTotal: String {
-//    let currency = records.first?.record.currency.rawValue ?? ""
-//    return "\(currency) \(filteredTotal.formattedDecimalValue)"
     return filteredTotal.formattedDecimalValue
   }
 
@@ -181,7 +179,7 @@ struct StatisticsEnvironment {
 
 }
 
-let statisticsReducer = Reducer
+let statisticsCoreReducer = Reducer
 <
   StatisticsState,
   StatisticsAction,
@@ -197,4 +195,18 @@ let statisticsReducer = Reducer
     state.dateFilter = filter
     return .none
   }
-}.debug()
+}
+
+let statisticsReducer = Reducer
+<
+  StatisticsState,
+  StatisticsAction,
+  StatisticsEnvironment
+>.combine(
+combinedRecordReducer.forEach(
+  state: \.records,
+  action: /StatisticsAction.recordAction(id:action:),
+  environment: { _ in RecordEnvironment() }
+),
+statisticsCoreReducer
+)

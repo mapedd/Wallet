@@ -11,6 +11,24 @@ import ComposableArchitecture
 
 
 struct MainState: Equatable {
+  init(
+    editorState: EditorState,
+    records: IdentifiedArrayOf<RecordState>,
+    summaryState: SummaryViewState,
+    title: String,
+    editMode: MainState.EditMode = .inactive,
+    statistics: StatisticsState? = nil
+  ) {
+    self.editorState = editorState
+    self.records = records
+    self.summaryState = summaryState
+    self.title = title
+    self.editMode = editMode
+    self.statistics = statistics
+
+    recalculateTotal()
+  }
+
 
   enum EditMode: Equatable {
     case inactive
@@ -27,6 +45,20 @@ struct MainState: Equatable {
 
   var showStatistics: Bool {
     statistics != nil
+  }
+
+  mutating func recalculateTotal() {
+    let sum = self.records.reduce(Decimal.zero, { partialResult, recordState in
+      if recordState.record.type == .expense {
+        return partialResult - recordState.record.amount
+      } else if recordState.record.type == .income {
+        return partialResult + recordState.record.amount
+      } else {
+        fatalError("not handled record type")
+      }
+    })
+
+    self.summaryState.total = sum
   }
 
 }
@@ -88,17 +120,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
 
         state.records.append(RecordState(record: newRecord))
 
-        let sum = state.records.reduce(Decimal.zero, { partialResult, recordState in
-          if recordState.record.type == .expense {
-            return partialResult - recordState.record.amount
-          } else if recordState.record.type == .income {
-            return partialResult + recordState.record.amount
-          } else {
-            fatalError("not handled record type")
-          }
-        })
-
-        state.summaryState.total = sum
+        state.recalculateTotal()
 
         state.editorState = .init()
         return .none
@@ -111,6 +133,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       return .none
     case let .delete(indexSet):
       state.records.remove(atOffsets: indexSet)
+      state.recalculateTotal()
       return .none
     case var .move(source, destination):
       let source = IndexSet(
@@ -129,6 +152,9 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       state.statistics = .init(records: state.records)
       return .none
     case .hideStatistics:
+      if let records = state.statistics?.records {
+        state.records = records
+      }
       state.statistics = nil
       return .none
 

@@ -49,15 +49,26 @@ struct StatisticsView: View {
         }
         .padding()
 
-        List(viewStore.filtered) { record in
-          RecordView(
-            store: .init(
-              initialState: record,
-              reducer: recordReducer,
-              environment: RecordEnvironment()
+        List {
+          ForEachStore(
+            self.store.scope(
+              state: \.filtered,
+              action: StatisticsAction.recordAction(id:action:)
             )
-          )
+          ) {
+            RecordView(store: $0)
+          }
         }
+
+//        List(viewStore.filtered) { record in
+//          RecordView(
+//            store: .init(
+//              initialState: record,
+//              reducer: recordReducer,
+//              environment: RecordEnvironment()
+//            )
+//          )
+//        }
       }
     }
   }
