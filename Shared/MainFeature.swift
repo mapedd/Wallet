@@ -73,7 +73,13 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
         state.records.append(RecordState(record: newRecord))
 
         let sum = state.records.reduce(Decimal.zero, { partialResult, recordState in
-          recordState.record.amount + partialResult
+          if recordState.record.type == .expense {
+            return partialResult - recordState.record.amount
+          } else if recordState.record.type == .income {
+            return partialResult + recordState.record.amount
+          } else {
+            fatalError("not handled record type")
+          }
         })
 
         state.summaryState.total = sum

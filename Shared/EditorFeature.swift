@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 struct EditorState: Equatable {
-  @BindableState var text = "New Record"
+  @BindableState var text = "New Record title"
   @BindableState var amount = "0.00"
   var currencySymbol = "$"
   @BindableState var recordType = MoneyRecord.RecordType.expense

@@ -28,6 +28,7 @@
 		04AB3E9E28D79CE400C327A4 /* SummaryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9C28D79CE400C327A4 /* SummaryFeature.swift */; };
 		04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9F28D79CFF00C327A4 /* MainView.swift */; };
 		04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */; };
+		04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */; };
 		04CCED6C28C2879800C68DB8 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED6B28C2879800C68DB8 /* Tests_iOS.swift */; };
 		04CCED6E28C2879800C68DB8 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED6D28C2879800C68DB8 /* Tests_iOSLaunchTests.swift */; };
 		04CCED7828C2879800C68DB8 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED7728C2879800C68DB8 /* Tests_macOS.swift */; };
@@ -73,6 +74,7 @@
 		04AB3E9C28D79CE400C327A4 /* SummaryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryFeature.swift; sourceTree = "<group>"; };
 		04AB3E9F28D79CFF00C327A4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoneyRecord+UI.swift"; sourceTree = "<group>"; };
+		04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewMultiPlatform.swift; sourceTree = "<group>"; };
 		04CCED5328C2879600C68DB8 /* WalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		04CCED5428C2879600C68DB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		04CCED5528C2879800C68DB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
 				04AB3E9F28D79CFF00C327A4 /* MainView.swift */,
+				04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */,
 				043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */,
 				0421FC2C28C697A600487827 /* SummaryView.swift */,
 				0425AE5628C9356A0032A4FD /* Statistics.swift */,
@@ -396,6 +399,7 @@
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
 				04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */,
+				04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */,
 				043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */,
 				04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */,
 			);
