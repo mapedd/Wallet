@@ -169,6 +169,13 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
           return .hideStatistics
         }
       }
+    case .recordAction(id: let id, action: let action):
+      if case .detailsAction(let recordDetailsAction) = action {
+        if case .deleteRecordTapped = recordDetailsAction {
+          state.records.remove(id: id)
+        }
+      }
+      return .none
 
     default:
       return .none

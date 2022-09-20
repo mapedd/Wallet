@@ -49,18 +49,23 @@ struct RecordDetailsState: Equatable {
 
 enum RecordDetailsAction: BindableAction {
 
+  case deleteRecordTapped
   case binding(BindingAction<RecordDetailsState>)
 
   static func view(_ viewAction: RenderableAction) -> Self {
     switch viewAction {
     case let .binding(action):
       return .binding(action.pullback(\.renderableState))
+
+    case .deleteRecordTapped:
+      return .deleteRecordTapped
     }
   }
 
 
   enum RenderableAction: BindableAction {
     case binding(BindingAction<RecordDetailsState.RenderableState>)
+    case deleteRecordTapped
   }
 
 }

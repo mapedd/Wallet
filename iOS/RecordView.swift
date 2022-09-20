@@ -37,8 +37,6 @@ struct RecordView: View {
                 )
               ) {
                 RecordDetailsView(store: $0)
-              } else: {
-                ProgressView()
               }
             }
         }

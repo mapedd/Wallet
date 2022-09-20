@@ -9,11 +9,11 @@ import Foundation
 import ComposableArchitecture
 
 struct RecordState: Equatable, Identifiable {
-    var record: MoneyRecord
-    var details: RecordDetailsState?
-    var id: UUID {
-        record.id
-    }
+  var record: MoneyRecord
+  var details: RecordDetailsState?
+  var id: UUID {
+    record.id
+  }
   var isSheetPresented: Bool {
     details != nil
   }
@@ -63,10 +63,9 @@ struct RecordState: Equatable, Identifiable {
 }
 
 enum RecordAction {
-    case deleteItem
-    case showCategoryPickerTapped
-    case setSheet(isPresented:Bool)
-    case detailsAction(RecordDetailsAction)
+  case showCategoryPickerTapped
+  case setSheet(isPresented:Bool)
+  case detailsAction(RecordDetailsAction)
 }
 
 struct RecordEnvironment {
@@ -75,9 +74,9 @@ struct RecordEnvironment {
 
 
 let recordReducer = Reducer<
-    RecordState,
-    RecordAction,
-    RecordEnvironment>
+  RecordState,
+  RecordAction,
+  RecordEnvironment>
 { state, action, _ in
   switch action {
   case .setSheet(isPresented: true):
@@ -88,6 +87,12 @@ let recordReducer = Reducer<
       state.record = updatedRecord
     }
     state.details = nil
+    return .none
+
+  case .detailsAction(let recordDetailsAction) :
+    if case .deleteRecordTapped = recordDetailsAction {
+      state.details = nil
+    }
     return .none
   default:
     return .none

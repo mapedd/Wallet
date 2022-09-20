@@ -20,6 +20,12 @@ struct RecordDetailsView: View {
           VStack {
             title(viewStore)
             amount(viewStore)
+            Spacer()
+            Button("Delete") {
+              viewStore.send(.deleteRecordTapped)
+            }
+            .buttonStyle(.bordered)
+            .frame(maxWidth: .infinity)
           }
         }
         .padding()
