@@ -18,6 +18,28 @@ struct RecordState: Equatable, Identifiable {
     details != nil
   }
 
+  static var sample: [RecordState] = [
+    RecordState(
+      record: .init(
+        id: .init(),
+        date: .init(),
+        title: "sample expense",
+        type: .expense,
+        amount: Decimal(123),
+        currency: .eur
+      )
+    ),
+    RecordState(
+      record: .init(
+        id: .init(),
+        date: .init(),
+        title: "sample income",
+        type: .income,
+        amount: Decimal(222),
+        currency: .eur
+      )
+    ),
+  ]
 }
 
 enum RecordAction {

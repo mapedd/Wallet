@@ -8,19 +8,51 @@
 import SwiftUI
 import ComposableArchitecture
 
+
+
 struct StatisticsView: View {
   var store: Store<StatisticsState, StatisticsAction>
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      List {
-        ForEachStore(
-          self.store.scope(
-            state: \.records,
-            action: StatisticsAction.recordAction(id:action:)
-          )
-        ) {
-          RecordView(store: $0)
+      VStack {
+        HStack {
+          Button("date", action: { viewStore.send(.datePickerTapped) })
+          Picker(
+            "Filter",
+            selection: viewStore.binding(
+              get: \.filter,
+              send: StatisticsAction.changeFilter
+            )
+          ) {
+            Text("Expense")
+              .tag(StatisticsState.Filter.expenseType(.expense))
+            Text("Income")
+              .tag(StatisticsState.Filter.expenseType(.income))
+          }
+          .pickerStyle(.segmented)
         }
+        .padding()
+
+        List(viewStore.filtered) { record in
+          RecordView(
+            store: .init(
+              initialState: record,
+              reducer: recordReducer,
+              environment: RecordEnvironment()
+            )
+          )
+        }
+        
+        //        List {
+        //          ForEachStore(
+        //            self.store.scope(
+        //              state: \.records,
+        //              action: StatisticsAction.recordAction(id:action:)
+        //            )
+        //          ) {
+        //
+        //          }
+        //        }
       }
     }
   }
