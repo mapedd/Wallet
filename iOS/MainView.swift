@@ -36,6 +36,12 @@ extension SwiftUI.EditMode {
   }
 }
 
+extension MainState {
+  var iOSEditMode : SwiftUI.EditMode {
+    self.editMode.iOSEditMode
+  }
+}
+
 struct MainView : View {
   var store: Store<MainState, MainAction>
   var body: some View {
@@ -68,13 +74,13 @@ struct MainView : View {
       .toolbar(content: {
         EditButton()
       })
-//      .environment(
-//        \.editMode,
-//         viewStore.binding(
-//          get: \.editMode,
-//          send: MainAction.editModeChanged
-//         )
-//      )
+      .environment(
+        \.editMode,
+         viewStore.binding(
+          get: \.iOSEditMode,
+          send: { value in return MainAction.editModeChanged(value.walletEditMode) }
+         )
+      )
       .navigationTitle(viewStore.title)
     }
   }
