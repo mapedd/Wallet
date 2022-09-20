@@ -14,6 +14,18 @@ struct StatisticsState: Equatable {
   }
   var records: IdentifiedArrayOf<RecordState> = []
   var filter: Filter = .expenseType(.expense)
+  var filteredTotal: Decimal  {
+    let sum = filtered.reduce(Decimal.zero, { partialResult, recordState in
+      if recordState.record.type == .expense {
+        return partialResult - recordState.record.amount
+      } else if recordState.record.type == .income {
+        return partialResult + recordState.record.amount
+      } else {
+        fatalError("not handled record type")
+      }
+    })
+    return sum
+  }
 
   var filtered: IdentifiedArrayOf<RecordState> {
     records.filter { recordState in

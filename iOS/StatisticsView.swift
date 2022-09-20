@@ -30,6 +30,7 @@ struct StatisticsView: View {
               .tag(StatisticsState.Filter.expenseType(.income))
           }
           .pickerStyle(.segmented)
+          Text(viewStore.filteredTotal.formatted())
         }
         .padding()
 
@@ -42,17 +43,6 @@ struct StatisticsView: View {
             )
           )
         }
-        
-        //        List {
-        //          ForEachStore(
-        //            self.store.scope(
-        //              state: \.records,
-        //              action: StatisticsAction.recordAction(id:action:)
-        //            )
-        //          ) {
-        //
-        //          }
-        //        }
       }
     }
   }
