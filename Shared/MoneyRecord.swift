@@ -29,9 +29,15 @@ let formatter: NumberFormatter = {
     return formatter
 }()
 
+extension Decimal {
+  var formattedDecimalValue: String {
+    formatter.string(for: self) ?? ""
+  }
+}
+
 extension MoneyRecord {
     var formattedCopy : String {
-        "\(formatter.string(for: amount) ?? "") - \(title)"
+      "\(amount.formattedDecimalValue) - \(title)"
     }
 }
 

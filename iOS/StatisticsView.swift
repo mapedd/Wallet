@@ -8,13 +8,8 @@
 import SwiftUI
 import ComposableArchitecture
 
-
-
 struct StatisticsView: View {
   var store: Store<StatisticsState, StatisticsAction>
-
-  var fruits = ["Banana🍌🍌","Apple🍎🍎", "Peach🍑🍑", "Watermelon🍉🍉", "Grapes🍇🍇" ]
-  @State private var selectedFruit = 0
 
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -50,7 +45,7 @@ struct StatisticsView: View {
               .tag(StatisticsState.Filter.expenseType(.income))
           }
           .pickerStyle(.segmented)
-          Text(viewStore.filteredTotal.formatted())
+          Text(viewStore.formattedFilteredTotal)
         }
         .padding()
 

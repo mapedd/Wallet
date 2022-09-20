@@ -23,7 +23,7 @@ struct RecordState: Equatable, Identifiable {
       record: .init(
         id: .init(),
         date: .init(),
-        title: "sample expense",
+        title: "sample expense today",
         type: .expense,
         amount: Decimal(123),
         currency: .eur
@@ -33,12 +33,32 @@ struct RecordState: Equatable, Identifiable {
       record: .init(
         id: .init(),
         date: .init(),
-        title: "sample income",
+        title: "sample income today",
         type: .income,
         amount: Decimal(222),
         currency: .eur
       )
     ),
+    RecordState(
+      record: .init(
+        id: .init(),
+        date: .init().addingTimeInterval(-60 * 60 * 24 * 3),
+        title: "sample income 3 days ago",
+        type: .income,
+        amount: Decimal(9.99),
+        currency: .eur
+      )
+    ),
+    RecordState(
+      record: .init(
+        id: .init(),
+        date: .init().addingTimeInterval(-60 * 60 * 24 * 30),
+        title: "sample income month ago",
+        type: .income,
+        amount: Decimal(44.2),
+        currency: .eur
+      )
+    )
   ]
 }
 

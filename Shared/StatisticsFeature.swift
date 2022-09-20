@@ -26,6 +26,12 @@ struct StatisticsState: Equatable {
   var dateFilter: Filter = .dateRange(.thisWeek)
   var showDateFilter = false
 
+  var formattedFilteredTotal: String {
+//    let currency = records.first?.record.currency.rawValue ?? ""
+//    return "\(currency) \(filteredTotal.formattedDecimalValue)"
+    return filteredTotal.formattedDecimalValue
+  }
+
   enum DateRange: Identifiable, Hashable, CaseIterable {
     var id: String {
       self.stringValue
