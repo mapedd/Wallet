@@ -24,8 +24,13 @@ struct StatisticsState: Equatable {
   var records: IdentifiedArrayOf<RecordState> = []
   var filter: Filter = .expenseType(.expense)
   var dateFilter: Filter = .dateRange(.thisWeek)
+  var showDateFilter = false
 
-  enum DateRange {
+  enum DateRange: Identifiable, Hashable, CaseIterable {
+    var id: String {
+      self.stringValue
+    }
+
     case today
     case thisYear
     case thisWeek
@@ -35,6 +40,25 @@ struct StatisticsState: Equatable {
     case last3Months
     case last6Months
     case lastYear
+
+    var stringValue: String {
+      switch self {
+      case .today:
+        return "Today"
+      case .thisYear:
+        return "This year"
+      case .thisWeek:
+        return "This week"
+      case .thisMonth:
+        return "This month"
+      case .last3Months:
+        return "Last 3 months"
+      case .last6Months:
+        return "Last 6 months"
+      case .lastYear:
+        return "Last year"
+      }
+    }
 
     func apply(_ date: Date, now: () -> Date = {Date()}) -> Bool {
       let components: Set<Calendar.Component> = [.year, .month, .weekOfYear]
@@ -76,6 +100,15 @@ struct StatisticsState: Equatable {
   enum Filter: Hashable {
     case expenseType(MoneyRecord.RecordType)
     case dateRange(DateRange)
+
+    var stringValue: String {
+      switch self {
+      case .expenseType(let type):
+        return type == .expense ? "Expense" : "Income"
+      case .dateRange(let range):
+        return range.stringValue
+      }
+    }
   }
 
   var filteredTotal: Decimal  {
@@ -133,9 +166,9 @@ struct StatisticsState: Equatable {
 }
 
 enum StatisticsAction {
-  case datePickerTapped
   case changeFilter(StatisticsState.Filter)
   case recordAction(id: RecordState.ID, action: RecordAction)
+  case changeDateFilter(StatisticsState.Filter)
 }
 
 struct StatisticsEnvironment {
@@ -149,13 +182,13 @@ let statisticsReducer = Reducer
   StatisticsEnvironment
 > { state, action, _ in
   switch action {
-
-  case .datePickerTapped:
-    return .none
   case .changeFilter(let filter):
     state.filter = filter
     return .none
   case .recordAction(id: let id, action: let action):
     return .none
+  case .changeDateFilter(let filter):
+    state.dateFilter = filter
+    return .none
   }
-}
+}.debug()

@@ -12,11 +12,31 @@ import ComposableArchitecture
 
 struct StatisticsView: View {
   var store: Store<StatisticsState, StatisticsAction>
+
+  var fruits = ["Banana🍌🍌","Apple🍎🍎", "Peach🍑🍑", "Watermelon🍉🍉", "Grapes🍇🍇" ]
+  @State private var selectedFruit = 0
+
   var body: some View {
     WithViewStore(self.store) { viewStore in
       VStack {
         HStack {
-          Button("date", action: { viewStore.send(.datePickerTapped) })
+          Picker(
+            selection: viewStore.binding(
+              get: \.dateFilter,
+              send: StatisticsAction.changeDateFilter
+            ),
+            content: {
+              ForEach(StatisticsState.DateRange.allCases) { range in
+                Text(range.stringValue)
+                  .tag(StatisticsState.Filter.dateRange(range))
+              }
+            },
+            label: {
+              Text(viewStore.dateFilter.stringValue)
+            }
+          )
+          .pickerStyle(MenuPickerStyle())
+
           Picker(
             "Filter",
             selection: viewStore.binding(
