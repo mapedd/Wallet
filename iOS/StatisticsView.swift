@@ -1,5 +1,5 @@
 //
-//  Statistics.swift
+//  StatisticsView.swift
 //  Wallet
 //
 //  Created by Tomasz Kuzma on 07/09/2022.
@@ -11,7 +11,18 @@ import ComposableArchitecture
 struct StatisticsView: View {
   var store: Store<StatisticsState, StatisticsAction>
   var body: some View {
-    Text("hello statistics")
+    WithViewStore(self.store) { viewStore in
+      List {
+        ForEachStore(
+          self.store.scope(
+            state: \.records,
+            action: StatisticsAction.recordAction(id:action:)
+          )
+        ) {
+          RecordView(store: $0)
+        }
+      }
+    }
   }
 }
 

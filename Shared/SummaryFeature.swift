@@ -16,7 +16,7 @@ struct SummaryViewState: Equatable {
   var total = Decimal.zero
 }
 
-enum SummaryViewAction: Equatable {
+enum SummaryViewAction {
   case showSummaryButtonTapped
   case hideSummary
   case statisticsAction(StatisticsAction)
