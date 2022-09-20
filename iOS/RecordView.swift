@@ -8,59 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct RecordState: Equatable, Identifiable {
-    var record: MoneyRecord
-    var details: RecordDetailsState?
-    var id: UUID {
-        record.id
-    }
-  var isSheetPresented: Bool {
-    details != nil
-  }
-
-}
-
-enum RecordAction {
-    case deleteItem
-    case showCategoryPickerTapped
-    case setSheet(isPresented:Bool)
-    case detailsAction(RecordDetailsAction)
-}
-
-struct RecordEnvironment {
-
-}
-
-
-let recordReducer = Reducer<
-    RecordState,
-    RecordAction,
-    RecordEnvironment>
-{ state, action, _ in
-  switch action {
-  case .setSheet(isPresented: true):
-    state.details = .init(record: state.record)
-    return .none
-  case .setSheet(isPresented: false):
-    if let updatedRecord = state.details?.record {
-      state.record = updatedRecord
-    }
-    state.details = nil
-    return .none
-  default:
-    return .none
-  }
-}
-
-let combinedRecordReducer = recordDetailsReducer
-  .optional()
-  .pullback(
-    state: \.details,
-    action: /RecordAction.detailsAction,
-    environment: { _ in RecordDetailsEnvironment() }
-  )
-  .combined(with: recordReducer)
-
 struct RecordView: View {
     var store: Store<RecordState, RecordAction>
 
@@ -98,20 +45,6 @@ struct RecordView: View {
     }
 }
 
-let formatter: NumberFormatter = {
-    let formatter = NumberFormatter()
-    formatter.maximumFractionDigits = 2
-    formatter.minimumFractionDigits = 2
-    formatter.currencyCode = "USD"
-    formatter.numberStyle = .currency
-    return formatter
-}()
-
-extension MoneyRecord {
-    var formattedCopy : String {
-        "\(formatter.string(for: amount) ?? "") - \(title)"
-    }
-}
 
 struct RecordView_Previews: PreviewProvider {
     static var previews: some View {

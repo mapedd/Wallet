@@ -1,8 +1,8 @@
 //
 //  WalletApp.swift
-//  Shared
+//  Wallet
 //
-//  Created by Tomasz Kuzma on 02/09/2022.
+//  Created by Tomasz Kuzma on 18/09/2022.
 //
 
 import SwiftUI
