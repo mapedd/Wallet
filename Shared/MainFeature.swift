@@ -115,14 +115,15 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
           title: state.editorState.text,
           type: state.editorState.recordType,
           amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
-          currency: .pln
+          currency: .pln,
+          category: state.editorState.category
         )
 
         state.records.append(RecordState(record: newRecord))
 
         state.recalculateTotal()
 
-        state.editorState = .init()
+        state.editorState = .init(categories: state.editorState.categories)
         return .none
       default:
         return .none
