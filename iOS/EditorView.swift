@@ -18,9 +18,30 @@ struct EditorView: View {
           addButton(viewStore)
         }
         recordTextField(viewStore)
-        recordTypePicker(viewStore)
+        HStack {
+          recordTypePicker(viewStore)
+          categoryPicker(viewStore)
+        }
+
       }
     }
+  }
+
+  func categoryPicker(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {
+    Picker(
+      selection: viewStore.binding(\.$category),
+      content: {
+        ForEach(viewStore.categories) { category in
+          Text(category.name)
+            .tag(category)
+        }
+      },
+      label: {
+        Text(viewStore.category?.name ?? "Pick category")
+      }
+    )
+    .pickerStyle(MenuPickerStyle())
+
   }
 
   func amountTextField(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {

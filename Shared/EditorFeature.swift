@@ -13,14 +13,18 @@ struct EditorState: Equatable {
   @BindableState var amount = "0.00"
   var currencySymbol = "$"
   @BindableState var recordType = MoneyRecord.RecordType.expense
+  @BindableState var category: Category? = nil
   var addButtonDisabled = true
+  var categories: [Category] = []
 
   static let preview = Self.init(
     text: "Buying groceries",
     amount: "123.00",
     currencySymbol: "€",
     recordType: .expense,
-    addButtonDisabled: false
+    category: .init(name: "Food", id: .init()),
+    addButtonDisabled: false,
+    categories: Category.previews
   )
 
 }

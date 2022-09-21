@@ -59,16 +59,6 @@ struct StatisticsView: View {
             RecordView(store: $0)
           }
         }
-
-//        List(viewStore.filtered) { record in
-//          RecordView(
-//            store: .init(
-//              initialState: record,
-//              reducer: recordReducer,
-//              environment: RecordEnvironment()
-//            )
-//          )
-//        }
       }
     }
   }

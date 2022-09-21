@@ -22,9 +22,15 @@ struct MoneyRecord: Equatable, Identifiable {
   
 }
 
-struct Category: Equatable, Identifiable {
+struct Category: Hashable, Identifiable {
   var name: String
   var id: UUID
+
+  static var previews = [
+    Category(name: "Food", id: .init()),
+    Category(name: "Car", id: .init()),
+    Category(name: "Kids", id: .init()),
+  ]
 }
 
 let formatter: NumberFormatter = {
