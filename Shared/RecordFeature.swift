@@ -26,7 +26,8 @@ struct RecordState: Equatable, Identifiable {
         title: "sample expense today",
         type: .expense,
         amount: Decimal(123),
-        currency: .eur
+        currency: .eur,
+        category: .init(name: "Food", id: .init())
       )
     ),
     RecordState(
@@ -46,7 +47,8 @@ struct RecordState: Equatable, Identifiable {
         title: "sample income 3 days ago",
         type: .income,
         amount: Decimal(9.99),
-        currency: .eur
+        currency: .eur,
+        category: .init(name: "Entertainment", id: .init())
       )
     ),
     RecordState(

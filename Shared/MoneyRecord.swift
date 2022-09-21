@@ -18,6 +18,13 @@ struct MoneyRecord: Equatable, Identifiable {
   var type: RecordType
   var amount: Decimal
   var currency: Currency
+  var category: Category?
+  
+}
+
+struct Category: Equatable, Identifiable {
+  var name: String
+  var id: UUID
 }
 
 let formatter: NumberFormatter = {
