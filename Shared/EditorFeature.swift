@@ -22,7 +22,7 @@ struct EditorState: Equatable {
     amount: "123.00",
     currencySymbol: "€",
     recordType: .expense,
-    category: .init(name: "Food", id: .init()),
+    category: nil,
     addButtonDisabled: false,
     categories: Category.previews
   )
@@ -35,6 +35,7 @@ enum EditorAction:BindableAction {
   case binding(BindingAction<EditorState>)
   case changeRecordType(MoneyRecord.RecordType)
   case addButtonTapped
+  case categoryPicked(Category?)
 }
 
 struct EditorEnvironment {
@@ -59,6 +60,9 @@ let editorReducer = Reducer<EditorState, EditorAction, EditorEnvironment> { stat
     return .none
   case let .changeRecordType(type):
     state.recordType = type
+    return .none
+  case let .categoryPicked(category):
+    state.category = category
     return .none
   case .binding(_):
     return .none

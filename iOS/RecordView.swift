@@ -11,10 +11,6 @@ import ComposableArchitecture
 struct RecordView: View {
   var store: Store<RecordState, RecordAction>
   
-  var friuts = ["hello", "my", "old", "friend"]
-  
-  @State var selection: String = "hello"
-  
   var body: some View {
     WithViewStore(self.store) { viewStore in
       VStack(alignment: .leading) {
@@ -22,7 +18,7 @@ struct RecordView: View {
           Text(viewStore.record.formattedCopy)
             .foregroundColor(viewStore.record.type == .income ? .green : .red)
           Spacer()
-          
+
         }
         if let categoryName = viewStore.record.category?.name {
           Text(categoryName)
