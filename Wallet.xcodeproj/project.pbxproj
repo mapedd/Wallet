@@ -16,7 +16,6 @@
 		042A3C4828DC77BA00772365 /* Wallet_MacUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C4728DC77BA00772365 /* Wallet_MacUITests.swift */; };
 		042A3C4A28DC77BA00772365 /* Wallet_MacUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C4928DC77BA00772365 /* Wallet_MacUITestsLaunchTests.swift */; };
 		042A3C5628DC780400772365 /* WalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5428DC780300772365 /* WalletApp.swift */; };
-		042A3C5728DC780400772365 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5528DC780400772365 /* EditorView.swift */; };
 		042A3C5928DC782800772365 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 042A3C5828DC782800772365 /* ComposableArchitecture */; };
 		042A3C5A28DC782E00772365 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9028D79C3900C327A4 /* MainFeature.swift */; };
 		042A3C5B28DC782E00772365 /* RecordDetailsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9928D79CC500C327A4 /* RecordDetailsFeature.swift */; };
@@ -25,6 +24,7 @@
 		042A3C5E28DC782E00772365 /* SummaryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9C28D79CE400C327A4 /* SummaryFeature.swift */; };
 		042A3C5F28DC782E00772365 /* MoneyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9328D79C7400C327A4 /* MoneyRecord.swift */; };
 		042A3C6028DC782E00772365 /* StatisticsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9628D79CA200C327A4 /* StatisticsFeature.swift */; };
+		042A3C6128DC7A2900772365 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5528DC780400772365 /* EditorView.swift */; };
 		043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */; };
 		04AB3E8B28D79B9D00C327A4 /* RecordFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */; };
 		04AB3E8E28D79BB600C327A4 /* EditorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8D28D79BB600C327A4 /* EditorFeature.swift */; };
@@ -103,8 +103,6 @@
 		04CCED6728C2879800C68DB8 /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04CCED6B28C2879800C68DB8 /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
 		04CCED6D28C2879800C68DB8 /* Tests_iOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOSLaunchTests.swift; sourceTree = "<group>"; };
-		04CCED7728C2879800C68DB8 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
-		04CCED7928C2879800C68DB8 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
 		04CCED9228C28E8D00C68DB8 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		04CCED9528C2AD6C00C68DB8 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -219,7 +217,6 @@
 				04AB3E8928D36B6C00C327A4 /* iOS */,
 				04CCED5228C2879600C68DB8 /* Shared */,
 				04CCED6A28C2879800C68DB8 /* Tests iOS */,
-				04CCED7628C2879800C68DB8 /* Tests macOS */,
 				042A3C2A28DC77B800772365 /* Wallet Mac */,
 				042A3C3C28DC77BA00772365 /* Wallet MacTests */,
 				042A3C4628DC77BA00772365 /* Wallet MacUITests */,
@@ -261,15 +258,6 @@
 				04CCED6D28C2879800C68DB8 /* Tests_iOSLaunchTests.swift */,
 			);
 			path = "Tests iOS";
-			sourceTree = "<group>";
-		};
-		04CCED7628C2879800C68DB8 /* Tests macOS */ = {
-			isa = PBXGroup;
-			children = (
-				04CCED7728C2879800C68DB8 /* Tests_macOS.swift */,
-				04CCED7928C2879800C68DB8 /* Tests_macOSLaunchTests.swift */,
-			);
-			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,11 +463,11 @@
 				042A3C5E28DC782E00772365 /* SummaryFeature.swift in Sources */,
 				042A3C5A28DC782E00772365 /* MainFeature.swift in Sources */,
 				042A3C5D28DC782E00772365 /* RecordFeature.swift in Sources */,
-				042A3C5728DC780400772365 /* EditorView.swift in Sources */,
 				042A3C5C28DC782E00772365 /* EditorFeature.swift in Sources */,
 				042A3C5B28DC782E00772365 /* RecordDetailsFeature.swift in Sources */,
 				042A3C2E28DC77B800772365 /* ContentView.swift in Sources */,
 				042A3C6028DC782E00772365 /* StatisticsFeature.swift in Sources */,
+				042A3C6128DC7A2900772365 /* EditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
