@@ -14,12 +14,7 @@ struct ContentView: View {
     NavigationView {
       MainView(
         store: .init(
-          initialState: .init(
-            editorState: .init(categories: Category.previews),
-            records: IdentifiedArray(uniqueElements: RecordState.sample),
-            summaryState: .init(),
-            title: "Wallet"
-          ),
+          initialState: .preview,
           reducer: mainReducer,
           environment: MainEnvironment()
         )

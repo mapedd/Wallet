@@ -12,10 +12,10 @@ import ComposableArchitecture
 
 struct MainState: Equatable {
   init(
-    editorState: EditorState,
-    records: IdentifiedArrayOf<RecordState>,
-    summaryState: SummaryViewState,
-    title: String,
+    editorState: EditorState = .init(),
+    records: IdentifiedArrayOf<RecordState> = [],
+    summaryState: SummaryViewState = .init(),
+    title: String = "Wallet",
     editMode: MainState.EditMode = .inactive,
     statistics: StatisticsState? = nil
   ) {
@@ -60,6 +60,13 @@ struct MainState: Equatable {
 
     self.summaryState.total = sum
   }
+
+  static let preview = Self.init(
+    editorState: .init(categories: Category.previews),
+    records: IdentifiedArray(uniqueElements: RecordState.sample),
+    summaryState: .init(),
+    title: "Wallet"
+  )
 
 }
 

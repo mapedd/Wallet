@@ -9,20 +9,45 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>Wallet (macOS).xcscheme_^#shared#^_</key>
+		<key>Wallet Mac.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>042A3C2828DC77B800772365</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>042A3C3828DC77BA00772365</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>042A3C4228DC77BA00772365</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>04CCED5928C2879800C68DB8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>04CCED5F28C2879800C68DB8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>04CCED6628C2879800C68DB8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>04CCED7228C2879800C68DB8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
