@@ -105,6 +105,7 @@
 		04CCED6D28C2879800C68DB8 /* Tests_iOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOSLaunchTests.swift; sourceTree = "<group>"; };
 		04CCED9228C28E8D00C68DB8 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		04CCED9528C2AD6C00C68DB8 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
+		04DB18B128DDC57400BAF531 /* Backend */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Backend; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +215,7 @@
 		04CCED4D28C2879600C68DB8 = {
 			isa = PBXGroup;
 			children = (
+				04DB18B128DDC57400BAF531 /* Backend */,
 				04AB3E8928D36B6C00C327A4 /* iOS */,
 				04CCED5228C2879600C68DB8 /* Shared */,
 				04CCED6A28C2879800C68DB8 /* Tests iOS */,
