@@ -24,28 +24,30 @@ let appRouter = OneOf {
     }
 }
 
-struct MyTemplate: TemplateRepresentable {
-    let title: String
-    func render(_ req: Request) -> Tag { Html {
-        Head {
-            Title(title)
-        }
-        Body {
-            H1(title)
-            H2("Dupa")
-        }
-    } }
-}
-
 // configures your application
 public func configure(_ app: Application) throws {
     
-    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    app.middleware.use(
+        FileMiddleware(
+            publicDirectory: app.directory.publicDirectory
+        )
+    )
     
     
     // register routes
-    try routes(app)
-    app.mount(appRouter, use: appHandler)
+    //    try routes(app)
+    
+    
+    
+    let routers: [RouteCollection] = [
+        WebRouter(),
+        BlogRouter()
+    ]
+    for router in routers {
+        try router.boot(routes: app.routes)
+    }
+    
+    //    app.mount(appRouter, use: appHandler)
 }
 
 func appHandler(

@@ -1,31 +1,31 @@
 import Vapor
 import VaporRouting
 
-func routes(_ app: Application) throws {
-//    app.get { req async in
-//        "It works!"
+//func routes(_ app: Application) throws {
+////    app.get { req async in
+////        "It works!"
+////    }
+////
+////    app.get("hello") { req async -> String in
+////        "Hello, world!"
+////    }
+//    
+//    
+////    app.routes.get("web") { req -> Response in
+////        req.templates.renderHtml(MyTemplate(title: "Hello, World!"))
+////    }
+//    
+//    
+//    app.routes.get("web") { req in
+//        req
+//            .templates
+//            .renderHtml(
+//                WebHomeTemplate(
+//                    WebHomeContext(
+//                        title: "Home",
+//                        message: "Hello there"
+//                    )
+//                )
+//            )
 //    }
-//
-//    app.get("hello") { req async -> String in
-//        "Hello, world!"
-//    }
-    
-    
-//    app.routes.get("web") { req -> Response in
-//        req.templates.renderHtml(MyTemplate(title: "Hello, World!"))
-//    }
-    
-    
-    app.routes.get("web") { req in
-        req
-            .templates
-            .renderHtml(
-                WebIndexTemplate(
-                    .init(
-                        title: "Home",
-                        message: "Hi there, welcome to my page"
-                    )
-                )
-            )
-    }
-}
+//}
