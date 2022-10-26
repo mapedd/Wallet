@@ -199,22 +199,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "585D0700-A801-4243-A639-2D676F65F3EC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/App/configure.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "configure(_:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "ECBFCD45-782E-4FB3-9553-712F35F9AAFC"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -289,6 +273,38 @@
             startingLineNumber = "43"
             endingLineNumber = "43"
             landmarkName = "respond(to:chainingTo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E2641C79-B989-49E5-A31A-FF0FAD49CBFD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/sqlite-nio/Sources/SQLiteNIO/SQLiteConnection.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "open(storage:threadPool:logger:on:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "244D7A51-6910-4F36-B6CB-B79077B5AEDE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/sqlite-nio/Sources/SQLiteNIO/SQLiteConnection.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "open(storage:threadPool:logger:on:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -46,15 +46,23 @@ public func configure(_ app: Application) throws {
     // register routes
     //    try routes(app)
     
+    app.sessions.use(.fluent)
+    app.migrations.add(SessionRecord.migration)
+    app.middleware.use(app.sessions.middleware)
+    
     let modules: [ModuleInterface] = [
         WebModule(),
-        BlogModule()
+        BlogModule(),
+        UserModule()
     ]
     for module in modules {
         try module.boot(app)
     }
     
     //    app.mount(appRouter, use: appHandler)
+    
+    /// use automatic database migration
+    try app.autoMigrate().wait()
 }
 
 func appHandler(
