@@ -11,7 +11,9 @@ let package = Package(
         // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
         .package(url: "https://github.com/pointfreeco/vapor-routing.git", from: "0.1.1"),
-        .package(url: "https://github.com/binarybirds/swift-html", from: "1.2.0")
+        .package(url: "https://github.com/binarybirds/swift-html", from: "1.2.0"),
+        .package(url: "https://github.com/vapor/fluent", from: "4.5.0"),
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver", from: "4.2.0"),
     ],
     targets: [
         .target(
@@ -20,7 +22,9 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "SwiftHtml", package: "swift-html"),
                 .product(name: "SwiftSvg", package: "swift-html"),
-                .product(name: "VaporRouting", package: "vapor-routing")
+                .product(name: "VaporRouting", package: "vapor-routing"),
+                .product(name: "Fluent", package: "fluent"),
+                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
             ],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of

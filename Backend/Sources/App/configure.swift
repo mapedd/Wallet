@@ -1,6 +1,8 @@
 import Vapor
 import VaporRouting
 import SwiftHtml
+import Fluent
+import FluentSQLiteDriver
 
 enum AppRoute {
     case home
@@ -24,8 +26,11 @@ let appRouter = OneOf {
     }
 }
 
-// configures your application
+
 public func configure(_ app: Application) throws {
+    
+    let dbPath = app.directory.resourcesDirectory + "db.sqlite"
+    app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
     
     app.middleware.use(
         FileMiddleware(
@@ -33,18 +38,20 @@ public func configure(_ app: Application) throws {
         )
     )
     
+    app.middleware.use(
+        ExtendPathMiddleware()
+    )
+    
     
     // register routes
     //    try routes(app)
     
-    
-    
-    let routers: [RouteCollection] = [
-        WebRouter(),
-        BlogRouter()
+    let modules: [ModuleInterface] = [
+        WebModule(),
+        BlogModule()
     ]
-    for router in routers {
-        try router.boot(routes: app.routes)
+    for module in modules {
+        try module.boot(app)
     }
     
     //    app.mount(appRouter, use: appHandler)
