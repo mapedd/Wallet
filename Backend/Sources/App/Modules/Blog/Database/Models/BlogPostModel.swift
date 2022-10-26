@@ -5,26 +5,25 @@
 //  Created by Tomek Kuzma on 25/10/2022.
 //
 
-import Foundation
 
 import Vapor
 import Fluent
 
 final class BlogPostModel: DatabaseModelInterface {
-    
     typealias Module = BlogModule
-    
+
     struct FieldKeys {
         struct v1 {
             static var title: FieldKey { "title" }
             static var slug: FieldKey { "slug" }
+            static var imageKey: FieldKey { "image_key" }
             static var excerpt: FieldKey { "excerpt" }
-            static var imageKey: FieldKey { "excerpt" }
             static var date: FieldKey { "date" }
             static var content: FieldKey { "content" }
             static var categoryId: FieldKey { "category_id" }
         }
     }
+
     @ID() var id: UUID?
     @Field(key: FieldKeys.v1.title) var title: String
     @Field(key: FieldKeys.v1.slug) var slug: String
@@ -33,19 +32,18 @@ final class BlogPostModel: DatabaseModelInterface {
     @Field(key: FieldKeys.v1.date) var date: Date
     @Field(key: FieldKeys.v1.content) var content: String
     @Parent(key: FieldKeys.v1.categoryId) var category: BlogCategoryModel
-    
+
     init() { }
-    
-    init(
-        id: UUID? = nil,
-        title: String,
+
+    init(id: UUID? = nil,
+         title: String,
          slug: String,
-        imageKey: String,
-        excerpt: String,
-        date: Date,
-        content: String,
-        categoryId: UUID
-    ) {
+         imageKey: String,
+         excerpt: String,
+         date: Date,
+         content: String,
+         categoryId: UUID)
+    {
         self.id = id
         self.title = title
         self.slug = slug
@@ -54,4 +52,5 @@ final class BlogPostModel: DatabaseModelInterface {
         self.date = date
         self.content = content
         $category.id = categoryId
-    } }
+    }
+}

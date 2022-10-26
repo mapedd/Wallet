@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Fluent
 
 struct BlogFrontendController {
     var posts: [BlogPost] {
