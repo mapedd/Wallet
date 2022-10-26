@@ -17,6 +17,8 @@ struct UserModule: ModuleInterface {
         app.migrations.add(UserMigrations.v1())
         app.migrations.add(UserMigrations.seed())
         
+        app.middleware.use(UserSessionAuthenticator())
+        
         try router.boot(routes: app.routes)
     }
 }
