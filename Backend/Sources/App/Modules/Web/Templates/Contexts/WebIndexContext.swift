@@ -2,7 +2,7 @@
 //  WebIndexContext.swift
 //  
 //
-//  Created by Tomek Kuzma on 23/10/2022.
+//  Created by Tibor Bodecs on 2021. 12. 29..
 //
 
 import Foundation
@@ -10,9 +10,7 @@ import Foundation
 public struct WebIndexContext {
     public let title: String
     
-    public init(
-        title: String
-    ) {
+    public init(title: String) {
         self.title = title
     }
 }

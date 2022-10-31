@@ -1,18 +1,21 @@
 //
-//  BlogCategory.swift
+//  File.swift
 //  
 //
-//  Created by Tomek Kuzma on 26/10/2022.
+//  Created by Tibor Bodecs on 2021. 12. 31..
 //
 
 import Foundation
 
 extension Blog {
+
     enum Category {
         
     }
 }
+
 extension Blog.Category {
+    
     struct List: Codable {
         let id: UUID
         let title: String

@@ -2,7 +2,7 @@
 //  WebIndexTemplate.swift
 //  
 //
-//  Created by Tomek Kuzma on 23/10/2022.
+//  Created by Tibor Bodecs on 2021. 12. 25..
 //
 
 import Vapor
@@ -10,8 +10,8 @@ import SwiftHtml
 import SwiftSvg
 
 extension Svg {
-    static var menuIcon: Svg {
-        Svg{
+    static func menuIcon() -> Svg {
+        Svg {
             Line(x1: 3, y1: 12, x2: 21, y2: 12)
             Line(x1: 3, y1: 6, x2: 21, y2: 6)
             Line(x1: 3, y1: 18, x2: 21, y2: 18)
@@ -27,20 +27,16 @@ extension Svg {
     }
 }
 
-
 public struct WebIndexTemplate: TemplateRepresentable {
-    
+
     public var context: WebIndexContext
     var body: Tag
-    
-    public init(
-        _ context: WebIndexContext,
-        @TagBuilder _ builder: () -> Tag
-    ) {
+
+    public init(_ context: WebIndexContext, @TagBuilder _ builder: () -> Tag) {
         self.context = context
         self.body = builder()
     }
-    
+
     @TagBuilder
     public func render(_ req: Request) -> Tag {
         Html {
@@ -50,20 +46,17 @@ public struct WebIndexTemplate: TemplateRepresentable {
                 Meta()
                     .name(.viewport)
                     .content("width=device-width, initial-scale=1")
-                
+
                 Link(rel: .shortcutIcon)
                     .href("/images/favicon.ico")
                     .type("image/x-icon")
-                
-                Link(rel: .stylesheet) .href("https://cdn.jsdelivr.net/gh/feathercms/feather-core@1.0.0-beta.44/feather.min.css")
-                
+                Link(rel: .stylesheet)
+                    .href("https://cdn.jsdelivr.net/gh/feathercms/feather-core@1.0.0-beta.44/feather.min.css")
                 Link(rel: .stylesheet)
                     .href("/css/web.css")
                 
                 Title(context.title)
-                
             }
-            
             Body {
                 Header {
                     Div {
@@ -80,16 +73,15 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                 .name("menu-button")
                                 .class("menu-button")
                             Label {
-                                Svg.menuIcon
+                                Svg.menuIcon()
                             }
                             .for("primary-menu-button")
-                                    
-                                    Div {
+                            Div {
                                 A("Home")
                                     .href("/")
                                     .class("selected", req.url.path == "/")
                                 A("Blog")
-                                    .href("/blog")
+                                    .href("/blog/")
                                     .class("selected", req.url.path == "/blog/")
                                 A("About")
                                     .href("#")
@@ -98,7 +90,8 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                 if req.auth.has(AuthenticatedUser.self) {
                                     A("Sign out")
                                         .href("/sign-out/")
-                                } else {
+                                }
+                                else {
                                     A("Sign in")
                                         .href("/sign-in/")
                                 }
@@ -113,7 +106,7 @@ public struct WebIndexTemplate: TemplateRepresentable {
                 Main {
                     body
                 }
-                
+
                 Footer {
                     Section {
                         P {
@@ -125,16 +118,19 @@ public struct WebIndexTemplate: TemplateRepresentable {
                             A("Vapor")
                                 .href("https://vapor.codes")
                                 .target(.blank)
-                            Text(".") }
+                            Text(".")
+                        }
                         P("myPage &copy; 2020-2022")
-                        
                     }
                 }
                 
-                Script() .type(.javascript) .src("/js/web.js")
+                Script()
+                    .type(.javascript)
+                    .src("/js/web.js")
+                
             }
-            
         }
         .lang("en-US")
     }
+    
 }

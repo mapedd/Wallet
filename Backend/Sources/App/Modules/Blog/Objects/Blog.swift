@@ -1,25 +1,10 @@
 //
-//  Blog.swift
+//  File.swift
 //  
 //
-//  Created by Tomek Kuzma on 26/10/2022.
+//  Created by Tibor Bodecs on 2021. 12. 31..
 //
 
-import Foundation
-
 enum Blog {
-    enum Post {
-        
-    }
-}
-
-extension Blog.Post {
-    struct List: Codable {
-        let id: UUID
-        let title: String
-        let slug: String
-        let image: String
-        let excerpt: String
-        let date: Date
-    }
+    
 }

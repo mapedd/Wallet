@@ -2,10 +2,8 @@
 //  BlogPostContext.swift
 //  
 //
-//  Created by Tomek Kuzma on 23/10/2022.
+//  Created by Tibor Bodecs on 2021. 12. 25..
 //
-
-import Foundation
 
 struct BlogPostContext {
     let post: Blog.Post.Detail

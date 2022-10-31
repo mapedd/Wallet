@@ -1,17 +1,17 @@
 //
 //  WebRouter.swift
-//  
 //
-//  Created by Tomek Kuzma on 23/10/2022.
+//
+//  Created by Tibor Bodecs on 2021. 12. 25..
 //
 
 import Vapor
 
 struct WebRouter: RouteCollection {
     
-    let frontendController = WebFrontendController()
-    
+    let controller = WebFrontendController()
+
     func boot(routes: RoutesBuilder) throws {
-        routes.get(use: frontendController.homeView)
+        routes.get(use: controller.homeView)
     }
 }

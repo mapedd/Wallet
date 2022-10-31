@@ -1,10 +1,9 @@
 //
-//  BlogPostModel.swift
+//  File.swift
 //  
 //
-//  Created by Tomek Kuzma on 25/10/2022.
+//  Created by Tibor Bodecs on 2021. 12. 31..
 //
-
 
 import Vapor
 import Fluent
