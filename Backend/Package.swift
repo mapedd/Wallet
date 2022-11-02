@@ -17,6 +17,8 @@ let package = Package(
         .package(url: "https://github.com/binarybirds/swift-html", from: "1.2.0"),
         .package(url: "https://github.com/vapor/fluent", from: "4.5.0"),
         .package(url: "https://github.com/vapor/fluent-sqlite-driver", from: "4.2.0"),
+        .package(url: "https://github.com/binarybirds/liquid", from: "1.3.0"),
+        .package(url: "https://github.com/binarybirds/liquid-local-driver", from: "1.3.0")
     ],
     targets: [
         .target(
@@ -28,6 +30,8 @@ let package = Package(
                 .product(name: "VaporRouting", package: "vapor-routing"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
+                .product(name: "Liquid", package: "liquid"),
+                .product(name: "LiquidLocalDriver", package: "liquid-local-driver")
             ],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of

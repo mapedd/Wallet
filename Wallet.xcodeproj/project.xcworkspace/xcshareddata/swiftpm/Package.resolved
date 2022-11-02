@@ -64,6 +64,33 @@
       }
     },
     {
+      "identity" : "liquid",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/binarybirds/liquid",
+      "state" : {
+        "revision" : "865eca0fd64273fd4352c26db6f0019d254102cb",
+        "version" : "1.3.2"
+      }
+    },
+    {
+      "identity" : "liquid-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/binarybirds/liquid-kit.git",
+      "state" : {
+        "revision" : "d2532e66faad5df4c63d85c7a2fdecc25a679916",
+        "version" : "1.3.4"
+      }
+    },
+    {
+      "identity" : "liquid-local-driver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/binarybirds/liquid-local-driver",
+      "state" : {
+        "revision" : "b068a1ab399d21f5d4b60eb4b0568fad4c398a59",
+        "version" : "1.3.2"
+      }
+    },
+    {
       "identity" : "multipart-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",
