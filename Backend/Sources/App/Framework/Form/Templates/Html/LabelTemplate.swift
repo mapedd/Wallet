@@ -8,7 +8,7 @@
 import Vapor
 import SwiftHtml
 
-public struct LabelTemplate: TemplateRepresentable {
+public struct LabelTemplate: TemplateRepresentable, TemplateRepresentablePreviewable {
 
     var context: LabelContext
 
@@ -18,6 +18,11 @@ public struct LabelTemplate: TemplateRepresentable {
 
     @TagBuilder
     public func render(_ req: Request) -> Tag {
+        render()
+    }
+    
+    @TagBuilder
+    public func render() -> Tag {
         Label {
             Text(context.title ?? context.key.capitalized)
 

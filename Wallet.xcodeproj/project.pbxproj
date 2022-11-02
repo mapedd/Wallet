@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041122402913112E00205EE3 /* PreviewAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411223F2913112E00205EE3 /* PreviewAppApp.swift */; };
+		041122422913112E00205EE3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041122412913112E00205EE3 /* ContentView.swift */; };
+		041122442913112F00205EE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 041122432913112F00205EE3 /* Assets.xcassets */; };
+		041122472913112F00205EE3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 041122462913112F00205EE3 /* Preview Assets.xcassets */; };
+		0411224F2913132500205EE3 /* Backend in Frameworks */ = {isa = PBXBuildFile; productRef = 0411224E2913132500205EE3 /* Backend */; };
 		0421FC2D28C697A600487827 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0421FC2C28C697A600487827 /* SummaryView.swift */; };
 		0425AE5728C9356A0032A4FD /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0425AE5628C9356A0032A4FD /* StatisticsView.swift */; };
 		042A3C2E28DC77B800772365 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C2D28DC77B800772365 /* ContentView.swift */; };
@@ -71,6 +76,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0411223D2913112E00205EE3 /* PreviewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PreviewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0411223F2913112E00205EE3 /* PreviewAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAppApp.swift; sourceTree = "<group>"; };
+		041122412913112E00205EE3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		041122432913112F00205EE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		041122462913112F00205EE3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		041122482913112F00205EE3 /* PreviewApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PreviewApp.entitlements; sourceTree = "<group>"; };
 		0421FC2C28C697A600487827 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		0425AE5628C9356A0032A4FD /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
 		042A3C2928DC77B800772365 /* Wallet Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wallet Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +120,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0411223A2913112E00205EE3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0411224F2913132500205EE3 /* Backend in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		042A3C2628DC77B800772365 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -149,6 +168,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0411223E2913112E00205EE3 /* PreviewApp */ = {
+			isa = PBXGroup;
+			children = (
+				0411223F2913112E00205EE3 /* PreviewAppApp.swift */,
+				041122412913112E00205EE3 /* ContentView.swift */,
+				041122432913112F00205EE3 /* Assets.xcassets */,
+				041122482913112F00205EE3 /* PreviewApp.entitlements */,
+				041122452913112F00205EE3 /* Preview Content */,
+			);
+			path = PreviewApp;
+			sourceTree = "<group>";
+		};
+		041122452913112F00205EE3 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				041122462913112F00205EE3 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		042A3C2A28DC77B800772365 /* Wallet Mac */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +261,7 @@
 				042A3C2A28DC77B800772365 /* Wallet Mac */,
 				042A3C3C28DC77BA00772365 /* Wallet MacTests */,
 				042A3C4628DC77BA00772365 /* Wallet MacUITests */,
+				0411223E2913112E00205EE3 /* PreviewApp */,
 				04CCED5B28C2879800C68DB8 /* Products */,
 				04AB3E8628D36AF200C327A4 /* Frameworks */,
 			);
@@ -249,6 +289,7 @@
 				042A3C2928DC77B800772365 /* Wallet Mac.app */,
 				042A3C3928DC77BA00772365 /* Wallet MacTests.xctest */,
 				042A3C4328DC77BA00772365 /* Wallet MacUITests.xctest */,
+				0411223D2913112E00205EE3 /* PreviewApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -265,6 +306,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0411223C2913112E00205EE3 /* PreviewApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0411224B2913112F00205EE3 /* Build configuration list for PBXNativeTarget "PreviewApp" */;
+			buildPhases = (
+				041122392913112E00205EE3 /* Sources */,
+				0411223A2913112E00205EE3 /* Frameworks */,
+				0411223B2913112E00205EE3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PreviewApp;
+			packageProductDependencies = (
+				0411224E2913132500205EE3 /* Backend */,
+			);
+			productName = PreviewApp;
+			productReference = 0411223D2913112E00205EE3 /* PreviewApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 		042A3C2828DC77B800772365 /* Wallet Mac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 042A3C4B28DC77BA00772365 /* Build configuration list for PBXNativeTarget "Wallet Mac" */;
@@ -366,9 +427,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1340;
+				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
+					0411223C2913112E00205EE3 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					042A3C2828DC77B800772365 = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
@@ -410,11 +474,21 @@
 				042A3C2828DC77B800772365 /* Wallet Mac */,
 				042A3C3828DC77BA00772365 /* Wallet MacTests */,
 				042A3C4228DC77BA00772365 /* Wallet MacUITests */,
+				0411223C2913112E00205EE3 /* PreviewApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0411223B2913112E00205EE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041122472913112F00205EE3 /* Preview Assets.xcassets in Resources */,
+				041122442913112F00205EE3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		042A3C2728DC77B800772365 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -456,6 +530,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		041122392913112E00205EE3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041122422913112E00205EE3 /* ContentView.swift in Sources */,
+				041122402913112E00205EE3 /* PreviewAppApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		042A3C2528DC77B800772365 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -544,6 +627,66 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		041122492913112F00205EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = PreviewApp/PreviewApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"PreviewApp/Preview Content\"";
+				DEVELOPMENT_TEAM = M84U5M38D2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapedd.PreviewApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		0411224A2913112F00205EE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = PreviewApp/PreviewApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"PreviewApp/Preview Content\"";
+				DEVELOPMENT_TEAM = M84U5M38D2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapedd.PreviewApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		042A3C4C28DC77BA00772365 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -894,6 +1037,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0411224B2913112F00205EE3 /* Build configuration list for PBXNativeTarget "PreviewApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				041122492913112F00205EE3 /* Debug */,
+				0411224A2913112F00205EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		042A3C4B28DC77BA00772365 /* Build configuration list for PBXNativeTarget "Wallet Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -962,6 +1114,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0411224E2913132500205EE3 /* Backend */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Backend;
+		};
 		042A3C5828DC782800772365 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

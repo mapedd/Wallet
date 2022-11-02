@@ -7,6 +7,9 @@ let package = Package(
        .macOS(.v12),
        .iOS(.v15)
     ],
+    products: [
+        .library(name: "Backend", targets: ["App"])
+    ],
     dependencies: [
         // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
