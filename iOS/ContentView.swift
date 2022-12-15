@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import IdentifiedCollections
 
+
 struct ContentView: View {
   var body: some View {
     NavigationView {
@@ -16,7 +17,9 @@ struct ContentView: View {
         store: .init(
           initialState: .preview,
           reducer: mainReducer,
-          environment: MainEnvironment()
+          environment: MainEnvironment(
+            apiClient: .live
+          )
         )
       )
     }

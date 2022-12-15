@@ -32,10 +32,15 @@ struct UserApiController {
     }
     
     func listAll(req: Request) async throws -> [User.Account.Detail] {
-        let users = try await UserAccountModel.query(on: req.db)
+        let users = try await UserAccountModel
+            .query(on: req.db)
             .all()
+        
         return users.map {
-            .init(id: $0.id!, email: $0.email)
+            .init(
+                id: $0.id!,
+                email: $0.email
+            )
         }
     }
     

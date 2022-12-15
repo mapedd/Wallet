@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-
+import AppApi
 
 
 struct MainState: Equatable {
@@ -25,28 +25,28 @@ struct MainState: Equatable {
     self.title = title
     self.editMode = editMode
     self.statistics = statistics
-
+    
     recalculateTotal()
   }
-
-
+  
+  
   enum EditMode: Equatable {
     case inactive
     case transient
     case active
   }
-
+  
   var editorState: EditorState
   var records: IdentifiedArrayOf<RecordState>
   var summaryState: SummaryViewState
   var title: String
   var editMode: EditMode = .inactive
   var statistics: StatisticsState?
-
+  
   var showStatistics: Bool {
     statistics != nil
   }
-
+  
   mutating func recalculateTotal() {
     let sum = self.records.reduce(Decimal.zero, { partialResult, recordState in
       if recordState.record.type == .expense {
@@ -57,17 +57,17 @@ struct MainState: Equatable {
         fatalError("not handled record type")
       }
     })
-
+    
     self.summaryState.total = sum
   }
-
+  
   static let preview = Self.init(
     editorState: .init(categories: Category.previews),
     records: IdentifiedArray(uniqueElements: RecordState.sample),
     summaryState: .init(),
     title: "Wallet"
   )
-
+  
 }
 
 enum MainAction {
@@ -80,10 +80,47 @@ enum MainAction {
   case statisticsAction(StatisticsAction)
   case showStatistics
   case hideStatistics
+  case loggedIn(User.Token.Detail)
+  case loginFailed
+}
+
+
+struct APIClient {
+  var signIn: (User.Account.Login) async throws -> User.Token.Detail?
+  
+  static var live: APIClient {
+    let url = URL(string: "http://localhost:8080/api/")
+    let session = URLSession.shared
+    let encoder = JSONEncoder()
+    let decoder = JSONDecoder()
+    
+    return APIClient(
+      signIn: { login in
+        var request = URLRequest(url: URL(string: "sign-in/", relativeTo: url)!)
+        request.httpBody = try encoder.encode(login)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        do {
+          let (data, _) = try await session.data(for:request)
+          return try decoder.decode(User.Token.Detail.self, from: data)
+        }
+        catch {
+          debugPrint("error sign in \(error)")
+          return nil
+        }
+        
+      }
+    )
+  }
+  static let mock = APIClient(
+    signIn: { _ in
+      User.Token.Detail(id: .init(), value: "asd", user: .init(id: .init(), email: "asd"))
+    }
+  )
 }
 
 struct MainEnvironment {
-
+  var apiClient: APIClient
 }
 
 let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
@@ -111,7 +148,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       action: /MainAction.statisticsAction,
       environment:{ _ in  StatisticsEnvironment() }
     ),
-  .init { state, action, _ in
+  .init { state, action, environment in
     switch action {
     case let .editorAction(editorAction):
       switch editorAction {
@@ -125,20 +162,28 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
           currency: .pln,
           category: state.editorState.category
         )
-
+        
         state.records.append(RecordState(record: newRecord))
-
+        
         state.recalculateTotal()
-
+        
         state.editorState = .init(categories: state.editorState.categories)
         return .none
       default:
         return .none
       }
-
+      
     case let .editModeChanged(editMode):
       state.editMode = editMode
-      return .none
+      return .task {
+        let login = User.Account.Login(email: "mapedd@gmail.com", password: "BobMarley123")
+        let user = try await environment.apiClient.signIn(login)
+        if let user {
+          return .loggedIn(user)
+        } else {
+          return .loginFailed
+        }
+      }
     case let .delete(indexSet):
       state.records.remove(atOffsets: indexSet)
       state.recalculateTotal()
@@ -154,9 +199,9 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       ?? destination
       state.records.move(fromOffsets: source, toOffset: destination)
       return .none
-
+      
     case .showStatistics:
-
+      
       state.statistics = .init(records: state.records)
       return .none
     case .hideStatistics:
@@ -165,7 +210,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       }
       state.statistics = nil
       return .none
-
+      
     case .summaryAction(let summaryAction):
       switch summaryAction {
       case .showSummaryButtonTapped:
@@ -184,7 +229,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
         }
       }
       return .none
-
+      
     default:
       return .none
     }
