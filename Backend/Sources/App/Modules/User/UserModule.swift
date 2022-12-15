@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import SwiftHtml
 
 struct UserModule: ModuleInterface {
 
@@ -16,7 +17,9 @@ struct UserModule: ModuleInterface {
         app.migrations.add(UserMigrations.seed())
         
         app.middleware.use(UserSessionAuthenticator())
+        app.middleware.use(UserTokenAuthenticator())
         
         try router.boot(routes: app.routes)
     }
 }
+

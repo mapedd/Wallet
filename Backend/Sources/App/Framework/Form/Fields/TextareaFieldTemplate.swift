@@ -1,15 +1,14 @@
 //
-//  TextareaFieldTemplate.swift
+//  File.swift
 //  
 //
-//  Created by Tomek Kuzma on 01/11/2022.
+//  Created by Tibor Bodecs on 2022. 01. 02..
 //
 
 import Vapor
 import SwiftHtml
-import SwiftUI
 
-public struct TextareaFieldTemplate: TemplateRepresentable, TemplateRepresentablePreviewable {
+public struct TextareaFieldTemplate: TemplateRepresentable {
     
     public var context: TextareaFieldContext
     
@@ -19,13 +18,7 @@ public struct TextareaFieldTemplate: TemplateRepresentable, TemplateRepresentabl
     
     @TagBuilder
     public func render(_ req: Request) -> Tag {
-        render()
-    }
-    
-    @TagBuilder
-    public func render() -> Tag {
-        LabelTemplate(context.label)
-            .render()
+        LabelTemplate(context.label).render(req)
         
         Textarea(context.value)
             .placeholder(context.placeholder)
@@ -36,48 +29,4 @@ public struct TextareaFieldTemplate: TemplateRepresentable, TemplateRepresentabl
                 .class("error")
         }
     }
-}
-
-struct TextareaFieldTemplate_Previews: PreviewProvider {    
-    static var previews: some SwiftUI.View {
-      WebView(
-        tag: TextareaFieldTemplate(
-            .init(
-                key: "key",
-                label: .init(
-                    key: "label",
-                    title: "title",
-                    required: true,
-                    more: "more"),
-                placeholder: "placeholder",
-                value: "value",
-                error: nil
-            )
-        ).render()
-      )
-  }
-}
-
-
-import WebKit
-
-struct WebView : NSViewRepresentable {
-    
-    let tag: Tag
-    
-    func makeNSView(context: Context) -> WKWebView  {
-        return WKWebView()
-    }
-    
-    func updateNSView(_ nsView: WKWebView, context: Context) {
-        
-        let doc = Document(.html) { tag }
-        let body = DocumentRenderer(
-            minify: false,
-            indent: 0
-        ).render(doc)
-        
-        nsView.loadHTMLString(body, baseURL: nil)
-    }
-    
 }

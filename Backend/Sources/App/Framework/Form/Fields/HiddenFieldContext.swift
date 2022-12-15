@@ -1,21 +1,16 @@
 //
-//  HiddenFieldContext.swift
+//  File.swift
 //  
 //
-//  Created by Tomek Kuzma on 01/11/2022.
+//  Created by Tibor Bodecs on 2022. 01. 02..
 //
-
-import Foundation
 
 public struct HiddenFieldContext {
 
     public let key: String
     public var value: String?
 
-    public init(
-        key: String,
-        value: String? = nil
-    ) {
+    public init(key: String, value: String? = nil) {
         self.key = key
         self.value = value
     }

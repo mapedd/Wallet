@@ -1,24 +1,16 @@
 //
-//  HiddenField.swift
+//  File.swift
 //  
 //
-//  Created by Tomek Kuzma on 01/11/2022.
+//  Created by Tibor Bodecs on 2022. 01. 02..
 //
 
 import Vapor
 
 public final class HiddenField: AbstractFormField<String, HiddenFieldTemplate> {
-    
+
     public convenience init(_ key: String) {
-        self.init(
-            key: key,
-            input: "",
-            output: .init(
-                .init(
-                    key: key
-                )
-            )
-        )
+        self.init(key: key, input: "", output: .init(.init(key: key)))
     }
     
     public override func process(req: Request) async throws {
@@ -26,3 +18,4 @@ public final class HiddenField: AbstractFormField<String, HiddenFieldTemplate> {
         output.context.value = input
     }
 }
+

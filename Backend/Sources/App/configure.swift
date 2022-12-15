@@ -10,6 +10,7 @@ import Fluent
 import FluentSQLiteDriver
 import Liquid
 import LiquidLocalDriver
+@_exported import AppApi
 
 public func configure(_ app: Application) throws {
     
@@ -18,14 +19,9 @@ public func configure(_ app: Application) throws {
     app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
     
     /// setup Liquid using the local file storage driver
-    app.fileStorages.use(
-        .local(
-            publicUrl: "http://localhost:8080",
-            publicPath: app.directory.publicDirectory,
-            workDirectory: "assets"
-        ),
-        as: .local
-    )
+    app.fileStorages.use(.local(publicUrl: "http://localhost:8080",
+                                publicPath: app.directory.publicDirectory,
+                                workDirectory: "assets"), as: .local)
     
     /// set the max file upload limit
     app.routes.defaultMaxBodySize = "10mb"
@@ -46,10 +42,15 @@ public func configure(_ app: Application) throws {
     let modules: [ModuleInterface] = [
         WebModule(),
         UserModule(),
+        AdminModule(),
+        ApiModule(),
         BlogModule(),
     ]
     for module in modules {
         try module.boot(app)
+    }
+    for module in modules {
+        try module.setUp(app)
     }
     
     /// use automatic database migration

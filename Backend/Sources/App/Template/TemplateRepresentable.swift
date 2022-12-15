@@ -13,9 +13,3 @@ public protocol TemplateRepresentable {
     @TagBuilder
     func render(_ req: Request) -> Tag
 }
-
-public protocol TemplateRepresentablePreviewable {
-    
-    @TagBuilder
-    func render() -> Tag
-}

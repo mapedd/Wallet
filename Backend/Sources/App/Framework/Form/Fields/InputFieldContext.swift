@@ -16,7 +16,6 @@ public struct InputFieldContext {
     public var value: String?
     public var error: String?
     
-    
     public init(key: String,
                 label: LabelContext? = nil,
                 type: Input.`Type` = .text,

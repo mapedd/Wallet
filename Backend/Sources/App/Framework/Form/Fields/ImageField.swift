@@ -7,7 +7,7 @@
 
 import Vapor
 
-public final class ImageField: AbstractFormField<ImageInput, ImageFieldTemplate> {
+public final class ImageField: AbstractFormField<FormImageInput, ImageFieldTemplate> {
 
     public var imageKey: String? {
         didSet {
@@ -19,11 +19,7 @@ public final class ImageField: AbstractFormField<ImageInput, ImageFieldTemplate>
 
     public init(_ key: String, path: String) {
         self.path = path
-        super.init(
-            key: key,
-            input: .init(key: key),
-            output: .init(.init(key: key))
-        )
+        super.init(key: key, input: .init(key: key), output: .init(.init(key: key)))
     }
 
     public override func process(req: Request) async throws {
