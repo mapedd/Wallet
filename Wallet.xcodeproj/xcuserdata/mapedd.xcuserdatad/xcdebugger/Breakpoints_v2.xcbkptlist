@@ -200,7 +200,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "ECBFCD45-782E-4FB3-9553-712F35F9AAFC"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Middleware/FileMiddleware.swift"
@@ -280,7 +280,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E2641C79-B989-49E5-A31A-FF0FAD49CBFD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/sqlite-nio/Sources/SQLiteNIO/SQLiteConnection.swift"
@@ -296,7 +296,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "244D7A51-6910-4F36-B6CB-B79077B5AEDE"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/sqlite-nio/Sources/SQLiteNIO/SQLiteConnection.swift"
@@ -305,6 +305,134 @@
             startingLineNumber = "112"
             endingLineNumber = "112"
             landmarkName = "open(storage:threadPool:logger:on:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6DE9BBDF-23A9-4DF4-A22D-D9BF5602E491"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "register(req:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "668F76A7-EAC7-447C-899E-256C8E5808F2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Routing/Application+Routes.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "3"
+            endingLineNumber = "3"
+            landmarkName = "routes"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5C1B4EA4-226B-4383-9699-3A1146B1FFF7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Routing/RouteCollection.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "register(collection:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DBE7E378-0A5C-4781-AC3C-05EB43296F2E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Application.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "boot()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DBE7E378-0A5C-4781-AC3C-05EB43296F2E - 56ca93045683eeb3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Vapor.Application.boot() throws -&gt; ()"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Application.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "316">
+               </Location>
+               <Location
+                  uuid = "DBE7E378-0A5C-4781-AC3C-05EB43296F2E - ab98f2f72dc322ec"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Vapor.LifecycleHandler) throws -&gt; () in Vapor.Application.boot() throws -&gt; ()"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Application.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E67F283A-A62A-4C1D-BACD-D7F66815BDC1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Routing/RoutesBuilder+Method.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "on(_:_:body:use:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1ECDA620-6B99-4425-839A-DA6BF02CB6F4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "register(req:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

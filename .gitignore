@@ -20,3 +20,6 @@ DerivedData/
 !default.perspectivev3
 .DS_Store
 *.sqlite
+Backend/.build
+*.xcbkptlist
+Wallet.xcodeproj/xcuserdata/*
