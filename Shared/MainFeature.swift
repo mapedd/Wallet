@@ -7,7 +7,6 @@
 
 import Foundation
 import ComposableArchitecture
-import AppApi
 
 
 struct MainState: Equatable {
@@ -80,44 +79,11 @@ enum MainAction {
   case statisticsAction(StatisticsAction)
   case showStatistics
   case hideStatistics
-  case loggedIn(User.Token.Detail)
-  case loginFailed
+  case logOut
+  case logOutButtonTapped
 }
 
 
-struct APIClient {
-  var signIn: (User.Account.Login) async throws -> User.Token.Detail?
-  
-  static var live: APIClient {
-    let url = URL(string: "http://localhost:8080/api/")
-    let session = URLSession.shared
-    let encoder = JSONEncoder()
-    let decoder = JSONDecoder()
-    
-    return APIClient(
-      signIn: { login in
-        var request = URLRequest(url: URL(string: "sign-in/", relativeTo: url)!)
-        request.httpBody = try encoder.encode(login)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        do {
-          let (data, _) = try await session.data(for:request)
-          return try decoder.decode(User.Token.Detail.self, from: data)
-        }
-        catch {
-          debugPrint("error sign in \(error)")
-          return nil
-        }
-        
-      }
-    )
-  }
-  static let mock = APIClient(
-    signIn: { _ in
-      User.Token.Detail(id: .init(), value: "asd", user: .init(id: .init(), email: "asd"))
-    }
-  )
-}
 
 struct MainEnvironment {
   var apiClient: APIClient
@@ -175,15 +141,7 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       
     case let .editModeChanged(editMode):
       state.editMode = editMode
-      return .task {
-        let login = User.Account.Login(email: "mapedd@gmail.com", password: "BobMarley123")
-        let user = try await environment.apiClient.signIn(login)
-        if let user {
-          return .loggedIn(user)
-        } else {
-          return .loginFailed
-        }
-      }
+      return .none
     case let .delete(indexSet):
       state.records.remove(atOffsets: indexSet)
       state.recalculateTotal()
@@ -229,6 +187,9 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
         }
       }
       return .none
+      
+    case .logOutButtonTapped:
+      return Effect(value: .logOut)
       
     default:
       return .none

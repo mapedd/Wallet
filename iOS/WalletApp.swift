@@ -15,7 +15,10 @@ struct WalletApp: App {
         store: .init(
           initialState: .loggedOut(.init()),
           reducer: ContentView.reducer,
-          environment: ContentView.Environment(main: .init(apiClient: .live), login: .init())
+          environment: ContentView.ContentEnvironment(
+            apiClient: .live,
+            keyValueStore: .live
+          )
         )
       )
     }

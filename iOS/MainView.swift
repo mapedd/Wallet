@@ -44,9 +44,12 @@ struct MainView : View {
           )
         )
       }
-      .toolbar(content: {
+      .toolbar {
+        Button("Log out") {
+          viewStore.send(.logOutButtonTapped)
+        }
         EditButton()
-      })
+      }
       .sheet(
         isPresented: viewStore.binding(
           get: \.showStatistics,
@@ -72,4 +75,5 @@ struct MainView : View {
       .navigationTitle(viewStore.title)
     }
   }
+  
 }

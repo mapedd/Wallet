@@ -33,6 +33,10 @@
 		043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */; };
 		0446E396294BC85000B62C95 /* AppApi in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E395294BC85000B62C95 /* AppApi */; };
 		0446E3992950A11D00B62C95 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E3982950A11D00B62C95 /* SwiftUINavigation */; };
+		0446E39B2951DF8500B62C95 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39A2951DF8500B62C95 /* APIClient.swift */; };
+		0446E39C2951DF8500B62C95 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39A2951DF8500B62C95 /* APIClient.swift */; };
+		0446E39E2951E19E00B62C95 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* Login.swift */; };
+		0446E39F2951E19E00B62C95 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* Login.swift */; };
 		04AB3E8B28D79B9D00C327A4 /* RecordFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */; };
 		04AB3E8E28D79BB600C327A4 /* EditorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8D28D79BB600C327A4 /* EditorFeature.swift */; };
 		04AB3E9128D79C3900C327A4 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9028D79C3900C327A4 /* MainFeature.swift */; };
@@ -99,6 +103,8 @@
 		042A3C5428DC780300772365 /* WalletApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		042A3C5528DC780400772365 /* EditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
+		0446E39A2951DF8500B62C95 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		0446E39D2951E19E00B62C95 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFeature.swift; sourceTree = "<group>"; };
 		04AB3E8D28D79BB600C327A4 /* EditorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFeature.swift; sourceTree = "<group>"; };
 		04AB3E9028D79C3900C327A4 /* MainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
@@ -242,6 +248,7 @@
 			children = (
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
+				0446E39D2951E19E00B62C95 /* Login.swift */,
 				04AB3E9F28D79CFF00C327A4 /* MainView.swift */,
 				04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */,
 				043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */,
@@ -278,6 +285,7 @@
 				04AB3E9C28D79CE400C327A4 /* SummaryFeature.swift */,
 				04AB3E9628D79CA200C327A4 /* StatisticsFeature.swift */,
 				04AB3E9028D79C3900C327A4 /* MainFeature.swift */,
+				0446E39A2951DF8500B62C95 /* APIClient.swift */,
 				04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */,
 				04AB3E9928D79CC500C327A4 /* RecordDetailsFeature.swift */,
 				04AB3E9328D79C7400C327A4 /* MoneyRecord.swift */,
@@ -553,8 +561,10 @@
 				042A3C5628DC780400772365 /* WalletApp.swift in Sources */,
 				042A3C5F28DC782E00772365 /* MoneyRecord.swift in Sources */,
 				042A3C5E28DC782E00772365 /* SummaryFeature.swift in Sources */,
+				0446E39F2951E19E00B62C95 /* Login.swift in Sources */,
 				042A3C5A28DC782E00772365 /* MainFeature.swift in Sources */,
 				042A3C5D28DC782E00772365 /* RecordFeature.swift in Sources */,
+				0446E39C2951DF8500B62C95 /* APIClient.swift in Sources */,
 				042A3C5C28DC782E00772365 /* EditorFeature.swift in Sources */,
 				042A3C5B28DC782E00772365 /* RecordDetailsFeature.swift in Sources */,
 				042A3C2E28DC77B800772365 /* ContentView.swift in Sources */,
@@ -597,10 +607,12 @@
 				0421FC2D28C697A600487827 /* SummaryView.swift in Sources */,
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
+				0446E39E2951E19E00B62C95 /* Login.swift in Sources */,
 				04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */,
 				04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */,
 				043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */,
 				04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */,
+				0446E39B2951DF8500B62C95 /* APIClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
