@@ -30,6 +30,11 @@ struct UserRouter: RouteCollection {
         routes
             .grouped("api")
             .post("register", use: apiController.register)
+      
+      routes
+          .grouped("api")
+          .grouped(UserCredentialsAuthenticator())
+          .get("sign-out", use: apiController.signOut)
         
         routes
             .grouped("api")

@@ -11,6 +11,7 @@ import AppApi
 
 struct APIClient {
   var signIn: (User.Account.Login) async throws -> User.Token.Detail?
+  var signOut: (User.Token.Detail) async throws -> Void 
   
   static var live: APIClient {
     let url = URL(string: "http://localhost:8080/api/")
