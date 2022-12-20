@@ -32,6 +32,7 @@
 		042A3C6128DC7A2900772365 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5528DC780400772365 /* EditorView.swift */; };
 		043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */; };
 		0446E396294BC85000B62C95 /* AppApi in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E395294BC85000B62C95 /* AppApi */; };
+		0446E3992950A11D00B62C95 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E3982950A11D00B62C95 /* SwiftUINavigation */; };
 		04AB3E8B28D79B9D00C327A4 /* RecordFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */; };
 		04AB3E8E28D79BB600C327A4 /* EditorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8D28D79BB600C327A4 /* EditorFeature.swift */; };
 		04AB3E9128D79C3900C327A4 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9028D79C3900C327A4 /* MainFeature.swift */; };
@@ -157,6 +158,7 @@
 			files = (
 				04CCED9128C2881C00C68DB8 /* ComposableArchitecture in Frameworks */,
 				0446E396294BC85000B62C95 /* AppApi in Frameworks */,
+				0446E3992950A11D00B62C95 /* SwiftUINavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +402,7 @@
 			packageProductDependencies = (
 				04CCED9028C2881C00C68DB8 /* ComposableArchitecture */,
 				0446E395294BC85000B62C95 /* AppApi */,
+				0446E3982950A11D00B62C95 /* SwiftUINavigation */,
 			);
 			productName = "Wallet (iOS)";
 			productReference = 04CCED5A28C2879800C68DB8 /* Wallet IOS.app */;
@@ -467,6 +470,7 @@
 			mainGroup = 04CCED4D28C2879600C68DB8;
 			packageReferences = (
 				04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 			);
 			productRefGroup = 04CCED5B28C2879800C68DB8 /* Products */;
 			projectDirPath = "";
@@ -1106,6 +1110,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swiftui-navigation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.5;
+			};
+		};
 		04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -1129,6 +1141,11 @@
 		0446E395294BC85000B62C95 /* AppApi */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppApi;
+		};
+		0446E3982950A11D00B62C95 /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
+			productName = SwiftUINavigation;
 		};
 		04CCED9028C2881C00C68DB8 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

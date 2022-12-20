@@ -9,11 +9,17 @@ import SwiftUI
 
 @main
 struct WalletApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      ContentView(
+        store: .init(
+          initialState: .loggedOut(.init()),
+          reducer: ContentView.reducer,
+          environment: ContentView.Environment(main: .init(apiClient: .live), login: .init())
+        )
+      )
     }
+  }
 }
 
 
