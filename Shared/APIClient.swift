@@ -32,8 +32,8 @@ struct Token: Codable, Sendable {
     .init(token: self)
   }
   
-  func isValid(_ date: Date) -> Bool {
-    validDate < date
+  func isValid(_ now: Date) -> Bool {
+    validDate > now
   }
   
   @objc(WalletToken) class Encodable: NSObject, NSCoding {
@@ -66,9 +66,10 @@ struct AuthNetwork {
 }
 
 enum AuthError: Error {
-  case unauthorized
-  case missingRefreshToken
-  case missingToken
+  case unauthorized // refreshing token failed
+  case missingRefreshToken // expiryDate lapsed but cannot find refresh token
+  case tokenExpired // expiryDate is lapsed
+  case noTokenStored // default state
 }
 
 struct DateProvider {
@@ -104,15 +105,13 @@ actor AuthManager {
   }
   private var refreshTask: Task<Token, Error>?
   
-  
-  
   func validToken() async throws -> Token {
     if let handle = refreshTask {
       return try await handle.value
     }
     
     guard let token = currentToken else {
-      throw AuthError.missingToken
+      throw AuthError.noTokenStored /// this means we need to login
     }
     
     if token.isValid(dateProvider.now) {
@@ -124,7 +123,7 @@ actor AuthManager {
   
   func tryRefreshCurrentToken() async throws -> Void {
     guard let refresh = currentToken?.refreshToken else {
-      throw AuthError.missingToken
+      throw AuthError.missingRefreshToken
     }
     let _ = try await refreshToken(token: refresh)
   }
@@ -243,7 +242,10 @@ class URLClient {
     return try decoder.decode(T.self, from: data)
   }
   
-  private func fetchData(request: URLRequest, allowRetry: Bool = true) async throws -> Data {
+  private func fetchData(
+    request: URLRequest,
+    allowRetry: Bool = true
+  ) async throws -> Data {
     do {
       
       let (data, urlResponse) = try await session.data(for:request)
