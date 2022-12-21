@@ -17,7 +17,8 @@ struct WalletApp: App {
           reducer: ContentView.reducer,
           environment: ContentView.ContentEnvironment(
             apiClient: .live,
-            keyValueStore: .live
+            keyValueStore: .live,
+            keychain: .live
           )
         )
       )

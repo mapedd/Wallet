@@ -35,6 +35,10 @@ struct UserRouter: RouteCollection {
           .grouped("api")
           .grouped(UserCredentialsAuthenticator())
           .get("sign-out", use: apiController.signOut)
+      
+      routes
+        .grouped("api")
+        .post("refresh-token", use: apiController.refresh)
         
         routes
             .grouped("api")

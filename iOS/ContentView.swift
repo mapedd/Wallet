@@ -19,6 +19,7 @@ struct ContentView: View {
   enum Action {
     case loggedIn(MainAction)
     case loggedOut(LoginAction)
+    case successfullyLoggedOut
   }
   
   struct KeyValueStore {
@@ -41,14 +42,17 @@ struct ContentView: View {
   struct ContentEnvironment {
     init(
       apiClient: APIClient,
-      keyValueStore: KeyValueStore
+      keyValueStore: KeyValueStore,
+      keychain: Keychain
     ) {
       self.apiClient = apiClient
       self.keyValueStore = keyValueStore
+      self.keychain = keychain
     }
     
-    private var apiClient: APIClient
+    var apiClient: APIClient
     var keyValueStore: KeyValueStore
+    var keychain: Keychain
     
     var main: MainEnvironment {
       .init(apiClient: apiClient)
@@ -73,9 +77,28 @@ struct ContentView: View {
       switch action {
       case .loggedOut(.loggedIn(let token)):
         env.keyValueStore.write("token", token.value)
+        let localToken = Token(
+          value: token.value,
+          validDate: Date().addingTimeInterval(10000000000),
+          refreshToken: "invalid-refresh-token"
+        )
+        env.keychain.saveToken(localToken)
         state = .loggedIn(MainState())
       case .loggedIn(.logOut):
+//        state.main.loading = true// show loading indicator
+        guard let token = env.keychain.readToken() else {
+          state = .loggedOut(LoginState())
+          return .none
+        }
+        
+        return .task {
+          let result = try await env.apiClient.signOut()
+          debugPrint("result \(result)")
+          return .successfullyLoggedOut
+        }
+      case .successfullyLoggedOut:
         state = .loggedOut(LoginState())
+        return .none
       default:
         return .none
       }

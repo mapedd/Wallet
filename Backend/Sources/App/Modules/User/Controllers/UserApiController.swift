@@ -10,10 +10,8 @@ import FluentKit
 
 extension User.Token.Detail: Content {}
 extension User.Account.Detail: Content {}
+extension ActionResult: Content {}
 
-struct ActionResult: Codable, Content {
-  var success: Bool
-}
 
 struct UserApiController {
   
@@ -47,6 +45,16 @@ struct UserApiController {
         email: $0.email
       )
     }
+  }
+  
+  func refresh(req: Request) async throws -> User.Token.Detail{
+    return User
+      .Token
+      .Detail(
+        id: .init(),
+        value: "123",
+        user: .init(id: .init(), email: "")
+      )
   }
   
   func signOut(req: Request) async throws -> ActionResult {
