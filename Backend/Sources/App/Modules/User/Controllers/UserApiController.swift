@@ -13,15 +13,20 @@ extension User.Account.Detail: Content {}
 extension ActionResult: Content {}
 
 
+func generateTokenString() -> String {
+  let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789="
+  let tokenValue = String((0..<64).map { _ in letters.randomElement()! })
+  return tokenValue
+}
+
 struct UserApiController {
   
   func signInApi(req: Request) async throws -> User.Token.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
       throw Abort(.unauthorized)
     }
-    let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789="
-    let tokenValue = String((0..<64).map { _ in letters.randomElement()! })
-    let token = UserTokenModel(value: tokenValue, userId: user.id)
+    
+    let token = UserTokenModel(value: generateTokenString(), userId: user.id)
     try await token.create(on: req.db)
     let userDetail = User.Account.Detail(id: user.id, email: user.email)
     
@@ -48,12 +53,49 @@ struct UserApiController {
   }
   
   func refresh(req: Request) async throws -> User.Token.Detail{
+    
+    guard let bearer =  req.headers.bearerAuthorization else {
+      throw Abort(.unauthorized)
+    }
+    
+    let token = try await UserTokenModel
+      .query(on: req.db)
+      .filter(\.$value == bearer.token)
+      .first()
+    
+    
+    guard
+      let token
+    else {
+      throw Abort(.unauthorized)
+    }
+    
+    
+    let user = try await token.$user.get(on: req.db)
+    
+    guard let userId = token.user.id else {
+      throw Abort(.unauthorized)
+    }
+    
+    try await token.delete(on: req.db)
+    
+    let newToken = UserTokenModel(
+      value: generateTokenString(),
+      userId: userId
+    )
+    
+    try await newToken.create(on: req.db)
+    let userDetail = User.Account.Detail(
+      id: userId,
+      email: token.user.email
+    )
+    
     return User
       .Token
       .Detail(
-        id: .init(),
-        value: "123",
-        user: .init(id: .init(), email: "")
+        id: newToken.id!,
+        value: newToken.value,
+        user: userDetail
       )
   }
   

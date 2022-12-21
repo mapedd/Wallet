@@ -38,7 +38,7 @@ struct UserRouter: RouteCollection {
       
       routes
         .grouped("api")
-        .post("refresh-token", use: apiController.refresh)
+        .get("refresh-token", use: apiController.refresh)
         
         routes
             .grouped("api")
