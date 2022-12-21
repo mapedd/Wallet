@@ -177,6 +177,15 @@ enum Endpoint {
       return "refresh-token/"
     }
   }
+  
+  var isAuthenticated: Bool {
+    switch self {
+    case .signIn:
+      return false
+    default:
+      return true
+    }
+  }
 }
 
 struct TokenProvider {
@@ -212,7 +221,7 @@ class URLClient {
       request.httpBody = try encoder.encode(encodable)
     }
     request.httpMethod = endPoint.httpMethod.rawValue
-    if let tokenProvider {
+    if let tokenProvider, endPoint.isAuthenticated {
       let token = try await tokenProvider.bearerToken()
       if let token {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
