@@ -18,18 +18,35 @@ public extension User.Token {
   
   struct Detail: Codable {
     public let id: UUID
-    public let value: String
+    public let token: Value
     public let user: User.Account.Detail
     
     public init(
       id: UUID,
-      value: String,
+      token: Value,
       user: User.Account.Detail
     ) {
       self.id = id
-      self.value = value
+      self.token = token
       self.user = user
     }
+  }
+  
+  struct Value: Codable {
+    public let value: String
+    public let expiry: Date
+    public let refresh: String
+    
+    public init(
+      value: String,
+      expiry: Date,
+      refresh: String
+    ) {
+      self.value = value
+      self.expiry = expiry
+      self.refresh = refresh
+    }
+    
   }
 }
 

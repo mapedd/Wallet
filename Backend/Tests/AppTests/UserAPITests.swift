@@ -11,6 +11,7 @@ import FluentKit
 import XCTest
 
 final class UserAPITests: AppTestCase {
+  
   func testRegisterSignInSignOutCreatesAndThenRemovesTokenCreatesUser() async throws {
     let app = try createTestApp()
     defer { app.shutdown() }
@@ -30,10 +31,14 @@ final class UserAPITests: AppTestCase {
     let tokensSignedIn = try await UserTokenModel.query(on: app.db).all()
     XCTAssertEqual(tokensSignedIn.count, 1)
     
-    let result = try signOut(token.value, app)
+    let result = try signOut(token.token.value, app)
     XCTAssertTrue(result.success)
     
     let tokensSignedOut = try await UserTokenModel.query(on: app.db).all()
     XCTAssertTrue(tokensSignedOut.isEmpty)
+  }
+  
+  func testRegisterSignInRefreshSignOut() async throws {
+    
   }
 }

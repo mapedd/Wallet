@@ -20,6 +20,11 @@ struct UserTokenAuthenticator: AsyncBearerAuthenticator {
       return
     }
     
+    // check if token not expired
+    guard token.expiry > Date() else {
+      return
+    }
+    
     guard
       let user = try await UserAccountModel
         .find(token.$user.id, on: req.db)

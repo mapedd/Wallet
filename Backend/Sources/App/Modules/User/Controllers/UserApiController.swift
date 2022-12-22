@@ -19,23 +19,43 @@ func generateTokenString() -> String {
   return tokenValue
 }
 
+extension UserTokenModel {
+  convenience init(userId: UUID) {
+    self.init(
+      value: generateTokenString(),
+      expiry: Date().addingTimeInterval(60),
+      refresh: generateTokenString(),
+      userId: userId
+    )
+  }
+}
+
 struct UserApiController {
+  
+  
   
   func signInApi(req: Request) async throws -> User.Token.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
       throw Abort(.unauthorized)
     }
     
-    let token = UserTokenModel(value: generateTokenString(), userId: user.id)
+    let token = UserTokenModel(userId: user.id)
     try await token.create(on: req.db)
-    let userDetail = User.Account.Detail(id: user.id, email: user.email)
+    
     
     return User
       .Token
       .Detail(
         id: token.id!,
-        value: token.value,
-        user: userDetail
+        token: .init(
+          value: token.value,
+          expiry: token.expiry,
+          refresh: token.refresh
+        ),
+        user: .init(
+          id: user.id,
+          email: user.email
+        )
       )
   }
   
@@ -75,10 +95,7 @@ struct UserApiController {
     
     try await token.delete(on: req.db)
     
-    let newToken = UserTokenModel(
-      value: generateTokenString(),
-      userId: userId
-    )
+    let newToken = UserTokenModel(userId: userId)
     
     try await newToken.create(on: req.db)
     let userDetail = User.Account.Detail(
@@ -90,7 +107,11 @@ struct UserApiController {
       .Token
       .Detail(
         id: newToken.id!,
-        value: newToken.value,
+        token: .init(
+          value: newToken.value,
+          expiry: newToken.expiry,
+          refresh: newToken.refresh
+        ),
         user: userDetail
       )
   }

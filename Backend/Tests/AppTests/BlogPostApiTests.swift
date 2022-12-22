@@ -22,7 +22,7 @@ final class BlogPostApiTests: AppTestCase {
         try app
             .describe("Blog posts list API should be fine")
             .get("/api/blog/posts/")
-            .bearerToken(token.value)
+            .bearerToken(token.token.value)
             .expect(.ok)
             .expect(.json)
             .expect([Blog.Post.List].self) { content in
@@ -54,7 +54,7 @@ final class BlogPostApiTests: AppTestCase {
             .describe("Create post should be fine")
             .post("/api/blog/posts/")
             .body(newPost)
-            .bearerToken(token.value)
+            .bearerToken(token.token.value)
             .expect(.created)
             .expect(.json)
             .expect(Blog.Post.Detail.self) { content in
@@ -87,7 +87,7 @@ final class BlogPostApiTests: AppTestCase {
             .describe("Update post should be fine")
             .put("/api/blog/posts/\(post.id!.uuidString)/")
             .body(newPost)
-            .bearerToken(token.value)
+            .bearerToken(token.token.value)
             .expect(.ok)
             .expect(.json)
             .expect(Blog.Post.Detail.self) { content in
