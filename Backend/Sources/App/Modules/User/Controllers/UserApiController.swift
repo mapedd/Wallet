@@ -63,15 +63,11 @@ struct UserApiController {
       .filter(\.$value == bearer.token)
       .first()
     
-    
     guard
       let token
     else {
       throw Abort(.unauthorized)
     }
-    
-    
-    let user = try await token.$user.get(on: req.db)
     
     guard let userId = token.user.id else {
       throw Abort(.unauthorized)
