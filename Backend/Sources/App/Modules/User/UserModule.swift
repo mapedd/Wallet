@@ -9,17 +9,23 @@ import Vapor
 import SwiftHtml
 
 struct UserModule: ModuleInterface {
-
-    let router = UserRouter()
-
-    func boot(_ app: Application) throws {
-        app.migrations.add(UserMigrations.v1())
-        app.migrations.add(UserMigrations.seed())
-        
-        app.middleware.use(UserSessionAuthenticator())
-        app.middleware.use(UserTokenAuthenticator())
-        
-        try router.boot(routes: app.routes)
-    }
+  
+  var router: UserRouter
+  
+  init(
+    router: UserRouter
+  ) {
+    self.router = router
+  }
+  
+  func boot(_ app: Application) throws {
+    app.migrations.add(UserMigrations.v1())
+    app.migrations.add(UserMigrations.seed())
+    
+    app.middleware.use(UserSessionAuthenticator())
+    app.middleware.use(UserTokenAuthenticator(dateProvider: router.dateProvider))
+    
+    try self.router.boot(routes: app.routes)
+  }
 }
 

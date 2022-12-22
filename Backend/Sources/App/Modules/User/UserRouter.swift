@@ -9,9 +9,16 @@ import Vapor
 
 struct UserRouter: RouteCollection {
   
+  var dateProvider: DateProvider
   let frontendController = UserFrontendController()
+  let apiController: UserApiController
   
-  let apiController = UserApiController()
+  init(
+    dateProvider: DateProvider
+  ) {
+    self.dateProvider = dateProvider
+    self.apiController = .init(dateProvider: dateProvider)
+  }
   
   func bootFrontend(_ routes: RoutesBuilder) throws {
     routes
@@ -29,7 +36,7 @@ struct UserRouter: RouteCollection {
     // for login in
     let loginAuthenticator = UserCredentialsAuthenticator()
     // post login
-    let tokenAuthenticator = UserTokenAuthenticator()
+    let tokenAuthenticator = UserTokenAuthenticator(dateProvider: dateProvider)
     
     routes
       .grouped("api")
@@ -44,8 +51,12 @@ struct UserRouter: RouteCollection {
     
     routes
       .grouped("api")
-      .post("refresh-token", use: apiController.refresh)
+      .grouped(tokenAuthenticator)
+      .get("user", use: apiController.details)
     
+    routes
+      .grouped("api")// internally validation of token since we need pair
+      .post("refresh-token", use: apiController.refresh)
     
     routes
       .grouped("api")
@@ -54,6 +65,10 @@ struct UserRouter: RouteCollection {
     routes
       .grouped("api")
       .get("users", use: apiController.listAll)
+    
+    routes
+      .grouped("api")
+      .get("*", use: apiController.any)
   }
   
   func boot(routes: RoutesBuilder) throws {

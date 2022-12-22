@@ -15,9 +15,9 @@ class AppTestCase: XCTestCase {
     let password: String
   }
   
-  func createTestApp() throws -> Application {
+  func createTestApp(dateProvider: DateProvider = .init(currentDate: { .now })) throws -> Application {
     let app = Application(.testing)
-    try configure(app)
+    try configure(app, dateProvider: dateProvider)
     try app.autoMigrate().wait()
     return app
   }

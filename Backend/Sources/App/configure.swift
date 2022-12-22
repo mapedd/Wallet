@@ -12,7 +12,7 @@ import Liquid
 import LiquidLocalDriver
 @_exported import AppApi
 
-public func configure(_ app: Application) throws {
+public func configure(_ app: Application, dateProvider: DateProvider) throws {
   
   if app.environment == .testing {
     app.databases.use(.sqlite(.memory), as: .sqlite)
@@ -34,7 +34,7 @@ public func configure(_ app: Application) throws {
   app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
   
   /// extend paths to always contain a trailing slash
-  app.middleware.use(ExtendPathMiddleware())
+//  app.middleware.use(ExtendPathMiddleware())
   
   /// setup sessions
   app.sessions.use(.fluent)
@@ -45,7 +45,7 @@ public func configure(_ app: Application) throws {
   /// setup modules
   let modules: [ModuleInterface] = [
     WebModule(),
-    UserModule(),
+    UserModule(router: .init(dateProvider: dateProvider)),
     AdminModule(),
     ApiModule(),
     BlogModule(),

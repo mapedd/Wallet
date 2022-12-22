@@ -12,6 +12,15 @@ extension User.Token.Detail: Content {}
 extension User.Account.Detail: Content {}
 extension ActionResult: Content {}
 
+struct UserQuery: Codable, Content {
+  var userId: UUID
+}
+
+struct EchoResponse: Codable, Content {
+  var hello = "nice to meet your"
+  var date = Date()
+}
+
 
 func generateTokenString() -> String {
   let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789="
@@ -20,10 +29,10 @@ func generateTokenString() -> String {
 }
 
 extension UserTokenModel {
-  convenience init(userId: UUID) {
+  convenience init(userId: UUID, dateProvider: DateProvider) {
     self.init(
       value: generateTokenString(),
-      expiry: Date().addingTimeInterval(60),
+      expiry: dateProvider.tokenExpiryDate,
       refresh: generateTokenString(),
       userId: userId
     )
@@ -32,12 +41,20 @@ extension UserTokenModel {
 
 struct UserApiController {
   
+  var dateProvider: DateProvider
+  init(dateProvider: DateProvider) {
+    self.dateProvider = dateProvider
+  }
+  
   func signInApi(req: Request) async throws -> User.Token.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
       throw Abort(.unauthorized)
     }
     
-    let token = UserTokenModel(userId: user.id)
+    let token = UserTokenModel(
+      userId: user.id,
+      dateProvider: dateProvider
+    )
     try await token.create(on: req.db)
     
     
@@ -57,6 +74,25 @@ struct UserApiController {
       )
   }
   
+  func details(req: Request) async throws -> User.Account.Detail {
+    
+    let userQuery = try req.query.decode(UserQuery.self)
+    
+    guard
+      let user = try await UserAccountModel
+        .query(on: req.db)
+        .filter(\.$id == userQuery.userId)
+        .first()
+    else {
+      throw Abort(.notFound)
+    }
+    
+    return .init(
+      id: user.id!,
+      email: user.email
+    )
+  }
+  
   func listAll(req: Request) async throws -> [User.Account.Detail] {
     let users = try await UserAccountModel
       .query(on: req.db)
@@ -68,6 +104,10 @@ struct UserApiController {
         email: $0.email
       )
     }
+  }
+  
+  func any(req: Request) async throws -> EchoResponse {
+    return EchoResponse()
   }
   
   func refresh(req: Request) async throws -> User.Token.Detail{
@@ -94,7 +134,10 @@ struct UserApiController {
     
     try await token.delete(on: req.db)
     
-    let newToken = UserTokenModel(userId: user.id!)
+    let newToken = UserTokenModel(
+      userId: user.id!,
+      dateProvider: dateProvider
+    )
     
     try await newToken.create(on: req.db)
     

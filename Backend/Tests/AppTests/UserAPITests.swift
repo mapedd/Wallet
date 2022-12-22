@@ -39,6 +39,35 @@ final class UserAPITests: AppTestCase {
   }
   
   func testRegisterSignInRefreshSignOut() async throws {
+    var date = Date()
+    let dateProvider = DateProvider(
+      currentDate: { return date }
+    )
+    let app = try createTestApp(dateProvider: dateProvider)
+    defer { app.shutdown() }
     
+    // check db has no user
+    let users = try await UserAccountModel.query(on: app.db).filter(\.$email == "tom@bob.com").all()
+    XCTAssertTrue(users.isEmpty)
+    
+    let userLogin = UserLogin(email: "tom@bob.com", password: "abc")
+    let _ = try register(userLogin, app)
+    
+    // check db has the user
+    let usersAfterRegister = try await UserAccountModel.query(on: app.db).filter(\.$email == "tom@bob.com").all()
+    XCTAssertEqual(usersAfterRegister.count, 1)
+    
+    let token = try authenticate(userLogin, app)
+    // here we should get a token valid for 60 seconds
+    // before next call we will decrease time in `date` to simulate token invalid
+    // which should result in refreshing of the token
+    let tokensSignedIn = try await UserTokenModel.query(on: app.db).all()
+    XCTAssertEqual(tokensSignedIn.count, 1)
+    
+    date = date.addingTimeInterval(-60 * 60) // simute token 1hr old
+    
+    let result = try signOut(token.token.value, app)
+    
+    XCTAssertTrue(result.success)
   }
 }
