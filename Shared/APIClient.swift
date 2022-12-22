@@ -153,7 +153,7 @@ actor AuthManager {
 enum Endpoint {
   case signIn(User.Account.Login)
   case signOut
-  case refreshToken(String)
+  case refreshToken(User.Token.Refresh)
   
   var httpMethod: HTTPMethod {
     switch self {
@@ -194,12 +194,21 @@ struct TokenProvider {
 
 class URLClient {
   
-  let encoder = JSONEncoder()
-  let decoder = JSONDecoder()
+  lazy var encoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .iso8601
+    return encoder
+  }()
+  
+  lazy var decoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return decoder
+  }()
   
   let baseURL: URL
   let session: URLSession
-  let tokenProvider: TokenProvider?
+  var tokenProvider: TokenProvider?
   
   init(
     baseURL: URL,
@@ -285,14 +294,23 @@ struct APIClient {
       tokenProvider: nil
     )
     
+    let keychain = Keychain.live
+    
     let authNetwork = AuthNetwork(
       refreshToken: { refreshToken in
-        try await authURLClient.fetch(endpoint: .refreshToken(refreshToken))
+        authURLClient.tokenProvider = .init(
+          bearerToken: {
+            keychain.readToken()?.value
+          },
+          refreshToken: {}
+        )
+        let apiToken: User.Token.Detail = try await authURLClient.fetch(endpoint: .refreshToken(.init(refresh: refreshToken)))
+        return apiToken.toLocalToken
       }
     )
     
     let authManager = AuthManager.init(
-      keychain: .live,
+      keychain: keychain,
       authNetwork: authNetwork,
       dateProvider: .init(
         currentDate: { .now }
@@ -319,12 +337,23 @@ struct APIClient {
       }
     )
   }
-  static let mock = APIClient(
-    signIn: { _ in
-      User.Token.Detail(id: .init(), value: "asd", user: .init(id: .init(), email: "asd"))
-    },
-    signOut: {
-      ActionResult(success: true)
-    }
-  )
+  static var mock: APIClient {
+    .init(
+      signIn: { _ in
+        User.Token.Detail(
+          id: .init(),
+          token: .init(
+            value: "token",
+            expiry: .init(),
+            refresh: "refresh"),
+          user: .init(
+            id: .init(),
+            email: "asd")
+        )
+      },
+      signOut: {
+        ActionResult(success: true)
+      }
+    )
+  }
 }

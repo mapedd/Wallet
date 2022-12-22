@@ -16,6 +16,13 @@ public extension User {
 
 public extension User.Token {
   
+  struct Refresh: Codable {
+    public let refresh: String
+    public init(refresh: String) {
+      self.refresh = refresh
+    }
+  }
+  
   struct Detail: Codable {
     public let id: UUID
     public let token: Value

@@ -32,8 +32,6 @@ extension UserTokenModel {
 
 struct UserApiController {
   
-  
-  
   func signInApi(req: Request) async throws -> User.Token.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
       throw Abort(.unauthorized)
@@ -78,29 +76,31 @@ struct UserApiController {
       throw Abort(.unauthorized)
     }
     
+    let input = try req.content.decode(User.Token.Refresh.self)
+    
     let token = try await UserTokenModel
       .query(on: req.db)
       .filter(\.$value == bearer.token)
       .first()
     
     guard
-      let token
+      let token,
+      token.refresh == input.refresh
     else {
       throw Abort(.unauthorized)
     }
     
-    guard let userId = token.user.id else {
-      throw Abort(.unauthorized)
-    }
+    let user = try await token.$user.get(on: req.db)
     
     try await token.delete(on: req.db)
     
-    let newToken = UserTokenModel(userId: userId)
+    let newToken = UserTokenModel(userId: user.id!)
     
     try await newToken.create(on: req.db)
+    
     let userDetail = User.Account.Detail(
-      id: userId,
-      email: token.user.email
+      id: user.id!,
+      email: user.email
     )
     
     return User

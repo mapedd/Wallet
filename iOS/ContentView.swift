@@ -9,6 +9,17 @@ import SwiftUI
 import ComposableArchitecture
 import IdentifiedCollections
 import SwiftUINavigation
+import AppApi
+
+extension User.Token.Detail {
+  var toLocalToken: Token {
+    .init(
+      value: self.token.value,
+      validDate: self.token.expiry,
+      refreshToken: self.token.refresh
+    )
+  }
+}
 
 struct ContentView: View {
   enum State: Equatable {
@@ -62,6 +73,7 @@ struct ContentView: View {
     }
   }
   
+  
   static let reducer: Reducer<State,Action,ContentEnvironment> = Reducer.combine(
     mainReducer.pullback(
       state: /State.loggedIn,
@@ -76,13 +88,7 @@ struct ContentView: View {
     .init{ state, action, env in
       switch action {
       case .loggedOut(.loggedIn(let token)):
-        env.keyValueStore.write("token", token.value)
-        let localToken = Token(
-          value: token.value,
-          validDate: Date().addingTimeInterval(10000000000),
-          refreshToken: "invalid-refresh-token"
-        )
-        env.keychain.saveToken(localToken)
+        env.keychain.saveToken(token.toLocalToken)
         state = .loggedIn(MainState())
       case .loggedIn(.logOut):
 //        state.main.loading = true// show loading indicator

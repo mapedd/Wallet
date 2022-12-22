@@ -10,8 +10,8 @@ import ComposableArchitecture
 import AppApi
 
 struct LoginState: Equatable {
-  @BindableState var username = "mapedd@gmail.com"
-  @BindableState var password = "BobMarley123"
+  @BindableState var username = "tomek@gmail.com"
+  @BindableState var password = "maciek12"
   var loading = false
   var loginFailed = false
 }
