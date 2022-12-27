@@ -49,6 +49,7 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     AdminModule(),
     ApiModule(),
     BlogModule(),
+    RecordModule()
   ]
   for module in modules {
     try module.boot(app)

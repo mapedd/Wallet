@@ -21,6 +21,23 @@ extension User.Token.Detail {
   }
 }
 
+struct KeyValueStore {
+  var write: (_ key: String, _ value: String) -> Void
+  var read: (_ key: String) -> String?
+  
+  static var live: KeyValueStore {
+    let defaults = UserDefaults.standard
+    return KeyValueStore(
+      write: {key, value in
+        defaults.set(value, forKey: key)
+      },
+      read: { key in
+        defaults.value(forKey: key) as? String
+      }
+    )
+  }
+}
+
 struct ContentView: View {
   enum State: Equatable {
     case loggedIn(MainState)
@@ -31,24 +48,10 @@ struct ContentView: View {
     case loggedIn(MainAction)
     case loggedOut(LoginAction)
     case successfullyLoggedOut
+    case viewLoaded
   }
   
-  struct KeyValueStore {
-    var write: (_ key: String, _ value: String) -> Void
-    var read: (_ key: String) -> String?
-    
-    static var live: KeyValueStore {
-      let defaults = UserDefaults.standard
-      return KeyValueStore(
-        write: {key, value in
-          defaults.set(value, forKey: key)
-        },
-        read: { key in
-          defaults.value(forKey: key) as? String
-        }
-      )
-    }
-  }
+  
   
   struct ContentEnvironment {
     init(
@@ -91,7 +94,7 @@ struct ContentView: View {
         env.keychain.saveToken(token.toLocalToken)
         state = .loggedIn(MainState())
       case .loggedIn(.logOut):
-//        state.main.loading = true// show loading indicator
+        //        state.main.loading = true// show loading indicator
         guard let token = env.keychain.readToken() else {
           state = .loggedOut(LoginState())
           return .none
@@ -105,10 +108,15 @@ struct ContentView: View {
       case .successfullyLoggedOut:
         state = .loggedOut(LoginState())
         return .none
+      case .viewLoaded:
+        if env.keychain.readToken() != nil {
+          state = .loggedIn(MainState())
+        }
+        return .none
       default:
         return .none
       }
-        return .none
+      return .none
     }
   )
     .debug()
@@ -116,19 +124,25 @@ struct ContentView: View {
   var store: Store<State, Action>
   var body: some View {
     NavigationView {
-      SwitchStore(self.store) {
-        CaseLet(state: /State.loggedIn, action: Action.loggedIn) { store in
-          MainView(
-            store: store
-          )
+      WithViewStore(self.store, observe: { $0 }) { viewStore in
+        SwitchStore(self.store) {
+          CaseLet(state: /State.loggedIn, action: Action.loggedIn) { store in
+            MainView(
+              store: store
+            )
+          }
+          CaseLet(state: /State.loggedOut, action: Action.loggedOut) { store in
+            LoginView(
+              store: store
+            )
+          }
         }
-        CaseLet(state: /State.loggedOut, action: Action.loggedOut) { store in
-          LoginView(
-            store: store
-          )
+        .onAppear{
+          viewStore.send(.viewLoaded)
         }
       }
     }
+    
   }
 }
 
@@ -143,3 +157,4 @@ struct ContentView: View {
 //    )
 //  }
 //}
+//

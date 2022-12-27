@@ -11,6 +11,7 @@ import Vapor
 var env = try Environment.detect()
 try LoggingSystem.bootstrap(from: &env)
 let app = Application(env)
+app.logger.logLevel = .debug
 defer { app.shutdown() }
 try configure(app, dateProvider: DateProvider(currentDate: { .now }))
 try app.run()

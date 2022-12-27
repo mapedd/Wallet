@@ -32,6 +32,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>AppTests</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>Run</key>
 		<dict>
 			<key>primary</key>
