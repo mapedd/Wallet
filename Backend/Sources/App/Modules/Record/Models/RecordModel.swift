@@ -54,7 +54,7 @@ final class RecordModel: DatabaseModelInterface {
   var title: String
   
   @Field(key: FieldKeys.v1.notes)
-  var notes: String
+  var notes: String?
   
 //  @Field(key: FieldKeys.v1.categoryID)
 //  var category: RecordCategoryModel
@@ -66,7 +66,7 @@ final class RecordModel: DatabaseModelInterface {
   var updated: Date
   
   @Field(key: FieldKeys.v1.deleted)
-  var deleted: Date
+  var deleted: Date?
   
   @Parent(key: FieldKeys.v1.userID)
   var user: UserAccountModel
@@ -79,11 +79,11 @@ final class RecordModel: DatabaseModelInterface {
     type: RecordType,
     currency: Currency,
     title: String,
-    notes: String,
+    notes: String? = nil,
 //    categoryID: UUID,
     created: Date,
     updated: Date,
-    deleted: Date,
+    deleted: Date? = nil,
     userID: UUID
   ) {
     self.id = id

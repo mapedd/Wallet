@@ -20,11 +20,20 @@ final class UserTokenModel: DatabaseModelInterface {
     }
   }
   
-  @ID() var id: UUID?
-  @Field(key: FieldKeys.v1.value) var value: String
-  @Field(key: FieldKeys.v1.expiry) var expiry: Date
-  @Field(key: FieldKeys.v1.refresh) var refresh: String
-  @Parent(key: FieldKeys.v1.userId) var user: UserAccountModel
+  @ID()
+  var id: UUID?
+  
+  @Field(key: FieldKeys.v1.value)
+  var value: String
+  
+  @Field(key: FieldKeys.v1.expiry)
+  var expiry: Date
+  
+  @Field(key: FieldKeys.v1.refresh)
+  var refresh: String
+  
+  @Parent(key: FieldKeys.v1.userId)
+  var user: UserAccountModel
   
   init() { }
   
@@ -33,8 +42,8 @@ final class UserTokenModel: DatabaseModelInterface {
     value: String,
     expiry: Date,
     refresh: String,
-    userId: UUID)
-  {
+    userId: UUID
+  ){
     self.id = id
     self.value = value
     self.expiry = expiry
