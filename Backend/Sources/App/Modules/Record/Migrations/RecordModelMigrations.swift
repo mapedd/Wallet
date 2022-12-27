@@ -19,25 +19,23 @@ enum RecordModelMigrations {
               enumBuilder = enumBuilder.case(option.rawValue)
           }
           
-          let _ = enumBuilder
+          let recordType = try await enumBuilder
             .create()
-            .map{ recordType in
-            
-            db.schema(RecordModel.schema)
-                .id()
-                .field(RecordModel.FieldKeys.v1.amount, .sql(raw: "NUMERIC(7,2"), .required)
-                .field(RecordModel.FieldKeys.v1.type, recordType, .required)
-                .field(RecordModel.FieldKeys.v1.currency, .string, .required)
-                .field(RecordModel.FieldKeys.v1.title, .string, .required)
-                .field(RecordModel.FieldKeys.v1.notes, .string)
-                .field(RecordModel.FieldKeys.v1.created, .datetime, .required)
-                .field(RecordModel.FieldKeys.v1.updated, .datetime, .required)
-                .field(RecordModel.FieldKeys.v1.deleted, .datetime)
-                .field(RecordModel.FieldKeys.v1.userID, .datetime)
-                .field(RecordModel.FieldKeys.v1.userID, .uuid, .required)
-                .foreignKey(RecordModel.FieldKeys.v1.userID, references: UserAccountModel.schema, .id)
-                .create()
-          }
+          
+          
+          try await db.schema(RecordModel.schema)
+              .id()
+              .field(RecordModel.FieldKeys.v1.amount, .sql(raw: "NUMERIC(7,2)"), .required)
+              .field(RecordModel.FieldKeys.v1.type, recordType, .required)
+              .field(RecordModel.FieldKeys.v1.currency, .string, .required)
+              .field(RecordModel.FieldKeys.v1.title, .string, .required)
+              .field(RecordModel.FieldKeys.v1.notes, .string)
+              .field(RecordModel.FieldKeys.v1.created, .datetime, .required)
+              .field(RecordModel.FieldKeys.v1.updated, .datetime, .required)
+              .field(RecordModel.FieldKeys.v1.deleted, .datetime)
+              .field(RecordModel.FieldKeys.v1.userID, .uuid, .required)
+              .foreignKey(RecordModel.FieldKeys.v1.userID, references: UserAccountModel.schema, .id)
+              .create()
       
 //            try await db.schema(RecordCategoryModel.schema)
 //                .id()

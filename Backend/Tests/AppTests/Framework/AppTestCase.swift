@@ -7,12 +7,15 @@
 
 @testable import App
 import XCTVapor
+import FluentKit
 
 class AppTestCase: XCTestCase {
   
   struct UserLogin: Content {
     let email: String
     let password: String
+    
+    static let tomBob = UserLogin(email: "tom@bob.com", password: "abc")
   }
   
   func createTestApp(dateProvider: DateProvider = .init(currentDate: { .now })) throws -> Application {
@@ -20,6 +23,27 @@ class AppTestCase: XCTestCase {
     try configure(app, dateProvider: dateProvider)
     try app.autoMigrate().wait()
     return app
+  }
+  
+  func create(
+    record input: Record.Create,
+    app: Application,
+    token: User.Token.Detail
+  ) async throws -> Record.Create {
+    var recordOutput: Record.Create?
+    try app.test(.POST, "/api/record/create", beforeRequest: { req in
+      req.headers.bearerAuthorization = BearerAuthorization(token: token.token.value)
+      try req.content.encode(input)
+    }, afterResponse: { res in
+      XCTAssertContent(Record.Create.self, res) { content in
+        recordOutput = content
+      }
+    })
+    guard let recordOutput = recordOutput else {
+      XCTFail("Record create failed")
+      throw Abort(.internalServerError)
+    }
+    return recordOutput
   }
   
   func register(_ userLogin: UserLogin, _ app: Application) throws -> User.Account.Detail {
@@ -72,6 +96,14 @@ class AppTestCase: XCTestCase {
   
   func authenticateRoot(_ app: Application) throws -> User.Token.Detail {
     try authenticate(.init(email: "root@localhost.com", password: "ChangeMe1"), app)
+  }
+  
+  func registerAndSignInUser(
+    app: Application,
+    login: UserLogin = .tomBob
+  ) async throws -> User.Token.Detail {
+    let _ = try register(login, app)
+    return try authenticate(login, app)
   }
 }
 

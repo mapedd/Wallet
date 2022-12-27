@@ -10,13 +10,13 @@ import Vapor
 import FluentKit
 
 enum Record {
-  struct Create: Codable, Content {
+  struct Create: Codable,Hashable, Content {
     var id: UUID
     var title: String
     var amount: Decimal
   }
   
-  struct List: Codable, Content {
+  struct List: Codable,Hashable, Content {
     var id: UUID
     var title: String
     var amount: Decimal
