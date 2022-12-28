@@ -154,6 +154,8 @@ enum Endpoint {
   case signIn(User.Account.Login)
   case signOut
   case refreshToken(User.Token.Refresh)
+  case updateRecord(Record.Update)
+  case listRecords
   
   var httpMethod: HTTPMethod {
     switch self {
@@ -161,6 +163,10 @@ enum Endpoint {
       return .POST(login)
     case .refreshToken(let token):
       return .POST(token)
+    case .updateRecord(let record):
+      return .POST(record)
+    case .listRecords:
+      return .GET
     case .signOut:
       return .GET
     }
@@ -174,6 +180,10 @@ enum Endpoint {
       return "sign-in/"
     case .refreshToken:
       return "refresh-token/"
+    case .listRecords:
+      return "record/list"
+    case .updateRecord:
+      return "record/update"
     }
   }
   
@@ -220,7 +230,9 @@ class URLClient {
     self.tokenProvider = tokenProvider
   }
   
-  func request(from endPoint: Endpoint) async throws -> URLRequest {
+  func request(
+    from endPoint: Endpoint
+  ) async throws -> URLRequest {
     var request = URLRequest(url: URL(string: endPoint.path, relativeTo: baseURL)!)
     if
       case let .POST(encodable) = endPoint.httpMethod,
@@ -282,6 +294,8 @@ struct APIClient {
   
   var signIn: (User.Account.Login) async throws -> User.Token.Detail?
   var signOut: () async throws -> ActionResult
+  var updateRecord: (Record.Update) async throws -> Record.Detail?
+  var listRecords: () async throws -> [Record.Detail]
   
   static var live: APIClient {
     
@@ -304,6 +318,7 @@ struct APIClient {
           },
           refreshToken: {}
         )
+        // handle refresh token getting 401
         let apiToken: User.Token.Detail = try await authURLClient.fetch(endpoint: .refreshToken(.init(refresh: refreshToken)))
         return apiToken.toLocalToken
       }
@@ -334,6 +349,12 @@ struct APIClient {
       },
       signOut: {
         try await urlClient.fetch(endpoint: .signOut)
+      },
+      updateRecord: { record in
+        try await urlClient.fetch(endpoint: .updateRecord(record))
+      },
+      listRecords: {
+        try await urlClient.fetch(endpoint: .listRecords)
       }
     )
   }
@@ -353,6 +374,19 @@ struct APIClient {
       },
       signOut: {
         ActionResult(success: true)
+      },
+      updateRecord: {
+        .init(
+          id: $0.id,
+          title: $0.title ?? "",
+          amount: $0.amount ?? .init(1),
+          currency: .pln,
+          created: .now,
+          updated: $0.updated
+        )
+      },
+      listRecords: {
+        []
       }
     )
   }

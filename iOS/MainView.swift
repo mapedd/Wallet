@@ -30,7 +30,10 @@ struct MainView : View {
 
         List {
           ForEachStore(
-            self.store.scope(state: \.records, action: MainAction.recordAction(id:action:))
+            self.store.scope(
+              state: \.records,
+              action: MainAction.recordAction(id:action:)
+            )
           ) {
             RecordView(store: $0)
           }
@@ -73,6 +76,9 @@ struct MainView : View {
          )
       )
       .navigationTitle(viewStore.title)
+      .onAppear {
+        viewStore.send(.mainViewAppeared)
+      }
     }
   }
   

@@ -100,12 +100,20 @@ struct ContentView: View {
           return .none
         }
         
-        return .task {
-          let result = try await env.apiClient.signOut()
-          debugPrint("result \(result)")
-          return .successfullyLoggedOut
-        }
+        return .task(
+          operation: {
+            
+            let result = try await env.apiClient.signOut()
+            debugPrint("result \(result)")
+            return .successfullyLoggedOut
+          }, catch: { error in
+            // we need to log out even if it failed to not be stuck here forever
+            
+            return .successfullyLoggedOut
+          }
+        )
       case .successfullyLoggedOut:
+        env.keychain.saveToken(nil)
         state = .loggedOut(LoginState())
         return .none
       case .viewLoaded:
@@ -119,7 +127,7 @@ struct ContentView: View {
       return .none
     }
   )
-    .debug()
+  .debug()
   
   var store: Store<State, Action>
   var body: some View {

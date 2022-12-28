@@ -81,6 +81,8 @@ enum MainAction {
   case hideStatistics
   case logOut
   case logOutButtonTapped
+  case mainViewAppeared
+  case loadedRecords([RecordState])
 }
 
 
@@ -191,6 +193,27 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
     case .logOutButtonTapped:
       return Effect(value: .logOut)
       
+    case .mainViewAppeared:
+      return .task {
+        let records = try await environment.apiClient.listRecords()
+        let recordStates = records.map { record in
+          RecordState(
+            record: .init(
+              id: record.id,
+              date: record.created,
+              title: record.title,
+              type: .expense,
+              amount: record.amount,
+              currency: .pln
+            )
+          )
+        }
+        return .loadedRecords(recordStates)
+      }
+      
+    case .loadedRecords(let records):
+      state.records = IdentifiedArrayOf<RecordState>(uniqueElements: records)
+      return .none
     default:
       return .none
     }
