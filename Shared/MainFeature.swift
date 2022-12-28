@@ -79,7 +79,6 @@ enum MainAction {
   case summaryAction(SummaryViewAction)
   case editModeChanged(MainState.EditMode)
   case delete(IndexSet)
-  case move(IndexSet, Int)
   case statisticsAction(StatisticsAction)
   case showStatistics
   case hideStatistics
@@ -90,6 +89,9 @@ enum MainAction {
   
   case recordCreated(Record.Detail)
   case recordCreateFailed(Error)
+  
+  case deleteSuccess
+  case deleteFailed(Error)
 }
 
 
@@ -173,20 +175,34 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
       state.editMode = editMode
       return .none
     case let .delete(indexSet):
+      var records = [RecordState]()
+      for i in indexSet {
+        records.append(state.records[i])
+      }
+      
       state.records.remove(atOffsets: indexSet)
       state.recalculateTotal()
-      return .none
-    case var .move(source, destination):
-      let source = IndexSet(
-        source
-          .map { state.records[$0] }
-          .compactMap { state.records.index(id: $0.id) }
+      
+      let updates = records.map { record in
+        Record.Update(
+          id: record.id,
+          updated: environment.dateProvider.now,
+          deleted: environment.dateProvider.now
+        )
+      }
+      
+      return .task(
+        operation: {
+          
+          for update in updates {
+            let _ = try await environment.apiClient.updateRecord(update)
+          }
+          return .deleteSuccess
+        },
+        catch: { error in
+          return .deleteFailed(error)
+        }
       )
-      let destination =
-      state.records.index(id: state.records[destination].id)
-      ?? destination
-      state.records.move(fromOffsets: source, toOffset: destination)
-      return .none
       
     case .showStatistics:
       

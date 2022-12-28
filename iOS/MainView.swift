@@ -38,7 +38,6 @@ struct MainView : View {
             RecordView(store: $0)
           }
           .onDelete { viewStore.send(.delete($0)) }
-          .onMove { viewStore.send(.move($0, $1)) }
         }
         SummaryView(
           store: self.store.scope(

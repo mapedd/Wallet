@@ -32,8 +32,6 @@ struct RecordDetailsState: Equatable {
     }
   }
 
-
-
   static let preview = RecordDetailsState(
     record: .init(
       id: .init(),
