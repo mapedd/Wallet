@@ -18,7 +18,10 @@ struct WalletApp: App {
           environment: ContentView.ContentEnvironment(
             apiClient: .live,
             keyValueStore: .live,
-            keychain: .live
+            keychain: .live,
+            dateProvider: .init(
+              currentDate: { .now }
+            )
           )
         )
       )

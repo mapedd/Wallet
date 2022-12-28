@@ -7,7 +7,11 @@
 
 import Foundation
 import ComposableArchitecture
+import AppApi
 
+enum LocalError : Error {
+  case cannotCreateRecord
+}
 
 struct MainState: Equatable {
   init(
@@ -83,12 +87,16 @@ enum MainAction {
   case logOutButtonTapped
   case mainViewAppeared
   case loadedRecords([RecordState])
+  
+  case recordCreated(Record.Detail)
+  case recordCreateFailed(Error)
 }
 
 
 
 struct MainEnvironment {
   var apiClient: APIClient
+  var dateProvider: DateProvider
 }
 
 let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
@@ -132,11 +140,31 @@ let mainReducer = Reducer<MainState, MainAction, MainEnvironment>.combine(
         )
         
         state.records.append(RecordState(record: newRecord))
-        
         state.recalculateTotal()
-        
         state.editorState = .init(categories: state.editorState.categories)
-        return .none
+        
+        return .task(
+          operation: {
+            let update = Record.Update(
+              id: newRecord.id,
+              title: newRecord.title,
+              amount: newRecord.amount,
+              currency: .pln,
+              notes: nil,
+              updated: environment.dateProvider.now
+            )
+            if let record = try await environment.apiClient.updateRecord(update) {
+              return .recordCreated(record)
+            }
+            else {
+              return .recordCreateFailed(LocalError.cannotCreateRecord)
+            }
+          },
+          catch: { error in
+            return .recordCreateFailed(error)
+          }
+        )
+        
       default:
         return .none
       }

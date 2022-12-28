@@ -57,19 +57,25 @@ struct ContentView: View {
     init(
       apiClient: APIClient,
       keyValueStore: KeyValueStore,
-      keychain: Keychain
+      keychain: Keychain,
+      dateProvider: DateProvider
     ) {
       self.apiClient = apiClient
       self.keyValueStore = keyValueStore
       self.keychain = keychain
+      self.dateProvider = dateProvider
     }
     
     var apiClient: APIClient
     var keyValueStore: KeyValueStore
     var keychain: Keychain
+    var dateProvider: DateProvider
     
     var main: MainEnvironment {
-      .init(apiClient: apiClient)
+      .init(
+        apiClient: apiClient,
+        dateProvider: dateProvider
+      )
     }
     var login: LoginEnvironment {
       .init(apiClient: apiClient)
