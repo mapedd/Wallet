@@ -45,7 +45,7 @@ struct RecordAPIController {
       throw Abort(.notFound)
     }
     
-    let records = userModel.records
+    let records =  try await userModel.$records.get(on: req.db)
     
     return records.map {
       Record.List(
