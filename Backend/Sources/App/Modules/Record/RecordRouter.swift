@@ -30,7 +30,7 @@ struct RecordRouter: RouteCollection {
       .grouped("api")
       .grouped(tokenAuthenticator)
       .grouped("record")
-      .post("create", use: apiController.createRecord)
+      .post("update", use: apiController.updateRecord)
     
     
     routes

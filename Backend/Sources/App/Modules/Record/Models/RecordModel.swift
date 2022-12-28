@@ -10,15 +10,6 @@ import Vapor
 import Fluent
 
 
-enum RecordType: String, Codable, CaseIterable  {
-  case income
-  case expense
-}
-
-enum Currency: String, Codable {
-  case usd = "usd"
-  case pln = "pln"
-}
 
 final class RecordModel: DatabaseModelInterface {
   typealias Module = RecordModule
