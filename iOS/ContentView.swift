@@ -133,7 +133,6 @@ struct ContentView: View {
       return .none
     }
   )
-  .debug()
   
   var store: Store<State, Action>
   var body: some View {

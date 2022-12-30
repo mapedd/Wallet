@@ -69,4 +69,3 @@ let editorReducer = Reducer<EditorState, EditorAction, EditorEnvironment> { stat
   }
 }
   .binding()
-  .debug()

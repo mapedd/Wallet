@@ -219,6 +219,7 @@ class URLClient {
   let baseURL: URL
   let session: URLSession
   var tokenProvider: TokenProvider?
+  var task: URLSessionWebSocketTask
   
   init(
     baseURL: URL,
@@ -228,6 +229,32 @@ class URLClient {
     self.baseURL = baseURL
     self.session = session
     self.tokenProvider = tokenProvider
+    
+//    let websocket = URL(string: "wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV")!
+//    let websocket = URL(string: "ws://localhost:8080/api/websocket")!
+//    let websocket = URL(string: "ws://127.0.0.1:8080/records/websocket")!
+    let websocket = URL(string: "ws://127.0.0.1:8080")!
+    self.task = session.webSocketTask(with: websocket)
+    self.task.resume()
+    
+    task.receive { receive in
+      print("received \(receive)")
+    }
+    
+    
+    Timer.scheduledTimer(
+      withTimeInterval: 3,
+      repeats: true
+    ) {[weak self] timer in
+      let message = URLSessionWebSocketTask.Message.string("hi I'm the client")
+      
+      self?.task.send(message) { error in
+        if let error {
+          print("sending ws message failed \(String(describing: error))")
+        }
+      }
+    }
+    
   }
   
   func request(
