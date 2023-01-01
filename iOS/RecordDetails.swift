@@ -9,11 +9,11 @@ import SwiftUI
 import ComposableArchitecture
 
 struct RecordDetailsView: View {
-  var store: Store<RecordDetailsState, RecordDetailsAction>
+  var store: StoreOf<RecordDetails>
 
   var body: some View {
     WithViewStore(
-      self.store, observe: \.renderableState, send: RecordDetailsAction.view
+      self.store, observe: \.renderableState, send: RecordDetails.Action.view
     ) { viewStore in
       NavigationView {
         ScrollView {
@@ -37,7 +37,7 @@ struct RecordDetailsView: View {
     }
   }
 
-  func amount(_ viewStore: ViewStore<RecordDetailsState.RenderableState, RecordDetailsAction.RenderableAction>) -> some View {
+  func amount(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
     HStack(spacing: 0) {
       Text("Amount")
         .font(.title)
@@ -53,7 +53,7 @@ struct RecordDetailsView: View {
     }
   }
 
-  func title(_ viewStore: ViewStore<RecordDetailsState.RenderableState, RecordDetailsAction.RenderableAction>) -> some View {
+  func title(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
     HStack(spacing: 0) {
       Text("Title")
         .font(.title)
@@ -73,10 +73,11 @@ struct RecordDetailsView: View {
 struct RecordDetailsView_Previews: PreviewProvider {
   static var previews: some View {
     RecordDetailsView(
-      store: .init(
-        initialState: .preview,
-        reducer: recordDetailsReducer,
-        environment: RecordDetailsEnvironment()
+      store: Store(
+        initialState: .init(
+          record: MoneyRecord.preview
+        ),
+        reducer: RecordDetails()
       )
     )
   }

@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SummaryView: View {
-  var store: Store<SummaryViewState, SummaryViewAction>
+  var store: StoreOf<Summary>
 
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -44,8 +44,7 @@ struct SummaryView_Previews: PreviewProvider {
     SummaryView(
       store: .init(
         initialState: .init(),
-        reducer: summaryReducer,
-        environment: .init()
+        reducer: Summary()
       )
     )
   }

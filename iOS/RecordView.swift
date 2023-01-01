@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct RecordView: View {
-  var store: Store<RecordState, RecordAction>
+  var store: StoreOf<Record>
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -30,13 +30,13 @@ struct RecordView: View {
       .sheet(
         isPresented: viewStore.binding(
           get: \.isSheetPresented,
-          send: RecordAction.setSheet(isPresented:)
+          send: Record.Action.setSheet(isPresented:)
         )
       ) {
         IfLetStore(
           self.store.scope(
             state: \.details,
-            action: RecordAction.detailsAction
+            action: Record.Action.detailsAction
           )
         ) {
           RecordDetailsView(store: $0)
@@ -51,12 +51,19 @@ struct RecordView_Previews: PreviewProvider {
   static var previews: some View {
     NavigationView {
       List {
-        ForEach(RecordState.sample) { record in
+        ForEach(Record.State.sample) { record in
           RecordView(
             store: .init(
-              initialState: record,
-              reducer: combinedRecordReducer,
-              environment: RecordEnvironment()
+              initialState: .init(
+                record: .init(
+                  id: .init(),
+                  date: .init(),
+                  title: "Title",
+                  type: .expense,
+                  amount: Decimal(floatLiteral: 12.1),
+                  currency: .pln)
+              ),
+              reducer: Record()
             )
           )
         }

@@ -8,18 +8,65 @@
 import Foundation
 import ComposableArchitecture
 
-struct RecordState: Equatable, Identifiable {
-  var record: MoneyRecord
-  var details: RecordDetailsState?
-  var id: UUID {
-    record.id
+struct Record : ReducerProtocol {
+  struct State: Equatable, Identifiable {
+    var record: MoneyRecord
+    var details: RecordDetails.State?
+    var id: UUID {
+      record.id
+    }
+    var isSheetPresented: Bool {
+      details != nil
+    }
   }
-  var isSheetPresented: Bool {
-    details != nil
+  
+  enum Action {
+    case showCategoryPickerTapped
+    case setSheet(isPresented:Bool)
+    case detailsAction(RecordDetails.Action)
   }
+  
+  var body: some ReducerProtocol<State, Action> {
+    Reduce { state, action in
+      switch action {
+      case .setSheet(isPresented: true):
+        state.details = .init(record: state.record)
+        return .none
+      case .setSheet(isPresented: false):
+        if let updatedRecord = state.details?.record {
+          state.record = updatedRecord
+        }
+        state.details = nil
+        return .none
 
-  static var sample: [RecordState] = [
-    RecordState(
+      case .detailsAction(let recordDetailsAction) :
+        if case .deleteRecordTapped = recordDetailsAction {
+          state.details = nil
+        }
+        return .none
+      default:
+        return .none
+      }
+    }
+    .ifLet(\.details, action: /Action.detailsAction) {
+      RecordDetails()
+    }
+  }
+}
+
+//let combinedRecordReducer = recordDetailsReducer
+//  .optional()
+//  .pullback(
+//    state: \.details,
+//    action: /RecordAction.detailsAction,
+//    environment: { _ in RecordDetailsEnvironment() }
+//  )
+//  .combined(with: recordReducer)
+
+
+extension Record.State {
+  static var sample: [Record.State] = [
+    Record.State(
       record: .init(
         id: .init(),
         date: .init(),
@@ -30,7 +77,7 @@ struct RecordState: Equatable, Identifiable {
         category: .init(name: "Food", id: .init())
       )
     ),
-    RecordState(
+    Record.State(
       record: .init(
         id: .init(),
         date: .init(),
@@ -40,7 +87,7 @@ struct RecordState: Equatable, Identifiable {
         currency: .eur
       )
     ),
-    RecordState(
+    Record.State(
       record: .init(
         id: .init(),
         date: .init().addingTimeInterval(-60 * 60 * 24 * 3),
@@ -51,7 +98,7 @@ struct RecordState: Equatable, Identifiable {
         category: .init(name: "Entertainment", id: .init())
       )
     ),
-    RecordState(
+    Record.State(
       record: .init(
         id: .init(),
         date: .init().addingTimeInterval(-60 * 60 * 24 * 30),
@@ -63,49 +110,3 @@ struct RecordState: Equatable, Identifiable {
     )
   ]
 }
-
-enum RecordAction {
-  case showCategoryPickerTapped
-  case setSheet(isPresented:Bool)
-  case detailsAction(RecordDetailsAction)
-}
-
-struct RecordEnvironment {
-
-}
-
-
-let recordReducer = Reducer<
-  RecordState,
-  RecordAction,
-  RecordEnvironment>
-{ state, action, _ in
-  switch action {
-  case .setSheet(isPresented: true):
-    state.details = .init(record: state.record)
-    return .none
-  case .setSheet(isPresented: false):
-    if let updatedRecord = state.details?.record {
-      state.record = updatedRecord
-    }
-    state.details = nil
-    return .none
-
-  case .detailsAction(let recordDetailsAction) :
-    if case .deleteRecordTapped = recordDetailsAction {
-      state.details = nil
-    }
-    return .none
-  default:
-    return .none
-  }
-}
-
-let combinedRecordReducer = recordDetailsReducer
-  .optional()
-  .pullback(
-    state: \.details,
-    action: /RecordAction.detailsAction,
-    environment: { _ in RecordDetailsEnvironment() }
-  )
-  .combined(with: recordReducer)

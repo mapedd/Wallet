@@ -8,27 +8,25 @@
 import Foundation
 import ComposableArchitecture
 
-struct SummaryViewState: Equatable {
-  var total = Decimal.zero
-}
-
-enum SummaryViewAction {
-  case showSummaryButtonTapped
-  case hideSummary
-}
-
-struct SummaryViewEnvironment {}
-
-let summaryReducer = Reducer
-<
-  SummaryViewState,
-  SummaryViewAction,
-  SummaryViewEnvironment
-> { state, action, _ in
-  switch action {
-  case .showSummaryButtonTapped:
-    return .none
-  case .hideSummary:
-    return .none
+struct Summary: ReducerProtocol {
+  
+  struct State: Equatable {
+    var total = Decimal.zero
   }
+  
+  enum Action {
+    case showSummaryButtonTapped
+    case hideSummary
+  }
+  
+  func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    
+    switch action {
+    case .showSummaryButtonTapped:
+      return .none
+    case .hideSummary:
+      return .none
+    }
+  }
+  
 }

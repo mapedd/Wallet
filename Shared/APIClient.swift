@@ -78,6 +78,12 @@ struct DateProvider {
   var now: Date {
     currentDate()
   }
+  
+  static let live = DateProvider {
+    .now
+  }
+  
+  static let preview = DateProvider.live
 }
 
 actor AuthManager {
@@ -154,7 +160,7 @@ enum Endpoint {
   case signIn(User.Account.Login)
   case signOut
   case refreshToken(User.Token.Refresh)
-  case updateRecord(Record.Update)
+  case updateRecord(AppApi.Record.Update)
   case listRecords
   
   var httpMethod: HTTPMethod {
@@ -321,8 +327,8 @@ struct APIClient {
   
   var signIn: (User.Account.Login) async throws -> User.Token.Detail?
   var signOut: () async throws -> ActionResult
-  var updateRecord: (Record.Update) async throws -> Record.Detail?
-  var listRecords: () async throws -> [Record.Detail]
+  var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
+  var listRecords: () async throws -> [AppApi.Record.Detail]
   
   static var live: APIClient {
     

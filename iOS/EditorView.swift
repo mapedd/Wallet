@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct EditorView: View {
-  var store: Store<EditorState, EditorAction>
+  var store: StoreOf<Editor>
   var body: some View {
     WithViewStore(self.store) { viewStore in
       VStack(spacing: 4) {
@@ -27,7 +27,7 @@ struct EditorView: View {
     }
   }
 
-  func categoryPicker(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {
+  func categoryPicker(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
 
     Picker(
       "Category",
@@ -41,7 +41,7 @@ struct EditorView: View {
     .pickerStyle(.menu)
   }
 
-  func amountTextField(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {
+  func amountTextField(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
     HStack(spacing: 0) {
       Text(viewStore.currencySymbol)
         .font(.title)
@@ -57,7 +57,7 @@ struct EditorView: View {
     }
   }
 
-  func addButton(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {
+  func addButton(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
     Button {
       viewStore.send(.addButtonTapped)
     } label: {
@@ -67,19 +67,19 @@ struct EditorView: View {
     }.disabled(viewStore.addButtonDisabled)
   }
 
-  func recordTextField(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {
+  func recordTextField(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
     TextField(
       "Untitled Todo",
       text: viewStore.binding(\.$text)
     )
   }
 
-  func recordTypePicker(_ viewStore: ViewStore<EditorState, EditorAction>) -> some View {
+  func recordTypePicker(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
     Picker(
       "Tab",
       selection: viewStore.binding(
         get: \.recordType,
-        send: EditorAction.changeRecordType
+        send: Editor.Action.changeRecordType
       )
     ) {
       imageView(record: .expense)
@@ -107,8 +107,7 @@ struct EditorView_Previews: PreviewProvider {
     EditorView(
       store: .init(
         initialState: .preview,
-        reducer: editorReducer,
-        environment: .init()
+        reducer: Editor()
       )
     )
     .padding(40)

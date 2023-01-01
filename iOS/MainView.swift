@@ -9,21 +9,21 @@ import SwiftUI
 import ComposableArchitecture
 
 
-extension MainState {
+extension Main.State {
   var iOSEditMode : SwiftUI.EditMode {
     self.editMode.iOSEditMode
   }
 }
 
 struct MainView : View {
-  var store: Store<MainState, MainAction>
+  var store: StoreOf<Main>
   var body: some View {
     WithViewStore(self.store) { viewStore in
       VStack {
         EditorView(
           store: self.store.scope(
             state: \.editorState,
-            action: MainAction.editorAction
+            action: Main.Action.editorAction
           )
         )
         .padding(20)
@@ -32,7 +32,7 @@ struct MainView : View {
           ForEachStore(
             self.store.scope(
               state: \.records,
-              action: MainAction.recordAction(id:action:)
+              action: Main.Action.recordAction(id:action:)
             )
           ) {
             RecordView(store: $0)
@@ -42,7 +42,7 @@ struct MainView : View {
         SummaryView(
           store: self.store.scope(
             state: \.summaryState,
-            action: MainAction.summaryAction
+            action: Main.Action.summaryAction
           )
         )
       }
@@ -55,13 +55,13 @@ struct MainView : View {
       .sheet(
         isPresented: viewStore.binding(
           get: \.showStatistics,
-          send: { $0 ? MainAction.showStatistics : MainAction.hideStatistics }
+          send: { $0 ? Main.Action.showStatistics : Main.Action.hideStatistics }
         )
       ) {
         IfLetStore(
           self.store.scope(
             state: \.statistics,
-            action: MainAction.statisticsAction
+            action: Main.Action.statisticsAction
           )
         ) {
           StatisticsView(store: $0)
@@ -71,7 +71,7 @@ struct MainView : View {
         \.editMode,
          viewStore.binding(
           get: \.iOSEditMode,
-          send: { value in return MainAction.editModeChanged(value.walletEditMode) }
+          send: { value in return Main.Action.editModeChanged(value.walletEditMode) }
          )
       )
       .navigationTitle(viewStore.title)

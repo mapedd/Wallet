@@ -20,6 +20,16 @@ struct MoneyRecord: Equatable, Identifiable {
   var currency: Currency
   var category: Category?
   
+  static var preview: MoneyRecord {
+    .init(
+      id: .init(),
+      date: .init(),
+      title: "Record",
+      type: .expense,
+      amount: Decimal(123),
+      currency: .pln
+    )
+  }
 }
 
 struct Category: Hashable, Identifiable {

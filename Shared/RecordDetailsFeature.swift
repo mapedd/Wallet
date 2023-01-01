@@ -8,77 +8,76 @@
 import Foundation
 import ComposableArchitecture
 
-struct RecordDetailsState: Equatable {
-  var record: MoneyRecord
+struct RecordDetails: ReducerProtocol {
+  struct State: Equatable {
+    var record: MoneyRecord
 
-  struct RenderableState: Equatable {
-    @BindableState var amount: String
-    @BindableState var title: String
-    @BindableState var date: Date
-  }
-
-  var renderableState: RenderableState {
-    set {
-      self.record.amount = Decimal(string: newValue.amount) ?? .zero
-      self.record.title = newValue.title
-      self.record.date = newValue.date
+    struct RenderableState: Equatable {
+      @BindableState var amount: String
+      @BindableState var title: String
+      @BindableState var date: Date
     }
-    get {
-      .init(
-        amount: record.amount.formatted(),
-        title: record.title,
-        date: record.date
+
+    var renderableState: RenderableState {
+      set {
+        self.record.amount = Decimal(string: newValue.amount) ?? .zero
+        self.record.title = newValue.title
+        self.record.date = newValue.date
+      }
+      get {
+        .init(
+          amount: record.amount.formatted(),
+          title: record.title,
+          date: record.date
+        )
+      }
+    }
+
+    static let preview = State(
+      record: .init(
+        id: .init(),
+        date: .init(),
+        title: "Shopping",
+        type: .expense,
+        amount: Decimal(123),
+        currency: .usd
       )
-    }
-  }
-
-  static let preview = RecordDetailsState(
-    record: .init(
-      id: .init(),
-      date: .init(),
-      title: "Shopping",
-      type: .expense,
-      amount: Decimal(123),
-      currency: .usd
     )
-  )
-}
+  }
+  
+  
+  enum Action: BindableAction {
+
+    case deleteRecordTapped
+    case binding(BindingAction<State>)
+
+    static func view(_ viewAction: RenderableAction) -> Self {
+      switch viewAction {
+      case let .binding(action):
+        return .binding(action.pullback(\.renderableState))
+
+      case .deleteRecordTapped:
+        return .deleteRecordTapped
+      }
+    }
 
 
-enum RecordDetailsAction: BindableAction {
+    enum RenderableAction: BindableAction {
+      case binding(BindingAction<State.RenderableState>)
+      case deleteRecordTapped
+    }
 
-  case deleteRecordTapped
-  case binding(BindingAction<RecordDetailsState>)
+  }
+  
+  func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    return .none
+  }
+  
+  var body: some ReducerProtocol<State, Action> {
+    BindingReducer()
 
-  static func view(_ viewAction: RenderableAction) -> Self {
-    switch viewAction {
-    case let .binding(action):
-      return .binding(action.pullback(\.renderableState))
-
-    case .deleteRecordTapped:
-      return .deleteRecordTapped
+    Reduce { state, action in
+      return .none
     }
   }
-
-
-  enum RenderableAction: BindableAction {
-    case binding(BindingAction<RecordDetailsState.RenderableState>)
-    case deleteRecordTapped
-  }
-
 }
-
-struct RecordDetailsEnvironment {
-
-}
-
-let recordDetailsReducer = Reducer
-<
-  RecordDetailsState,
-  RecordDetailsAction,
-  RecordDetailsEnvironment
->
-{ state, action , _ in
-  return .none
-}
-.binding()

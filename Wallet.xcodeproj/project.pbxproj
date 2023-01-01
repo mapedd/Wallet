@@ -38,6 +38,10 @@
 		0446E3A22952678D00B62C95 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3A02952678D00B62C95 /* Keychain.swift */; };
 		0446E3A5295267FB00B62C95 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E3A4295267FB00B62C95 /* SwiftKeychainWrapper */; };
 		0446E3B12953A76D00B62C95 /* AuthManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3B02953A76D00B62C95 /* AuthManagerTests.swift */; };
+		0446E3B82962103100B62C95 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3B72962103100B62C95 /* Dependencies.swift */; };
+		0446E3B92962103100B62C95 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3B72962103100B62C95 /* Dependencies.swift */; };
+		0446E3BB2962106C00B62C95 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3BA2962106C00B62C95 /* KeyValueStore.swift */; };
+		0446E3BC2962106C00B62C95 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3BA2962106C00B62C95 /* KeyValueStore.swift */; };
 		04AB3E8B28D79B9D00C327A4 /* RecordFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */; };
 		04AB3E8E28D79BB600C327A4 /* EditorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E8D28D79BB600C327A4 /* EditorFeature.swift */; };
 		04AB3E9128D79C3900C327A4 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9028D79C3900C327A4 /* MainFeature.swift */; };
@@ -88,6 +92,8 @@
 		0446E3A02952678D00B62C95 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		0446E3AE2953A76C00B62C95 /* WalletiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0446E3B02953A76D00B62C95 /* AuthManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerTests.swift; sourceTree = "<group>"; };
+		0446E3B72962103100B62C95 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		0446E3BA2962106C00B62C95 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
 		04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordFeature.swift; sourceTree = "<group>"; };
 		04AB3E8D28D79BB600C327A4 /* EditorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFeature.swift; sourceTree = "<group>"; };
 		04AB3E9028D79C3900C327A4 /* MainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
@@ -207,6 +213,7 @@
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
 				0446E39D2951E19E00B62C95 /* Login.swift */,
+				0446E3B72962103100B62C95 /* Dependencies.swift */,
 				04AB3E9F28D79CFF00C327A4 /* MainView.swift */,
 				04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */,
 				043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */,
@@ -243,6 +250,7 @@
 				04AB3E9628D79CA200C327A4 /* StatisticsFeature.swift */,
 				04AB3E9028D79C3900C327A4 /* MainFeature.swift */,
 				0446E39A2951DF8500B62C95 /* APIClient.swift */,
+				0446E3BA2962106C00B62C95 /* KeyValueStore.swift */,
 				04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */,
 				04AB3E9928D79CC500C327A4 /* RecordDetailsFeature.swift */,
 				04AB3E9328D79C7400C327A4 /* MoneyRecord.swift */,
@@ -446,6 +454,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0446E3B92962103100B62C95 /* Dependencies.swift in Sources */,
 				042A3C5628DC780400772365 /* WalletApp.swift in Sources */,
 				042A3C5F28DC782E00772365 /* MoneyRecord.swift in Sources */,
 				0446E3A22952678D00B62C95 /* Keychain.swift in Sources */,
@@ -455,6 +464,7 @@
 				042A3C5D28DC782E00772365 /* RecordFeature.swift in Sources */,
 				0446E39C2951DF8500B62C95 /* APIClient.swift in Sources */,
 				042A3C5C28DC782E00772365 /* EditorFeature.swift in Sources */,
+				0446E3BC2962106C00B62C95 /* KeyValueStore.swift in Sources */,
 				042A3C5B28DC782E00772365 /* RecordDetailsFeature.swift in Sources */,
 				042A3C2E28DC77B800772365 /* ContentView.swift in Sources */,
 				042A3C6028DC782E00772365 /* StatisticsFeature.swift in Sources */,
@@ -474,6 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0446E3B82962103100B62C95 /* Dependencies.swift in Sources */,
 				04CCED9328C28E8D00C68DB8 /* EditorView.swift in Sources */,
 				04AB3E9728D79CA200C327A4 /* StatisticsFeature.swift in Sources */,
 				04AB3E8B28D79B9D00C327A4 /* RecordFeature.swift in Sources */,
@@ -482,6 +493,7 @@
 				04AB3E9D28D79CE400C327A4 /* SummaryFeature.swift in Sources */,
 				04AB3E9428D79C7400C327A4 /* MoneyRecord.swift in Sources */,
 				04AB3E8E28D79BB600C327A4 /* EditorFeature.swift in Sources */,
+				0446E3BB2962106C00B62C95 /* KeyValueStore.swift in Sources */,
 				04AB3E9A28D79CC500C327A4 /* RecordDetailsFeature.swift in Sources */,
 				0446E3A12952678D00B62C95 /* Keychain.swift in Sources */,
 				0425AE5728C9356A0032A4FD /* StatisticsView.swift in Sources */,
@@ -910,8 +922,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.34.0;
+				kind = exactVersion;
+				version = 0.47.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

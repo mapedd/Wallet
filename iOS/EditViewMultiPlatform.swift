@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension MainState.EditMode {
+extension Main.State.EditMode {
   var iOSEditMode: SwiftUI.EditMode {
     switch self {
     case .active:
@@ -21,14 +21,14 @@ extension MainState.EditMode {
 }
 
 extension SwiftUI.EditMode {
-  var walletEditMode: MainState.EditMode {
+  var walletEditMode: Main.State.EditMode {
     switch self {
     case .active:
-      return MainState.EditMode.active
+      return Main.State.EditMode.active
     case .transient:
-      return MainState.EditMode.transient
+      return Main.State.EditMode.transient
     case .inactive:
-      return MainState.EditMode.inactive
+      return Main.State.EditMode.inactive
     @unknown default:
       fatalError()
     }
