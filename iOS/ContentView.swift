@@ -112,15 +112,14 @@ struct ContentView: View {
   }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    ContentView(
-//      store: .init(
-//        initialState: <#T##ContentView.State#>,
-//        reducer: <#T##Reducer<ContentView.State, ContentView.Action, Environment>#>,
-//        environment: <#T##Environment#>
-//      )
-//    )
-//  }
-//}
-//
+struct ContentView_Previews: PreviewProvider {
+  static var previews: some View {
+    ContentView(
+      store: .init(
+        initialState: .loggedOut(.init()),
+        reducer: Content()
+      )
+    )
+  }
+}
+
