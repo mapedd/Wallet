@@ -54,16 +54,6 @@ struct Record : ReducerProtocol {
   }
 }
 
-//let combinedRecordReducer = recordDetailsReducer
-//  .optional()
-//  .pullback(
-//    state: \.details,
-//    action: /RecordAction.detailsAction,
-//    environment: { _ in RecordDetailsEnvironment() }
-//  )
-//  .combined(with: recordReducer)
-
-
 extension Record.State {
   static var sample: [Record.State] = [
     Record.State(

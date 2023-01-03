@@ -37,35 +37,43 @@ enum RecordModelMigrations {
               .foreignKey(RecordModel.FieldKeys.v1.userID, references: UserAccountModel.schema, .id)
               .create()
       
-//            try await db.schema(RecordCategoryModel.schema)
-//                .id()
-//                .field(UserTokenModel.FieldKeys.v1.value, .string, .required)
-//                .field(UserTokenModel.FieldKeys.v1.expiry, .date, .required)
-//                .field(UserTokenModel.FieldKeys.v1.refresh, .string, .required)
-//                .field(UserTokenModel.FieldKeys.v1.userId, .uuid, .required)
-//                .foreignKey(UserTokenModel.FieldKeys.v1.userId, references: UserAccountModel.schema, .id)
-//                .unique(on: UserTokenModel.FieldKeys.v1.value)
-//                .create()
+            try await db.schema(RecordCategoryModel.schema)
+                .id()
+                .field(RecordCategoryModel.FieldKeys.v1.name, .string, .required)
+                .field(RecordCategoryModel.FieldKeys.v1.color, .int64, .required)
+                .unique(on: RecordCategoryModel.FieldKeys.v1.name)
+                .create()
+          
+          
+          try await db.schema(RecordToCategoryPivot.schema)
+              .id()
+              .field(RecordToCategoryPivot.FieldKeys.v1.categoryID, .uuid, .required)
+              .field(RecordToCategoryPivot.FieldKeys.v1.recordID, .uuid, .required)
+              .foreignKey(RecordToCategoryPivot.FieldKeys.v1.categoryID, references: RecordCategoryModel.schema, .id)
+              .foreignKey(RecordToCategoryPivot.FieldKeys.v1.recordID, references: RecordModel.schema, .id)
+              .unique(on: RecordToCategoryPivot.FieldKeys.v1.recordID, RecordToCategoryPivot.FieldKeys.v1.categoryID)
+              .create()
         }
 
         func revert(on db: Database) async throws  {
-//            try await db.schema(RecordCategoryModel.schema).delete()
+            try await db.schema(RecordCategoryModel.schema).delete()
             try await db.schema(RecordModel.schema).delete()
+            try await db.schema(RecordToCategoryPivot.schema).delete()
         }
     }
     
     struct seed: AsyncMigration {
         
         func prepare(on db: Database) async throws {
-//            let travel = RecordCategoryModel(name: "travel", color: 1)
-//            let food = RecordCategoryModel(name: "travel", color: 1)
-//            try await travel.create(on: db)
-//            try await food.create(on: db)
+            let travel = RecordCategoryModel(name: "travel", color: 1)
+            let food = RecordCategoryModel(name: "travel", color: 1)
+            try await travel.create(on: db)
+            try await food.create(on: db)
         }
 
         func revert(on db: Database) async throws {
             try await RecordModel.query(on: db).delete()
-//            try await RecordCategoryModel.query(on: db).delete()
+            try await RecordCategoryModel.query(on: db).delete()
         }
     }
     

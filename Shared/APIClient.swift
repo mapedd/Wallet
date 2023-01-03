@@ -413,6 +413,7 @@ struct APIClient {
           id: $0.id,
           title: $0.title ?? "",
           amount: $0.amount ?? .init(1),
+          type: .expense,
           currency: .pln,
           created: .now,
           updated: $0.updated

@@ -47,8 +47,8 @@ final class RecordModel: DatabaseModelInterface {
   @Field(key: FieldKeys.v1.notes)
   var notes: String?
   
-//  @Field(key: FieldKeys.v1.categoryID)
-//  var category: RecordCategoryModel
+  @Siblings(through: RecordToCategoryPivot.self, from: \.$record, to: \.$category)
+  var categories: [RecordCategoryModel]
   
   @Field(key: FieldKeys.v1.created)
   var created: Date
@@ -79,7 +79,7 @@ final class RecordModel: DatabaseModelInterface {
   ) {
     self.id = id
     self.amount = amount
-    self.type = type
+    self.type = type 
     self.currency = currency
     self.title = title
     self.notes = notes
@@ -90,30 +90,3 @@ final class RecordModel: DatabaseModelInterface {
     self.$user.id = userID
   }
 }
-//
-//
-//// a pivot model for many-to-many reletionship.
-//final class RecordToCategoryPivot: Model {
-//    static let schema = "record+category"
-//
-//    @ID(key: .id)
-//    var id: UUID?
-//
-//    @Parent(key: "record_id")
-//    var record: RecordModel
-//
-//    @Parent(key: "category_id")
-//    var category: RecordCategoryModel
-//
-//    init() { }
-//
-//    init(
-//      id: UUID? = nil,
-//      record: RecordModel,
-//      category: RecordCategoryModel
-//    ) throws {
-//        self.id = id
-//        self.$record.id = try record.requireID()
-//        self.$category.id = try category.requireID()
-//    }
-//}

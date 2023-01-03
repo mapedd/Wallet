@@ -13,6 +13,9 @@ import AppApi
 extension Record.Detail : Content {}
 extension Record.Update : Content {}
 
+extension RecordCategory.Detail: Content {}
+extension RecordCategory.Create : Content {}
+
 
 struct RecordAPIController {
   
@@ -72,12 +75,31 @@ struct RecordAPIController {
     
     return record.asDetail
   }
+  
+  
+  func createCategory(req: Request) async throws -> RecordCategory.Detail {
+    let categoryUpdate = try req.content.decode(RecordCategory.Create.self)
+    let newCategory = RecordCategoryModel(
+      name: categoryUpdate.name,
+      color: categoryUpdate.color
+    )
+    
+    try await newCategory.save(on: req.db)
+    
+    return newCategory.asDetail
+  }
+  func listCategories(req: Request) async throws -> [RecordCategory.Detail] {
+    let categories = try await RecordCategoryModel.query(on: req.db).all()
+    return categories.map { $0.asDetail }
+  }
+  
 }
 
 enum RecordModelError: Int, Error  {
   case missingAmount = 100
   case missingCurrency = 101
   case missingTitle = 102
+  case missingType = 103
 }
 
 extension RecordModel {
@@ -99,6 +121,12 @@ extension RecordModel {
       throw RecordModelError.missingCurrency
     }
     
+    guard
+      let type = update.type
+    else {
+      throw RecordModelError.missingType
+    }
+    
     guard let title = update.title else {
       throw RecordModelError.missingTitle
     }
@@ -106,7 +134,7 @@ extension RecordModel {
     self.init(
       id: update.id,
       amount: amount,
-      type: .expense,
+      type: type,
       currency: currency,
       title: title,
       created: dateProvider.now,
@@ -133,6 +161,9 @@ extension RecordModel {
     if let newNotes = update.notes {
       self.notes = newNotes
     }
+    if let type = update.type {
+      self.type = type
+    }
     self.deleted = update.deleted
   }
   
@@ -141,10 +172,22 @@ extension RecordModel {
       id: id!,
       title: title,
       amount: amount,
+      type: type,
       currency: currency,
       created: created,
       updated: updated,
       deleted: deleted
+    )
+  }
+}
+
+
+extension RecordCategoryModel {
+  var asDetail: RecordCategory.Detail {
+    .init(
+      id: id!,
+      name: name,
+      color: color
     )
   }
 }

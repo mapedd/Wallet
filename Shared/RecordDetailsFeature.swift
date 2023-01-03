@@ -69,10 +69,6 @@ struct RecordDetails: ReducerProtocol {
 
   }
   
-  func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-    return .none
-  }
-  
   var body: some ReducerProtocol<State, Action> {
     BindingReducer()
 

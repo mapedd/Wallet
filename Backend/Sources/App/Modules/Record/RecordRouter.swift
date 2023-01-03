@@ -39,6 +39,21 @@ struct RecordRouter: RouteCollection {
       .grouped("record")
       .get("list", use: apiController.list)
     
+    routes
+      .grouped("api")
+      .grouped(tokenAuthenticator)
+      .grouped("record")
+      .grouped("category")
+      .post("create", use: apiController.createCategory)
+    
+    
+    routes
+      .grouped("api")
+      .grouped(tokenAuthenticator)
+      .grouped("record")
+      .grouped("category")
+      .get("list", use: apiController.listCategories)
+    
   }
 }
 

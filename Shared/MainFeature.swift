@@ -82,6 +82,7 @@ struct Main : ReducerProtocol {
     case editModeChanged(State.EditMode)
     case delete(IndexSet)
     case statisticsAction(Statistics.Action)
+    case detailsAction(Record.Action)
     case showStatistics
     case hideStatistics
     case logOut
@@ -89,11 +90,54 @@ struct Main : ReducerProtocol {
     case mainViewAppeared
     case loadedRecords([Record.State])
     
+    case dismissDetails(Record.State?)
+    
     case recordCreated(AppApi.Record.Detail)
     case recordCreateFailed(Error)
     
     case deleteSuccess
     case deleteFailed(Error)
+    
+    case updateSuccess
+    case updateFailed(Error)
+  }
+  
+  func deleting(_ record: MoneyRecord) -> EffectTask<Action> {
+    let update = AppApi.Record.Update(
+      id: record.id,
+      updated: dateProvider.now,
+      deleted: dateProvider.now
+    )
+    
+    return .task(
+      operation: {
+        let _ = try await apiClient.updateRecord(update)
+        return .deleteSuccess
+      },
+      catch: { error in
+        return .deleteFailed(error)
+      }
+    )
+  }
+  
+  func saving(_ record: MoneyRecord) -> EffectTask<Action> {
+    
+    let update = AppApi.Record.Update(
+      id: record.id,
+      title: record.title,
+      amount: record.amount,
+      updated: dateProvider.now
+    )
+    
+    return .task(
+      operation: {
+        let _ = try await apiClient.updateRecord(update)
+        return .updateSuccess
+      },
+      catch: { error in
+        return .updateFailed(error)
+      }
+    )
   }
   
   @Dependency(\.apiClient) var apiClient
@@ -131,6 +175,7 @@ struct Main : ReducerProtocol {
                 id: newRecord.id,
                 title: newRecord.title,
                 amount: newRecord.amount,
+                type: newRecord.apiRecordType,
                 currency: .pln,
                 notes: nil,
                 updated: dateProvider.now
@@ -154,6 +199,29 @@ struct Main : ReducerProtocol {
       case let .editModeChanged(editMode):
         state.editMode = editMode
         return .none
+      case .recordAction(let id, let recordAction):
+        switch recordAction {
+        case .detailsAction(let recordDetailsAction):
+          switch recordDetailsAction {
+          case .deleteRecordTapped:
+            if let record = state.records[id: id] {
+              state.records.remove(id: id)
+              state.recalculateTotal()
+              return deleting(record.record)
+            }
+            return .none
+          default:
+            return .none
+          }
+        case .setSheet(isPresented: let presented):
+          if !presented, let record = state.records[id: id] {
+            return saving(record.record)
+          }
+          return .none
+        default:
+          return .none
+        }
+        
       case let .delete(indexSet):
         var records = [Record.State]()
         for i in indexSet {
@@ -206,13 +274,6 @@ struct Main : ReducerProtocol {
             return .hideStatistics
           }
         }
-      case .recordAction(id: let id, action: let action):
-        if case .detailsAction(let recordDetailsAction) = action {
-          if case .deleteRecordTapped = recordDetailsAction {
-            state.records.remove(id: id)
-          }
-        }
-        return .none
         
       case .logOutButtonTapped:
         return Effect(value: .logOut)
@@ -226,7 +287,7 @@ struct Main : ReducerProtocol {
                 id: record.id,
                 date: record.created,
                 title: record.title,
-                type: .expense,
+                type: record.clientRecordType,
                 amount: record.amount,
                 currency: .pln
               )
@@ -249,5 +310,28 @@ struct Main : ReducerProtocol {
       Statistics()
     }
     
+  }
+}
+
+
+extension MoneyRecord {
+  var apiRecordType: AppApi.RecordType {
+    switch self.type {
+    case .income:
+      return AppApi.RecordType.income
+    case .expense:
+      return AppApi.RecordType.expense
+    }
+  }
+}
+
+extension AppApi.Record.Detail {
+  var clientRecordType: MoneyRecord.RecordType {
+    switch self.type {
+    case .income:
+      return MoneyRecord.RecordType.income
+    case .expense:
+      return MoneyRecord.RecordType.expense
+    }
   }
 }
