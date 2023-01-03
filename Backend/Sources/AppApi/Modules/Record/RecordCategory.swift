@@ -41,5 +41,22 @@ public extension RecordCategory {
     public var name: String
     public var color: Int
   }
+  
+  struct Update: Codable,Hashable {
+    
+    public init(
+      id: UUID,
+      name: String,
+      color: Int
+    ) {
+      self.id = id
+      self.name = name
+      self.color = color
+    }
+    
+    public var id: UUID
+    public var name: String
+    public var color: Int
+  }
 }
 

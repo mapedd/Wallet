@@ -25,7 +25,10 @@ final class BlogCategoryModel: DatabaseModelInterface {
     
     init() { }
     
-    init(id: UUID? = nil, title: String) {
+    init(
+      id: UUID? = nil,
+      title: String
+    ) {
         self.id = id
         self.title = title
     }

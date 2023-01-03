@@ -29,6 +29,7 @@ public extension Record {
       type: RecordType,
       currency: Currency,
       notes: String? = nil,
+      categories: [RecordCategory.Detail] = [],
       created: Date,
       updated: Date,
       deleted: Date? = nil
@@ -39,6 +40,7 @@ public extension Record {
       self.type = type
       self.currency = currency
       self.notes = notes
+      self.categories = categories
       self.created = created
       self.updated = updated
       self.deleted = deleted
@@ -50,6 +52,7 @@ public extension Record {
     public var type: RecordType
     public var currency: Currency
     public var notes: String?
+    public var categories: [RecordCategory.Detail]
     public var created: Date
     public var updated: Date
     public var deleted: Date?
@@ -64,6 +67,7 @@ public extension Record {
       type: RecordType? = .expense,
       currency: Currency? = nil,
       notes: String? = nil,
+      categoryIds: [UUID]? = nil,
       updated: Date,
       deleted: Date? = nil
     ) {
@@ -73,6 +77,7 @@ public extension Record {
       self.type = type
       self.currency = currency
       self.notes = notes
+      self.categoryIds = categoryIds ?? []
       self.updated = updated
       self.deleted = deleted
     }
@@ -83,6 +88,7 @@ public extension Record {
     public var type: RecordType?
     public var currency: Currency?
     public var notes: String?
+    public var categoryIds: [UUID]
     public var updated: Date
     public var deleted: Date?
   }

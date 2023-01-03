@@ -20,6 +20,7 @@ extension RecordCategory.Create : Content {}
 struct RecordAPIController {
   
   var dateProvider: DateProvider
+  
   init(dateProvider: DateProvider) {
     self.dateProvider = dateProvider
   }
@@ -43,8 +44,8 @@ struct RecordAPIController {
       .all()
       
     
-    return records.map {
-      $0.asDetail
+    return try await records.asyncMap {
+      try await $0.asDetail(on: req.db)
     }
   }
   
@@ -57,12 +58,13 @@ struct RecordAPIController {
     
     let existingRecord = try await RecordModel.find(recordUpdate.id, on: req.db)
     if let existingRecord {
-      existingRecord.read(
+      try await existingRecord.read(
         from: recordUpdate,
-        dateProvider: dateProvider
+        dateProvider: dateProvider,
+        db: req.db
       )
       try await existingRecord.save(on: req.db)
-      return existingRecord.asDetail
+      return try await existingRecord.asDetail(on: req.db)
     }
     
     let record = try RecordModel(
@@ -71,9 +73,15 @@ struct RecordAPIController {
       dateProvider: dateProvider
     )
     
+    try await record.read(
+      from: recordUpdate,
+      dateProvider: dateProvider,
+      db: req.db
+    )
+    
     try await record.create(on: req.db)
     
-    return record.asDetail
+    return try await record.asDetail(on: req.db)
   }
   
   
@@ -131,6 +139,7 @@ extension RecordModel {
       throw RecordModelError.missingTitle
     }
     
+    
     self.init(
       id: update.id,
       amount: amount,
@@ -145,8 +154,9 @@ extension RecordModel {
   
   func read(
     from update: Record.Update,
-    dateProvider: DateProvider
-  ) {
+    dateProvider: DateProvider,
+    db: Database
+  ) async throws {
     if let newTitle = update.title {
       self.title = newTitle
     }
@@ -165,15 +175,27 @@ extension RecordModel {
       self.type = type
     }
     self.deleted = update.deleted
+    
+    
+    let categories = try await  RecordCategoryModel.query(on: db).filter(\.$id ~~ update.categoryIds).all()
+    
+    for category in categories {
+      try await self.$categories.attach(category, method: .ifNotExists, on: db)
+    }
   }
   
-  var asDetail: Record.Detail {
-    .init(
+  func asDetail(on db: Database) async throws ->  Record.Detail {
+    guard let categories = try? await self.$categories.get(on: db) else {
+      throw Abort(.internalServerError)
+    }
+    return .init(
       id: id!,
       title: title,
       amount: amount,
       type: type,
       currency: currency,
+      notes: notes,
+      categories: categories.map { $0.asDetail },
       created: created,
       updated: updated,
       deleted: deleted
@@ -190,4 +212,18 @@ extension RecordCategoryModel {
       color: color
     )
   }
+}
+
+extension Sequence {
+    func asyncMap<T>(
+        _ transform: (Element) async throws -> T
+    ) async rethrows -> [T] {
+        var values = [T]()
+
+        for element in self {
+            try await values.append(transform(element))
+        }
+
+        return values
+    }
 }
