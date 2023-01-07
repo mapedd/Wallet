@@ -9,8 +9,6 @@
 import Vapor
 import Fluent
 
-
-
 final class RecordModel: DatabaseModelInterface {
   typealias Module = RecordModule
   
@@ -18,7 +16,7 @@ final class RecordModel: DatabaseModelInterface {
     struct v1 {
       static var amount: FieldKey { "value" }
       static var type: FieldKey { "type" }
-      static var currency: FieldKey { "currency" }
+      static var currency: FieldKey { "currency_code" }
       static var title: FieldKey { "title" }
       static var notes: FieldKey { "notes" }
 //      static var categoryID: FieldKey { "category_id" }
@@ -39,7 +37,7 @@ final class RecordModel: DatabaseModelInterface {
   var type: RecordType
   
   @Field(key: FieldKeys.v1.currency)
-  var currency: Currency
+  var currencyCode: String
   
   @Field(key: FieldKeys.v1.title)
   var title: String
@@ -68,10 +66,9 @@ final class RecordModel: DatabaseModelInterface {
     id: UUID,
     amount: Decimal,
     type: RecordType,
-    currency: Currency,
+    currencyCode: Currency.Code,
     title: String,
     notes: String? = nil,
-//    categoryID: UUID,
     created: Date,
     updated: Date,
     deleted: Date? = nil,
@@ -80,10 +77,9 @@ final class RecordModel: DatabaseModelInterface {
     self.id = id
     self.amount = amount
     self.type = type 
-    self.currency = currency
+    self.currencyCode = currencyCode
     self.title = title
     self.notes = notes
-//    self.$category.id = categoryID
     self.created = created
     self.updated = updated
     self.deleted = deleted

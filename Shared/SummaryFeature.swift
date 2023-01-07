@@ -12,6 +12,7 @@ struct Summary: ReducerProtocol {
   
   struct State: Equatable {
     var total = Decimal.zero
+    var currency: Currency
   }
   
   enum Action {

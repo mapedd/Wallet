@@ -13,7 +13,7 @@ struct Editor: ReducerProtocol {
   struct State: Equatable {
     @BindableState var text = "New Record title"
     @BindableState var amount = "0.00"
-    var currencySymbol = "$"
+    @BindableState var currency = Currency.usd
     @BindableState var recordType = MoneyRecord.RecordType.expense
     @BindableState var category: Category? = nil
     var addButtonDisabled = true
@@ -22,7 +22,7 @@ struct Editor: ReducerProtocol {
     static let preview = Self.init(
       text: "Buying groceries",
       amount: "123.00",
-      currencySymbol: "€",
+      currency: .usd,
       recordType: .expense,
       category: nil,
       addButtonDisabled: false,

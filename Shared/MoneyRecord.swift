@@ -15,6 +15,7 @@ struct MoneyRecord: Equatable, Identifiable {
   var id: UUID
   var date: Date
   var title: String
+  var notes: String
   var type: RecordType
   var amount: Decimal
   var currency: Currency
@@ -25,6 +26,7 @@ struct MoneyRecord: Equatable, Identifiable {
       id: .init(),
       date: .init(),
       title: "Record",
+      notes: "Sample notes",
       type: .expense,
       amount: Decimal(123),
       currency: .pln
@@ -42,31 +44,44 @@ struct Category: Hashable, Identifiable {
     Category(name: "Kids", id: .init()),
   ]
 }
-
-let formatter: NumberFormatter = {
-    let formatter = NumberFormatter()
-    formatter.maximumFractionDigits = 2
-    formatter.minimumFractionDigits = 2
-    formatter.currencyCode = "USD"
-    formatter.numberStyle = .currency
-    return formatter
-}()
-
-extension Decimal {
-  var formattedDecimalValue: String {
-    formatter.string(for: self) ?? ""
-  }
-}
+//
+//let formatter: NumberFormatter = {
+//    let formatter = NumberFormatter()
+//    formatter.maximumFractionDigits = 2
+//    formatter.minimumFractionDigits = 2
+//    formatter.currencyCode = "USD"
+//    formatter.numberStyle = .currency
+//    return formatter
+//}()
+//
+//extension Decimal {
+//  var formattedDecimalValue: String {
+//    formatter.string(for: self) ?? ""
+//  }
+//}
 
 extension MoneyRecord {
     var formattedCopy : String {
-      "\(amount.formattedDecimalValue) - \(title)"
+      "\(amount.formatted(.currency(code: currency.rawValue))) - \(title)"
     }
 }
 
-enum Currency: String, Equatable {
+enum Currency: String, Equatable, CaseIterable, Identifiable {
+  var id: String {
+    return self.rawValue
+  }
   case pln
   case usd
   case eur
   case gbp
+  
+  var symbol: String {
+    getSymbol(forCurrencyCode: self.rawValue) ?? rawValue
+  }
+}
+
+
+func getSymbol(forCurrencyCode code: String) -> String? {
+   let locale = NSLocale(localeIdentifier: code)
+  return locale.displayName(forKey: NSLocale.Key.currencySymbol, value: code)
 }

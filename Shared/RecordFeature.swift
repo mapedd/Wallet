@@ -61,6 +61,7 @@ extension Record.State {
         id: .init(),
         date: .init(),
         title: "sample expense today",
+        notes: "",
         type: .expense,
         amount: Decimal(123),
         currency: .eur,
@@ -72,6 +73,7 @@ extension Record.State {
         id: .init(),
         date: .init(),
         title: "sample income today",
+        notes: "",
         type: .income,
         amount: Decimal(222),
         currency: .eur
@@ -82,6 +84,7 @@ extension Record.State {
         id: .init(),
         date: .init().addingTimeInterval(-60 * 60 * 24 * 3),
         title: "sample income 3 days ago",
+        notes: "",
         type: .income,
         amount: Decimal(9.99),
         currency: .eur,
@@ -93,6 +96,7 @@ extension Record.State {
         id: .init(),
         date: .init().addingTimeInterval(-60 * 60 * 24 * 30),
         title: "sample income month ago",
+        notes: "",
         type: .income,
         amount: Decimal(44.2),
         currency: .eur

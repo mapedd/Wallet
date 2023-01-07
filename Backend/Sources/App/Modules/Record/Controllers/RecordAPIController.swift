@@ -124,7 +124,7 @@ extension RecordModel {
     }
     
     guard
-      let currency = update.currency
+      let currencyCode = update.currencyCode
     else {
       throw RecordModelError.missingCurrency
     }
@@ -144,7 +144,7 @@ extension RecordModel {
       id: update.id,
       amount: amount,
       type: type,
-      currency: currency,
+      currencyCode: currencyCode,
       title: title,
       created: dateProvider.now,
       updated: dateProvider.now,
@@ -165,8 +165,8 @@ extension RecordModel {
       self.amount = newAmount
     }
     self.updated = update.updated
-    if let newCurrency = update.currency {
-      self.currency = newCurrency
+    if let newCurrency = update.currencyCode {
+      self.currencyCode = newCurrency
     }
     if let newNotes = update.notes {
       self.notes = newNotes
@@ -193,7 +193,7 @@ extension RecordModel {
       title: title,
       amount: amount,
       type: type,
-      currency: currency,
+      currencyCode: currencyCode,
       notes: notes,
       categories: categories.map { $0.asDetail },
       created: created,

@@ -43,9 +43,12 @@ struct EditorView: View {
 
   func amountTextField(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
     HStack(spacing: 0) {
-      Text(viewStore.currencySymbol)
-        .font(.title)
-        .monospacedDigit()
+      Picker("Currency", selection: viewStore.binding(\.$currency)) {
+        ForEach(Currency.allCases) { currency in
+          Text(currency.symbol)
+            .tag(currency)
+        }
+      }
       TextField(
         "Amount",
         text: viewStore.binding(\.$amount)

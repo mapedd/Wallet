@@ -19,7 +19,7 @@ struct Main : ReducerProtocol {
     init(
       editorState: Editor.State = .init(),
       records: IdentifiedArrayOf<Record.State> = [],
-      summaryState: Summary.State = .init(),
+      summaryState: Summary.State = .init(currency: .usd),
       title: String = "Wallet",
       editMode: State.EditMode = .inactive,
       statistics: Statistics.State? = nil
@@ -52,6 +52,13 @@ struct Main : ReducerProtocol {
       statistics != nil
     }
     
+    var currentCurrency: Currency {
+      if let first = records.first {
+        return first.record.currency
+      }
+      return .usd
+    }
+    
     mutating func recalculateTotal() {
       let sum = self.records.reduce(Decimal.zero, { partialResult, recordState in
         if recordState.record.type == .expense {
@@ -64,12 +71,13 @@ struct Main : ReducerProtocol {
       })
       
       self.summaryState.total = sum
+      self.summaryState.currency = currentCurrency
     }
     
     static let preview = Self.init(
       editorState: .init(categories: Category.previews),
       records: IdentifiedArray(uniqueElements: Record.State.sample),
-      summaryState: .init(),
+      summaryState: .init(currency: .usd),
       title: "Wallet"
     )
     
@@ -88,6 +96,8 @@ struct Main : ReducerProtocol {
     case logOut
     case logOutButtonTapped
     case mainViewAppeared
+    
+    case loadingRecordsFailed(Swift.Error)
     case loadedRecords([Record.State])
     
     case dismissDetails(Record.State?)
@@ -159,9 +169,10 @@ struct Main : ReducerProtocol {
             id: .init(),
             date: .init(),
             title: state.editorState.text,
+            notes: "",
             type: state.editorState.recordType,
             amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
-            currency: .pln,
+            currency: state.editorState.currency,
             category: state.editorState.category
           )
           
@@ -254,7 +265,10 @@ struct Main : ReducerProtocol {
         
       case .showStatistics:
         
-        state.statistics = .init(records: state.records)
+        state.statistics = .init(
+          records: state.records,
+          currency: state.currentCurrency
+        )
         return .none
       case .hideStatistics:
         if let records = state.statistics?.records {
@@ -279,22 +293,16 @@ struct Main : ReducerProtocol {
         return Effect(value: .logOut)
         
       case .mainViewAppeared:
-        return .task {
-          let records = try await apiClient.listRecords()
-          let recordStates = records.map { record in
-            Record.State(
-              record: .init(
-                id: record.id,
-                date: record.created,
-                title: record.title,
-                type: record.clientRecordType,
-                amount: record.amount,
-                currency: .pln
-              )
-            )
+        return .task(
+          operation: {
+            let records = try await apiClient.listRecords()
+            let recordStates = records.map { $0.asRecordState }
+            return .loadedRecords(recordStates)
+          },
+          catch: { error in
+            return .loadingRecordsFailed(error)
           }
-          return .loadedRecords(recordStates)
-        }
+        )
         
       case .loadedRecords(let records):
         state.records = IdentifiedArrayOf<Record.State>(uniqueElements: records)
@@ -313,6 +321,32 @@ struct Main : ReducerProtocol {
   }
 }
 
+extension AppApi.Record.Detail {
+  var asRecordState: Record.State {
+    Record.State(
+      record: .init(
+        id: id,
+        date: created,
+        title: title,
+        notes: notes ?? "",
+        type: clientRecordType,
+        amount: amount,
+        currency: currency.asClientCurrency
+      )
+    )
+  }
+}
+
+extension AppApi.Currency {
+  var asClientCurrency: Wallet_IOS.Currency {
+    switch self {
+    case .usd:
+      return .usd
+    case .pln:
+      return .pln
+    }
+  }
+}
 
 extension MoneyRecord {
   var apiRecordType: AppApi.RecordType {

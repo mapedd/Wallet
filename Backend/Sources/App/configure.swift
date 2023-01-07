@@ -49,7 +49,8 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     AdminModule(),
     ApiModule(),
     BlogModule(),
-    RecordModule(router: .init(dateProvider: dateProvider))
+    RecordModule(router: .init(dateProvider: dateProvider)),
+    CurrencyModule(router: .init(dateProvider: dateProvider))
   ]
   for module in modules {
     try module.boot(app)

@@ -13,61 +13,75 @@ struct RecordDetailsView: View {
 
   var body: some View {
     WithViewStore(
-      self.store, observe: \.renderableState, send: RecordDetails.Action.view
+      self.store,
+      observe: \.renderableState,
+      send: RecordDetails.Action.view
     ) { viewStore in
-      NavigationView {
-        ScrollView {
-          VStack {
-            title(viewStore)
-            amount(viewStore)
-            Spacer()
-            Button("Delete") {
-              viewStore.send(.deleteRecordTapped)
+      Form {
+        Section {
+          
+          Picker(
+            "Type",
+            selection: viewStore.binding(\.$recordType)
+          ) {
+            Text("Expense")
+              .tag(MoneyRecord.RecordType.expense)
+              .tint(.red)
+
+            Text("Income")
+              .tag(MoneyRecord.RecordType.income)
+              .tint(.green)
+          }
+          .pickerStyle(.segmented)
+        }
+        
+        Section {
+          LabeledContent("Title") {
+            TextField(
+              "Title",
+              text: viewStore.binding(\.$title),
+              prompt: Text("Title")
+            )
+          }
+          TextEditor(text: viewStore.binding(\.$notes))
+        }
+        
+        Section {
+          HStack {
+            Picker(
+              "Currency",
+              selection: viewStore.binding(\.$currency)
+            ) {
+              ForEach(Currency.allCases) { currency in
+                Text(currency.symbol)
+                  .tag(currency)
+              }
             }
-            .buttonStyle(.bordered)
-            .frame(maxWidth: .infinity)
+            .pickerStyle(.menu)
+            Spacer()
+            TextField(
+              "Amount",
+              text: viewStore.binding(\.$amount)
+            )
           }
         }
-        .padding()
-        .navigationTitle(Text(viewStore.date.formatted()))
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationViewStyle(.stack)
+        
+        
+        Section {
+          Button("Delete record") {
+            viewStore.send(.deleteRecordTapped)
+          }
+          .tint(.red)
+        }
       }
-
-    }
-  }
-
-  func amount(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
-    HStack(spacing: 0) {
-      Text("Amount")
-        .font(.title)
-        .monospacedDigit()
-      TextField(
-        "amount",
-        text: viewStore.binding(\.$amount)
+      .navigationTitle(
+        Text(viewStore.date.formatted())
       )
-      .font(.title)
-      .monospacedDigit()
-      .keyboardType(.decimalPad)
-      .padding()
+      .navigationBarTitleDisplayMode(.inline)
+      .navigationViewStyle(.stack)
     }
   }
 
-  func title(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
-    HStack(spacing: 0) {
-      Text("Title")
-        .font(.title)
-        .monospacedDigit()
-      TextField(
-        "title",
-        text: viewStore.binding(\.$title)
-      )
-      .font(.title)
-      .monospacedDigit()
-      .keyboardType(.decimalPad)
-      .padding()
-    }
-  }
 }
 
 struct RecordDetailsView_Previews: PreviewProvider {
@@ -75,7 +89,7 @@ struct RecordDetailsView_Previews: PreviewProvider {
     RecordDetailsView(
       store: Store(
         initialState: .init(
-          record: MoneyRecord.preview
+          record: .preview
         ),
         reducer: RecordDetails()
       )

@@ -27,9 +27,10 @@ struct Statistics: ReducerProtocol {
     var filter: Filter = .expenseType(.expense)
     var dateFilter: Filter = .dateRange(.thisWeek)
     var showDateFilter = false
+    var currency: Currency
     
     var formattedFilteredTotal: String {
-      return filteredTotal.formattedDecimalValue
+      return filteredTotal.formatted(.currency(code: currency.rawValue))
     }
     
     enum DateRange: Identifiable, Hashable, CaseIterable {
@@ -153,6 +154,7 @@ struct Statistics: ReducerProtocol {
           id: .init(),
           date: .init(),
           title: "sample expense",
+          notes: "",
           type: .expense,
           amount: Decimal(123),
           currency: .eur
@@ -163,12 +165,14 @@ struct Statistics: ReducerProtocol {
           id: .init(),
           date: .init(),
           title: "sample income",
+          notes: "",
           type: .income,
           amount: Decimal(222),
           currency: .eur
         )
       ),
-    ])
+    ],
+                                   currency: .usd)
   }
   
   enum Action {
@@ -196,34 +200,3 @@ struct Statistics: ReducerProtocol {
     
   }
 }
-//let statisticsCoreReducer = Reducer
-//<
-//  StatisticsState,
-//  StatisticsAction,
-//  StatisticsEnvironment
-//> { state, action, _ in
-//  switch action {
-//  case .changeFilter(let filter):
-//    state.filter = filter
-//    return .none
-//  case .recordAction(id: let id, action: let action):
-//    return .none
-//  case .changeDateFilter(let filter):
-//    state.dateFilter = filter
-//    return .none
-//  }
-//}
-//
-//let statisticsReducer = Reducer
-//<
-//  StatisticsState,
-//  StatisticsAction,
-//  StatisticsEnvironment
-//>.combine(
-//combinedRecordReducer.forEach(
-//  state: \.records,
-//  action: /StatisticsAction.recordAction(id:action:),
-//  environment: { _ in RecordEnvironment() }
-//),
-//statisticsCoreReducer
-//)

@@ -15,6 +15,9 @@ struct RecordDetails: ReducerProtocol {
     struct RenderableState: Equatable {
       @BindableState var amount: String
       @BindableState var title: String
+      @BindableState var notes: String
+      @BindableState var currency: Currency
+      @BindableState var recordType: MoneyRecord.RecordType
       @BindableState var date: Date
     }
 
@@ -22,12 +25,18 @@ struct RecordDetails: ReducerProtocol {
       set {
         self.record.amount = Decimal(string: newValue.amount) ?? .zero
         self.record.title = newValue.title
+        self.record.notes = newValue.notes
+        self.record.currency = newValue.currency
+        self.record.type = newValue.recordType
         self.record.date = newValue.date
       }
       get {
         .init(
           amount: record.amount.formatted(),
           title: record.title,
+          notes: record.notes,
+          currency: record.currency,
+          recordType: record.type,
           date: record.date
         )
       }
@@ -38,6 +47,7 @@ struct RecordDetails: ReducerProtocol {
         id: .init(),
         date: .init(),
         title: "Shopping",
+        notes: "Sample notes",
         type: .expense,
         amount: Decimal(123),
         currency: .usd
@@ -48,6 +58,7 @@ struct RecordDetails: ReducerProtocol {
   
   enum Action: BindableAction {
 
+    case changeType(MoneyRecord.RecordType)
     case deleteRecordTapped
     case binding(BindingAction<State>)
 

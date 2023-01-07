@@ -38,8 +38,10 @@ struct RecordView: View {
             state: \.details,
             action: Record.Action.detailsAction
           )
-        ) {
-          RecordDetailsView(store: $0)
+        ) { store in
+          NavigationView {
+            RecordDetailsView(store: store)
+          }
         }
       }
     }
@@ -59,9 +61,11 @@ struct RecordView_Previews: PreviewProvider {
                   id: .init(),
                   date: .init(),
                   title: "Title",
+                  notes: "",
                   type: .expense,
                   amount: Decimal(floatLiteral: 12.1),
-                  currency: .pln)
+                  currency: .pln
+                )
               ),
               reducer: Record()
             )

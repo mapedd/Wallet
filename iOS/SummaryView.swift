@@ -18,7 +18,7 @@ struct SummaryView: View {
           Text("Total")
             .font(.title)
             .bold()
-          Text(formatter.string(for:viewStore.total) ?? "")
+          Text(viewStore.total.formatted(.currency(code: viewStore.currency.rawValue)))
             .font(.title)
             .monospacedDigit()
         }
@@ -43,7 +43,7 @@ struct SummaryView_Previews: PreviewProvider {
   static var previews: some View {
     SummaryView(
       store: .init(
-        initialState: .init(),
+        initialState: .init(currency: .usd),
         reducer: Summary()
       )
     )
