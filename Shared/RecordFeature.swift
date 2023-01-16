@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import AppApi
 
 struct Record : ReducerProtocol {
   struct State: Equatable, Identifiable {
@@ -64,7 +65,7 @@ extension Record.State {
         notes: "",
         type: .expense,
         amount: Decimal(123),
-        currency: .eur,
+        currencyCode: "EUR",
         category: .init(name: "Food", id: .init())
       )
     ),
@@ -76,7 +77,7 @@ extension Record.State {
         notes: "",
         type: .income,
         amount: Decimal(222),
-        currency: .eur
+        currencyCode: "EUR"
       )
     ),
     Record.State(
@@ -87,7 +88,7 @@ extension Record.State {
         notes: "",
         type: .income,
         amount: Decimal(9.99),
-        currency: .eur,
+        currencyCode: "EUR",
         category: .init(name: "Entertainment", id: .init())
       )
     ),
@@ -99,8 +100,32 @@ extension Record.State {
         notes: "",
         type: .income,
         amount: Decimal(44.2),
-        currency: .eur
+        currencyCode: "EUR"
       )
     )
   ]
+}
+
+extension AppApi.Currency.List {
+  static var eur = AppApi.Currency.List(
+    code: "EUR",
+    name: "Euro",
+    namePlural: "Euros",
+    symbol: "€",
+    symbolNative: "€"
+  )
+  static var usd = AppApi.Currency.List(
+    code: "USD",
+    name: "Dollar",
+    namePlural: "Dollars",
+    symbol: "$",
+    symbolNative: "$"
+  )
+  static var pln = AppApi.Currency.List(
+    code: "PLN",
+    name: "Polish Zloty",
+    namePlural: "Polish Zlotys",
+    symbol: "PLN",
+    symbolNative: "zł"
+  )
 }

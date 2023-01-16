@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import AppApi
 
 struct RecordDetailsView: View {
   var store: StoreOf<RecordDetails>
@@ -50,9 +51,9 @@ struct RecordDetailsView: View {
           HStack {
             Picker(
               "Currency",
-              selection: viewStore.binding(\.$currency)
+              selection: viewStore.binding(\.$currencyCode)
             ) {
-              ForEach(Currency.allCases) { currency in
+              ForEach(Currency.List.examples) { currency in
                 Text(currency.symbol)
                   .tag(currency)
               }

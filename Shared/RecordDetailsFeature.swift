@@ -7,16 +7,17 @@
 
 import Foundation
 import ComposableArchitecture
+import AppApi
 
 struct RecordDetails: ReducerProtocol {
   struct State: Equatable {
     var record: MoneyRecord
 
-    struct RenderableState: Equatable {
+    struct RenderableState: Hashable {
       @BindableState var amount: String
       @BindableState var title: String
       @BindableState var notes: String
-      @BindableState var currency: Currency
+      @BindableState var currencyCode: Currency.Code
       @BindableState var recordType: MoneyRecord.RecordType
       @BindableState var date: Date
     }
@@ -26,7 +27,7 @@ struct RecordDetails: ReducerProtocol {
         self.record.amount = Decimal(string: newValue.amount) ?? .zero
         self.record.title = newValue.title
         self.record.notes = newValue.notes
-        self.record.currency = newValue.currency
+        self.record.currencyCode = newValue.currencyCode
         self.record.type = newValue.recordType
         self.record.date = newValue.date
       }
@@ -35,7 +36,7 @@ struct RecordDetails: ReducerProtocol {
           amount: record.amount.formatted(),
           title: record.title,
           notes: record.notes,
-          currency: record.currency,
+          currencyCode: record.currencyCode,
           recordType: record.type,
           date: record.date
         )
@@ -50,7 +51,7 @@ struct RecordDetails: ReducerProtocol {
         notes: "Sample notes",
         type: .expense,
         amount: Decimal(123),
-        currency: .usd
+        currencyCode: "USD"
       )
     )
   }

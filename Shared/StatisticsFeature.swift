@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import AppApi
 
 extension MoneyRecord {
   func apply(filter: Statistics.State.Filter) -> Bool {
@@ -27,10 +28,10 @@ struct Statistics: ReducerProtocol {
     var filter: Filter = .expenseType(.expense)
     var dateFilter: Filter = .dateRange(.thisWeek)
     var showDateFilter = false
-    var currency: Currency
+    var baseCurrency: AppApi.Currency.Code
     
     var formattedFilteredTotal: String {
-      return filteredTotal.formatted(.currency(code: currency.rawValue))
+      return filteredTotal.formatted(.currency(code: baseCurrency))
     }
     
     enum DateRange: Identifiable, Hashable, CaseIterable {
@@ -157,7 +158,7 @@ struct Statistics: ReducerProtocol {
           notes: "",
           type: .expense,
           amount: Decimal(123),
-          currency: .eur
+          currencyCode: "EUR"
         )
       ),
       Record.State(
@@ -168,11 +169,11 @@ struct Statistics: ReducerProtocol {
           notes: "",
           type: .income,
           amount: Decimal(222),
-          currency: .eur
+          currencyCode: "EUR"
         )
       ),
     ],
-                                   currency: .usd)
+                                   baseCurrency: "USD")
   }
   
   enum Action {

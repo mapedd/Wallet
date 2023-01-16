@@ -157,11 +157,15 @@ actor AuthManager {
 
 
 enum Endpoint {
+  enum Currency {
+    case list
+  }
   case signIn(User.Account.Login)
   case signOut
   case refreshToken(User.Token.Refresh)
   case updateRecord(AppApi.Record.Update)
   case listRecords
+  case currency(Currency)
   
   var httpMethod: HTTPMethod {
     switch self {
@@ -174,6 +178,8 @@ enum Endpoint {
     case .listRecords:
       return .GET
     case .signOut:
+      return .GET
+    case .currency:
       return .GET
     }
   }
@@ -190,6 +196,11 @@ enum Endpoint {
       return "record/list"
     case .updateRecord:
       return "record/update"
+    case .currency(let endpoint):
+      switch endpoint {
+      case .list:
+        return "currency/list"
+      }
     }
   }
   
@@ -329,6 +340,7 @@ struct APIClient {
   var signOut: () async throws -> ActionResult
   var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
   var listRecords: () async throws -> [AppApi.Record.Detail]
+  var listCurrencies: () async throws -> [AppApi.Currency.List]
   
   static var live: APIClient {
     
@@ -388,6 +400,9 @@ struct APIClient {
       },
       listRecords: {
         try await urlClient.fetch(endpoint: .listRecords)
+      },
+      listCurrencies: {
+        try await urlClient.fetch(endpoint: .currency(.list))
       }
     )
   }
@@ -414,13 +429,18 @@ struct APIClient {
           title: $0.title ?? "",
           amount: $0.amount ?? .init(1),
           type: .expense,
-          currency: .pln,
+          currencyCode: "usd",
           created: .now,
           updated: $0.updated
         )
       },
       listRecords: {
         []
+      },
+      listCurrencies: {
+        [
+          .init(code: "USD", name: "Dollar", namePlural: "Dollars", symbol: "$", symbolNative: "$")
+        ]
       }
     )
   }

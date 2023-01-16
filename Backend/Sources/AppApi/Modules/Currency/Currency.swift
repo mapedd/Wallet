@@ -8,13 +8,13 @@
 import Foundation
 
 public enum Currency {
-  public struct List: Codable {
+  public struct List: Codable, Hashable {
     
-    var code: Code
-    var name: String
-    var namePlural: String
-    var symbol: String
-    var symbolNative: String
+    public var code: Code
+    public var name: String
+    public var namePlural: String
+    public var symbol: String
+    public var symbolNative: String
     
     public init(
       code: Currency.Code,

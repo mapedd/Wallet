@@ -16,7 +16,7 @@ final class RecordModel: DatabaseModelInterface {
     struct v1 {
       static var amount: FieldKey { "value" }
       static var type: FieldKey { "type" }
-      static var currency: FieldKey { "currency_code" }
+      static var currency: FieldKey { "currency" }
       static var title: FieldKey { "title" }
       static var notes: FieldKey { "notes" }
 //      static var categoryID: FieldKey { "category_id" }

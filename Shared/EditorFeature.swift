@@ -7,13 +7,26 @@
 
 import Foundation
 import ComposableArchitecture
+import AppApi
+
+extension AppApi.Currency.List {
+  static var preview: AppApi.Currency.List {
+    .init(
+      code: "USD",
+      name: "Dollar",
+      namePlural: "Dollars",
+      symbol: "$",
+      symbolNative: "$"
+    )
+  }
+}
 
 struct Editor: ReducerProtocol {
   
   struct State: Equatable {
     @BindableState var text = "New Record title"
     @BindableState var amount = "0.00"
-    @BindableState var currency = Currency.usd
+    @BindableState var currency: AppApi.Currency.List
     @BindableState var recordType = MoneyRecord.RecordType.expense
     @BindableState var category: Category? = nil
     var addButtonDisabled = true
@@ -22,7 +35,7 @@ struct Editor: ReducerProtocol {
     static let preview = Self.init(
       text: "Buying groceries",
       amount: "123.00",
-      currency: .usd,
+      currency: .preview,
       recordType: .expense,
       category: nil,
       addButtonDisabled: false,

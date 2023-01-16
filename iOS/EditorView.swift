@@ -7,6 +7,22 @@
 
 import SwiftUI
 import ComposableArchitecture
+import AppApi
+
+extension Currency.List {
+  static var examples: [Currency.List] {
+    [
+      .usd,
+      .pln
+    ]
+  }
+}
+
+extension Currency.List: Identifiable {
+  public var id: String {
+    code
+  }
+}
 
 struct EditorView: View {
   var store: StoreOf<Editor>
@@ -44,7 +60,7 @@ struct EditorView: View {
   func amountTextField(_ viewStore: ViewStore<Editor.State, Editor.Action>) -> some View {
     HStack(spacing: 0) {
       Picker("Currency", selection: viewStore.binding(\.$currency)) {
-        ForEach(Currency.allCases) { currency in
+        ForEach(Currency.List.examples) { currency in
           Text(currency.symbol)
             .tag(currency)
         }

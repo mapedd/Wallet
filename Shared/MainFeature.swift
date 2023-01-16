@@ -17,9 +17,9 @@ struct Main : ReducerProtocol {
   
   struct State: Equatable {
     init(
-      editorState: Editor.State = .init(),
+      editorState: Editor.State = .init(currency: .usd),
       records: IdentifiedArrayOf<Record.State> = [],
-      summaryState: Summary.State = .init(currency: .usd),
+      summaryState: Summary.State = .init(baseCurrencyCode: "USD"),
       title: String = "Wallet",
       editMode: State.EditMode = .inactive,
       statistics: Statistics.State? = nil
@@ -52,11 +52,11 @@ struct Main : ReducerProtocol {
       statistics != nil
     }
     
-    var currentCurrency: Currency {
+    var currentCurrencyCode: Currency.Code {
       if let first = records.first {
-        return first.record.currency
+        return first.record.currencyCode
       }
-      return .usd
+      return Currency.List.usd.code
     }
     
     mutating func recalculateTotal() {
@@ -71,13 +71,16 @@ struct Main : ReducerProtocol {
       })
       
       self.summaryState.total = sum
-      self.summaryState.currency = currentCurrency
+      self.summaryState.baseCurrencyCode = currentCurrencyCode
     }
     
     static let preview = Self.init(
-      editorState: .init(categories: Category.previews),
+      editorState: .init(
+        currency: .preview,
+        categories: Category.previews
+      ),
       records: IdentifiedArray(uniqueElements: Record.State.sample),
-      summaryState: .init(currency: .usd),
+      summaryState: .init(baseCurrencyCode: "USD"),
       title: "Wallet"
     )
     
@@ -172,13 +175,16 @@ struct Main : ReducerProtocol {
             notes: "",
             type: state.editorState.recordType,
             amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
-            currency: state.editorState.currency,
+            currencyCode: state.editorState.currency.code,
             category: state.editorState.category
           )
           
           state.records.append(Record.State(record: newRecord))
           state.recalculateTotal()
-          state.editorState = .init(categories: state.editorState.categories)
+          state.editorState = .init(
+            currency: .preview,
+            categories: state.editorState.categories
+          )
           
           return .task(
             operation: {
@@ -187,7 +193,7 @@ struct Main : ReducerProtocol {
                 title: newRecord.title,
                 amount: newRecord.amount,
                 type: newRecord.apiRecordType,
-                currency: .pln,
+                currencyCode: newRecord.currencyCode,
                 notes: nil,
                 updated: dateProvider.now
               )
@@ -267,7 +273,7 @@ struct Main : ReducerProtocol {
         
         state.statistics = .init(
           records: state.records,
-          currency: state.currentCurrency
+          baseCurrency: state.currentCurrencyCode
         )
         return .none
       case .hideStatistics:
@@ -331,22 +337,22 @@ extension AppApi.Record.Detail {
         notes: notes ?? "",
         type: clientRecordType,
         amount: amount,
-        currency: currency.asClientCurrency
+        currencyCode: currencyCode
       )
     )
   }
 }
 
-extension AppApi.Currency {
-  var asClientCurrency: Wallet_IOS.Currency {
-    switch self {
-    case .usd:
-      return .usd
-    case .pln:
-      return .pln
-    }
-  }
-}
+//extension AppApi.Currency {
+//  var asClientCurrency: Wallet_IOS.Currency {
+//    switch self {
+//    case .usd:
+//      return .usd
+//    case .pln:
+//      return .pln
+//    }
+//  }
+//}
 
 extension MoneyRecord {
   var apiRecordType: AppApi.RecordType {
