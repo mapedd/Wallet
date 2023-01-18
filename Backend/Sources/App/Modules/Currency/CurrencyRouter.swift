@@ -32,6 +32,12 @@ struct CurrencyRouter: RouteCollection {
       .grouped("currency")
       .get("list", use: apiController.list)
     
+    routes
+      .grouped("api")
+      .grouped(tokenAuthenticator)
+      .grouped("currency")
+      .get("conversions", use: apiController.conversions)
+    
   }
 }
 

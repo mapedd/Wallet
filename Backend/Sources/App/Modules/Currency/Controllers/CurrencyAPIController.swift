@@ -9,6 +9,15 @@ import Vapor
 import FluentKit
 import AppApi
 
+struct ConversionResult: Content {
+  var data: [String:Float]
+}
+
+struct ConversionsQuery: Content {
+  var baseCurrency: String
+  var currencies: [String]
+}
+
 extension Currency.List : Content {}
 
 struct CurrencyAPIController {
@@ -32,6 +41,31 @@ struct CurrencyAPIController {
     
     struct ListResponse: Codable {
       var data: [String: Currency]
+    }
+  }
+  
+  func conversions(req: Request) async throws -> ConversionResult {
+    let currencyQuery = try req.query.decode(ConversionsQuery.self)
+    let url: URI = "https://api.freecurrencyapi.com/v1/latest"
+    let apiKey = "IQRoPuHyC37OgfvjK037aRfxcWm99roenKYE2jOE"
+    let response = try await req.client.get(url) { req in
+        try req.query.encode([
+          "apikey": apiKey,
+          "base_currency" : currencyQuery.baseCurrency.uppercased(),
+          "currencies" : currencyQuery.currencies.joined(separator: ",")
+        ])
+        
+    }
+    
+    
+    do {
+      let mappedResponse = try response.content.decode(ConversionResult.self)
+      
+      
+      return mappedResponse
+    } catch {
+      req.logger.error("error \(error)")
+      throw Abort(.internalServerError)
     }
   }
   
