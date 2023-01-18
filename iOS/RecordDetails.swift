@@ -19,61 +19,15 @@ struct RecordDetailsView: View {
       send: RecordDetails.Action.view
     ) { viewStore in
       Form {
-        Section {
-          
-          Picker(
-            "Type",
-            selection: viewStore.binding(\.$recordType)
-          ) {
-            Text("Expense")
-              .tag(MoneyRecord.RecordType.expense)
-              .tint(.red)
-
-            Text("Income")
-              .tag(MoneyRecord.RecordType.income)
-              .tint(.green)
-          }
-          .pickerStyle(.segmented)
-        }
-        
-        Section {
-          LabeledContent("Title") {
-            TextField(
-              "Title",
-              text: viewStore.binding(\.$title),
-              prompt: Text("Title")
-            )
-          }
-          TextEditor(text: viewStore.binding(\.$notes))
-        }
-        
-        Section {
-          HStack {
-            Picker(
-              "Currency",
-              selection: viewStore.binding(\.$currencyCode)
-            ) {
-              ForEach(Currency.List.examples) { currency in
-                Text(currency.symbol)
-                  .tag(currency)
-              }
-            }
-            .pickerStyle(.menu)
-            Spacer()
-            TextField(
-              "Amount",
-              text: viewStore.binding(\.$amount)
-            )
-          }
-        }
-        
-        
-        Section {
-          Button("Delete record") {
-            viewStore.send(.deleteRecordTapped)
-          }
-          .tint(.red)
-        }
+        type(viewStore)
+        title(viewStore)
+        amount(viewStore)
+        currency(viewStore)
+        category(viewStore)
+        deleteSection(viewStore)
+      }
+      .onAppear{
+        viewStore.send(.didAppear)
       }
       .navigationTitle(
         Text(viewStore.date.formatted())
@@ -82,7 +36,90 @@ struct RecordDetailsView: View {
       .navigationViewStyle(.stack)
     }
   }
+  
+  func type(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+    Picker(
+      "Type",
+      selection: viewStore.binding(\.$recordType)
+    ) {
+      Text("Expense")
+        .tag(MoneyRecord.RecordType.expense)
+        .tint(.red)
 
+      Text("Income")
+        .tag(MoneyRecord.RecordType.income)
+        .tint(.green)
+    }
+    .pickerStyle(.segmented)
+  }
+  
+  func title(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+    Section {
+      LabeledContent("Title") {
+        TextField(
+          "Title",
+          text: viewStore.binding(\.$title),
+          prompt: Text("Title")
+        )
+      }
+      TextEditor(text: viewStore.binding(\.$notes))
+    }
+  }
+  
+  func amount(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+    Section {
+      LabeledContent {
+        TextField(
+          "Amount",
+          text: viewStore.binding(\.$amount)
+        )
+      } label: {
+        Text("Amount")
+      }
+
+    }
+  }
+
+  func currency(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+    Section {
+      Picker(
+        "Currency",
+        selection: viewStore.binding(\.$currencyCode)
+      ) {
+        ForEach(Currency.List.examples) { currency in
+          Text(currency.symbol)
+            .tag(currency)
+        }
+      }
+      .pickerStyle(.menu)
+    }
+  }
+  
+  func category(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+    Section {
+      Picker(
+        "Category",
+        selection: viewStore.binding(\.$category)
+      ) {
+        Text("No category")
+          .tag(nil as Optional<Category>)
+        ForEach(viewStore.categories) { category in
+          Text(category.name)
+            .tag(category as Optional<Category>)
+        }
+      }
+      .pickerStyle(.menu)
+    }
+  }
+  
+  func deleteSection(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+    Section {
+      Button("Delete record") {
+        viewStore.send(.deleteRecordTapped)
+      }
+      .tint(.red)
+    }
+  }
 }
 
 struct RecordDetailsView_Previews: PreviewProvider {
@@ -90,7 +127,9 @@ struct RecordDetailsView_Previews: PreviewProvider {
     RecordDetailsView(
       store: Store(
         initialState: .init(
-          record: .preview
+          record: .preview,
+          categories: [
+            .init(name: "Sweets", id: UUID(), color: 1)]
         ),
         reducer: RecordDetails()
       )

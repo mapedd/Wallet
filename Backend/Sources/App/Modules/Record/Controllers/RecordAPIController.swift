@@ -20,9 +20,13 @@ extension RecordCategory.Create : Content {}
 struct RecordAPIController {
   
   var dateProvider: DateProvider
-  
+  let encoder: JSONEncoder
   init(dateProvider: DateProvider) {
     self.dateProvider = dateProvider
+    
+    encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .iso8601
+    encoder.outputFormatting = .prettyPrinted
   }
   
   func list(req:Request) async throws -> [Record.Detail] {
@@ -48,7 +52,13 @@ struct RecordAPIController {
       try await $0.asDetail(on: req.db)
     }
   }
-  
+  func log(_ action: String, _ details: Record.Detail,_ req: Request)  {
+    
+    do {
+      let json = try encoder.encode(details)
+      req.logger.info("\(action) record \(String(data: json, encoding: .utf8) ?? "")")
+    } catch {}
+  }
   func updateRecord(req: Request) async throws -> Record.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
       throw Abort(.unauthorized)
@@ -64,7 +74,9 @@ struct RecordAPIController {
         db: req.db
       )
       try await existingRecord.save(on: req.db)
-      return try await existingRecord.asDetail(on: req.db)
+      let details = try await existingRecord.asDetail(on: req.db)
+      log("updated", details, req)
+      return details
     }
     
     let record = try RecordModel(
@@ -80,8 +92,9 @@ struct RecordAPIController {
     )
     
     try await record.create(on: req.db)
-    
-    return try await record.asDetail(on: req.db)
+    let detail = try await record.asDetail(on: req.db)
+    log("created", detail, req)
+    return detail
   }
   
   

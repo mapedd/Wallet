@@ -29,7 +29,8 @@ struct MoneyRecord: Equatable, Identifiable {
       notes: "Sample notes",
       type: .expense,
       amount: Decimal(123),
-      currencyCode: "usd"
+      currencyCode: "usd",
+      category: .init(name: "Sweets", id: UUID(), color: 1)
     )
   }
 }
@@ -37,11 +38,12 @@ struct MoneyRecord: Equatable, Identifiable {
 struct Category: Hashable, Identifiable {
   var name: String
   var id: UUID
+  var color: Int
 
   static var previews = [
-    Category(name: "Food", id: .init()),
-    Category(name: "Car", id: .init()),
-    Category(name: "Kids", id: .init()),
+    Category(name: "Food", id: .init(), color: 1),
+    Category(name: "Car", id: .init(), color: 3),
+    Category(name: "Kids", id: .init(), color: 2),
   ]
 }
 

@@ -22,7 +22,8 @@ struct Main : ReducerProtocol {
       summaryState: Summary.State = .init(baseCurrencyCode: "USD"),
       title: String = "Wallet",
       editMode: State.EditMode = .inactive,
-      statistics: Statistics.State? = nil
+      statistics: Statistics.State? = nil,
+      categories: [Category] = []
     ) {
       self.editorState = editorState
       self.records = records
@@ -30,6 +31,7 @@ struct Main : ReducerProtocol {
       self.title = title
       self.editMode = editMode
       self.statistics = statistics
+      self.categories = categories
       
       recalculateTotal()
     }
@@ -47,6 +49,7 @@ struct Main : ReducerProtocol {
     var title: String
     var editMode: EditMode = .inactive
     var statistics: Statistics.State?
+    var categories: [Category]
     
     var showStatistics: Bool {
       statistics != nil
@@ -103,6 +106,9 @@ struct Main : ReducerProtocol {
     case loadingRecordsFailed(Swift.Error)
     case loadedRecords([Record.State])
     
+    case loadingCategoriesFailed(Swift.Error)
+    case loadedCategories([Category])
+    
     case dismissDetails(Record.State?)
     
     case recordCreated(AppApi.Record.Detail)
@@ -135,10 +141,18 @@ struct Main : ReducerProtocol {
   
   func saving(_ record: MoneyRecord) -> EffectTask<Action> {
     
+    var categoryIds: [UUID] = []
+    if let category = record.category {
+      categoryIds.append(category.id)
+    }
     let update = AppApi.Record.Update(
       id: record.id,
       title: record.title,
       amount: record.amount,
+      type: record.apiRecordType,
+      currencyCode: record.currencyCode,
+      notes: record.notes,
+      categoryIds: categoryIds,
       updated: dateProvider.now
     )
     
@@ -179,7 +193,12 @@ struct Main : ReducerProtocol {
             category: state.editorState.category
           )
           
-          state.records.append(Record.State(record: newRecord))
+          let recordState = Record.State(
+            record: newRecord,
+            categories: state.categories
+          )
+          
+          state.records.append(recordState)
           state.recalculateTotal()
           state.editorState = .init(
             currency: .preview,
@@ -299,19 +318,34 @@ struct Main : ReducerProtocol {
         return Effect(value: .logOut)
         
       case .mainViewAppeared:
-        return .task(
-          operation: {
-            let records = try await apiClient.listRecords()
-            let recordStates = records.map { $0.asRecordState }
-            return .loadedRecords(recordStates)
-          },
-          catch: { error in
-            return .loadingRecordsFailed(error)
-          }
+        return .merge(
+          .task(
+            operation: {
+              let records = try await apiClient.listRecords()
+              let recordStates = records.map { $0.asRecordState }
+              return .loadedRecords(recordStates)
+            },
+            catch: { error in
+              return .loadingRecordsFailed(error)
+            }
+          ),
+          .task(
+            operation: {
+              let categories = try await apiClient.listCategories()
+              let localCategeries = categories.map { $0.asLocaleCategory }
+              return .loadedCategories(localCategeries)
+            },
+            catch: { error in
+              return .loadingCategoriesFailed(error)
+            }
+          )
         )
         
       case .loadedRecords(let records):
         state.records = IdentifiedArrayOf<Record.State>(uniqueElements: records)
+        return .none
+      case .loadedCategories(let categories):
+        state.editorState.categories = categories
         return .none
       default:
         return .none
@@ -338,7 +372,8 @@ extension AppApi.Record.Detail {
         type: clientRecordType,
         amount: amount,
         currencyCode: currencyCode
-      )
+      ),
+      categories: []
     )
   }
 }
@@ -373,5 +408,14 @@ extension AppApi.Record.Detail {
     case .expense:
       return MoneyRecord.RecordType.expense
     }
+  }
+}
+extension AppApi.RecordCategory.Detail {
+  var asLocaleCategory: Wallet_IOS.Category {
+    .init(
+      name: self.name,
+      id: self.id,
+      color: self.color
+    )
   }
 }

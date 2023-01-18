@@ -166,6 +166,7 @@ enum Endpoint {
   case updateRecord(AppApi.Record.Update)
   case listRecords
   case currency(Currency)
+  case listCategories
   
   var httpMethod: HTTPMethod {
     switch self {
@@ -180,6 +181,8 @@ enum Endpoint {
     case .signOut:
       return .GET
     case .currency:
+      return .GET
+    case .listCategories:
       return .GET
     }
   }
@@ -196,6 +199,8 @@ enum Endpoint {
       return "record/list"
     case .updateRecord:
       return "record/update"
+    case .listCategories:
+      return "record/category/list"
     case .currency(let endpoint):
       switch endpoint {
       case .list:
@@ -341,6 +346,7 @@ struct APIClient {
   var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
   var listRecords: () async throws -> [AppApi.Record.Detail]
   var listCurrencies: () async throws -> [AppApi.Currency.List]
+  var listCategories: () async throws -> [AppApi.RecordCategory.Detail]
   
   static var live: APIClient {
     
@@ -403,6 +409,9 @@ struct APIClient {
       },
       listCurrencies: {
         try await urlClient.fetch(endpoint: .currency(.list))
+      },
+      listCategories: {
+        try await urlClient.fetch(endpoint: .listCategories)
       }
     )
   }
@@ -440,6 +449,12 @@ struct APIClient {
       listCurrencies: {
         [
           .init(code: "USD", name: "Dollar", namePlural: "Dollars", symbol: "$", symbolNative: "$")
+        ]
+      },
+      listCategories: {
+        [
+          .init(id: .init(), name: "Fun", color: 1),
+          .init(id: .init(), name: "Sweets", color: 3)
         ]
       }
     )

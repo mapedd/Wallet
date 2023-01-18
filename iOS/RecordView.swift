@@ -65,7 +65,8 @@ struct RecordView_Previews: PreviewProvider {
                   type: .expense,
                   amount: Decimal(floatLiteral: 12.1),
                   currencyCode: "USD"
-                )
+                ),
+                categories: []
               ),
               reducer: Record()
             )

@@ -75,6 +75,7 @@ struct MainView : View {
          )
       )
       .navigationTitle(viewStore.title)
+      .navigationBarTitleDisplayMode(.inline)
       .onAppear {
         viewStore.send(.mainViewAppeared)
       }
