@@ -158,9 +158,9 @@ struct Statistics: ReducerProtocol {
           notes: "",
           type: .expense,
           amount: Decimal(123),
-          currencyCode: "EUR"
-        ),
-        categories: []
+          currencyCode: "EUR",
+          categories: []
+        )
       ),
       Record.State(
         record: .init(
@@ -170,9 +170,9 @@ struct Statistics: ReducerProtocol {
           notes: "",
           type: .income,
           amount: Decimal(222),
-          currencyCode: "EUR"
-        ),
-        categories: []
+          currencyCode: "EUR",
+          categories: []
+        )
       ),
     ],
                                    baseCurrency: "USD")

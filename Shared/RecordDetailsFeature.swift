@@ -12,17 +12,17 @@ import AppApi
 struct RecordDetails: ReducerProtocol {
   struct State: Equatable {
     var record: MoneyRecord
-    var categories: [Category] = []
+    var availableCategories: [Category] = []
 
     struct RenderableState: Hashable {
       @BindableState var amount: String
       @BindableState var title: String
       @BindableState var notes: String
       @BindableState var currencyCode: Currency.Code
-      @BindableState var category: Category?
+      @BindableState var assignedCategories: [Category]
       @BindableState var recordType: MoneyRecord.RecordType
       @BindableState var date: Date
-      var categories: [Category]
+      var availableCategories: [Category]
     }
 
     var renderableState: RenderableState {
@@ -33,8 +33,8 @@ struct RecordDetails: ReducerProtocol {
         self.record.currencyCode = newValue.currencyCode
         self.record.type = newValue.recordType
         self.record.date = newValue.date
-        self.record.category = newValue.category
-        self.categories = newValue.categories
+        self.record.categories = newValue.assignedCategories
+        self.availableCategories = newValue.availableCategories
       }
       get {
         .init(
@@ -42,10 +42,10 @@ struct RecordDetails: ReducerProtocol {
           title: record.title,
           notes: record.notes,
           currencyCode: record.currencyCode,
-          category: record.category,
+          assignedCategories: record.categories,
           recordType: record.type,
           date: record.date,
-          categories: categories
+          availableCategories: availableCategories
         )
       }
     }
@@ -59,7 +59,7 @@ struct RecordDetails: ReducerProtocol {
         type: .expense,
         amount: Decimal(123),
         currencyCode: "USD",
-        category: nil
+        categories: []
       )
     )
   }
@@ -72,6 +72,7 @@ struct RecordDetails: ReducerProtocol {
     case changeType(MoneyRecord.RecordType)
     case deleteRecordTapped
     case binding(BindingAction<State>)
+    case categoryTapped(Category)
 
     static func view(_ viewAction: RenderableAction) -> Self {
       switch viewAction {
@@ -82,6 +83,8 @@ struct RecordDetails: ReducerProtocol {
 
       case .deleteRecordTapped:
         return .deleteRecordTapped
+      case .categoryTapped(let category):
+        return .categoryTapped(category)
       }
     }
 
@@ -90,6 +93,7 @@ struct RecordDetails: ReducerProtocol {
       case didAppear
       case binding(BindingAction<State.RenderableState>)
       case deleteRecordTapped
+      case categoryTapped(Category)
     }
 
   }
@@ -113,7 +117,21 @@ struct RecordDetails: ReducerProtocol {
             }
           )
       case .loadedCategories(let localCategories):
-        state.categories = localCategories
+        state.availableCategories = localCategories
+        return .none
+      case .categoryTapped(let category):
+        let contains = state.record.categories.contains(where: {
+          $0.id == category.id
+        })
+        
+        if contains {
+          state.record.categories.removeAll { inside in
+            inside.id == category.id
+          }
+        } else {
+          state.record.categories.append(category)
+        }
+        
         return .none
       default:
         return .none

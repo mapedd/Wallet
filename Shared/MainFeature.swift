@@ -141,10 +141,8 @@ struct Main : ReducerProtocol {
   
   func saving(_ record: MoneyRecord) -> EffectTask<Action> {
     
-    var categoryIds: [UUID] = []
-    if let category = record.category {
-      categoryIds.append(category.id)
-    }
+    var categoryIds = record.categories.map { $0.id }
+    
     let update = AppApi.Record.Update(
       id: record.id,
       title: record.title,
@@ -182,6 +180,10 @@ struct Main : ReducerProtocol {
       case let .editorAction(editorAction):
         switch editorAction {
         case .addButtonTapped:
+          var categories: [Category] = []
+          if let newCategory = state.editorState.category {
+            categories.append(newCategory)
+          }
           let newRecord = MoneyRecord(
             id: .init(),
             date: .init(),
@@ -190,12 +192,11 @@ struct Main : ReducerProtocol {
             type: state.editorState.recordType,
             amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
             currencyCode: state.editorState.currency.code,
-            category: state.editorState.category
+            categories: categories
           )
           
           let recordState = Record.State(
-            record: newRecord,
-            categories: state.categories
+            record: newRecord
           )
           
           state.records.append(recordState)
@@ -371,23 +372,12 @@ extension AppApi.Record.Detail {
         notes: notes ?? "",
         type: clientRecordType,
         amount: amount,
-        currencyCode: currencyCode
-      ),
-      categories: []
+        currencyCode: currencyCode,
+        categories: categories.map { $0.asLocaleCategory }
+      )
     )
   }
 }
-
-//extension AppApi.Currency {
-//  var asClientCurrency: Wallet_IOS.Currency {
-//    switch self {
-//    case .usd:
-//      return .usd
-//    case .pln:
-//      return .pln
-//    }
-//  }
-//}
 
 extension MoneyRecord {
   var apiRecordType: AppApi.RecordType {

@@ -13,7 +13,6 @@ struct Record : ReducerProtocol {
   struct State: Equatable, Identifiable {
     var record: MoneyRecord
     var details: RecordDetails.State?
-    var categories: [Category]
     
     var id: UUID {
       record.id
@@ -34,8 +33,7 @@ struct Record : ReducerProtocol {
       switch action {
       case .setSheet(isPresented: true):
         state.details = .init(
-          record: state.record,
-          categories: state.categories
+          record: state.record
         )
         return .none
       case .setSheet(isPresented: false):
@@ -71,9 +69,8 @@ extension Record.State {
         type: .expense,
         amount: Decimal(123),
         currencyCode: "EUR",
-        category: .init(name: "Food", id: .init(), color: 1)
-      ),
-      categories: []
+        categories: [.init(name: "Food", id: .init(), color: 1)]
+      )
     ),
     Record.State(
       record: .init(
@@ -83,9 +80,9 @@ extension Record.State {
         notes: "",
         type: .income,
         amount: Decimal(222),
-        currencyCode: "EUR"
-      ),
-      categories: []
+        currencyCode: "EUR",
+        categories: [.init(name: "Food", id: .init(), color: 1)]
+      )
     ),
     Record.State(
       record: .init(
@@ -96,9 +93,8 @@ extension Record.State {
         type: .income,
         amount: Decimal(9.99),
         currencyCode: "EUR",
-        category: .init(name: "Entertainment", id: .init(), color: 1)
-      ),
-      categories: []
+        categories: [.init(name: "Food", id: .init(), color: 1)]
+      )
     ),
     Record.State(
       record: .init(
@@ -108,9 +104,9 @@ extension Record.State {
         notes: "",
         type: .income,
         amount: Decimal(44.2),
-        currencyCode: "EUR"
-      ),
-      categories: []
+        currencyCode: "EUR",
+        categories: [.init(name: "Food", id: .init(), color: 1)]
+      )
     )
   ]
 }

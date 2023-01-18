@@ -95,20 +95,18 @@ struct RecordDetailsView: View {
     }
   }
   
+  
+  
   func category(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
     Section {
-      Picker(
-        "Category",
-        selection: viewStore.binding(\.$category)
-      ) {
-        Text("No category")
-          .tag(nil as Optional<Category>)
-        ForEach(viewStore.categories) { category in
-          Text(category.name)
-            .tag(category as Optional<Category>)
+      MultiPicker(
+        label: "Categories",
+        options: viewStore.availableCategories,
+        pickedValues: viewStore.assignedCategories,
+        itemTapped: { category in
+          viewStore.send(.categoryTapped(category))
         }
-      }
-      .pickerStyle(.menu)
+      )
     }
   }
   
@@ -127,12 +125,16 @@ struct RecordDetailsView_Previews: PreviewProvider {
     RecordDetailsView(
       store: Store(
         initialState: .init(
-          record: .preview,
-          categories: [
-            .init(name: "Sweets", id: UUID(), color: 1)]
+          record: .preview
         ),
         reducer: RecordDetails()
       )
     )
+  }
+}
+
+extension Category : Readable {
+  var readableDescription: String {
+    name
   }
 }

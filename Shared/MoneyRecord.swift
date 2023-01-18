@@ -19,7 +19,7 @@ struct MoneyRecord: Equatable, Identifiable {
   var type: RecordType
   var amount: Decimal
   var currencyCode: String
-  var category: Category?
+  var categories: [Category]
   
   static var preview: MoneyRecord {
     .init(
@@ -30,7 +30,7 @@ struct MoneyRecord: Equatable, Identifiable {
       type: .expense,
       amount: Decimal(123),
       currencyCode: "usd",
-      category: .init(name: "Sweets", id: UUID(), color: 1)
+      categories: [.init(name: "Sweets", id: UUID(), color: 1)]
     )
   }
 }

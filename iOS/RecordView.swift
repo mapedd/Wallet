@@ -20,8 +20,8 @@ struct RecordView: View {
           Spacer()
 
         }
-        if let categoryName = viewStore.record.category?.name {
-          Text(categoryName)
+        if !viewStore.record.categories.isEmpty {
+          Text(viewStore.record.categories.map { $0.name}.joined(separator: ", "))
         }
       }
       .onTapGesture {
@@ -64,9 +64,9 @@ struct RecordView_Previews: PreviewProvider {
                   notes: "",
                   type: .expense,
                   amount: Decimal(floatLiteral: 12.1),
-                  currencyCode: "USD"
-                ),
-                categories: []
+                  currencyCode: "USD",
+                  categories: Category.previews
+                )
               ),
               reducer: Record()
             )
