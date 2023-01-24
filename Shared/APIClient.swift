@@ -159,6 +159,7 @@ actor AuthManager {
 enum Endpoint {
   enum Currency {
     case list
+    case conversions(base: String, currencies: [String])
   }
   case signIn(User.Account.Login)
   case signOut
@@ -205,6 +206,8 @@ enum Endpoint {
       switch endpoint {
       case .list:
         return "currency/list"
+      case .conversions(let base, _):
+        return "currency/conversions?baseCurrency=\(base)"
       }
     }
   }
@@ -339,6 +342,12 @@ class URLClient {
   }
 }
 
+
+struct ConversionResult: Hashable, Codable {
+  var data: [String:Float]
+}
+
+
 struct APIClient {
   
   var signIn: (User.Account.Login) async throws -> User.Token.Detail?
@@ -347,6 +356,7 @@ struct APIClient {
   var listRecords: () async throws -> [AppApi.Record.Detail]
   var listCurrencies: () async throws -> [AppApi.Currency.List]
   var listCategories: () async throws -> [AppApi.RecordCategory.Detail]
+  var conversions: (Currency.Code) async throws -> ConversionResult
   
   static var live: APIClient {
     
@@ -412,6 +422,9 @@ struct APIClient {
       },
       listCategories: {
         try await urlClient.fetch(endpoint: .listCategories)
+      },
+      conversions: { code in
+        try await urlClient.fetch(endpoint: .currency(.conversions(base: code, currencies: [])))
       }
     )
   }
@@ -456,6 +469,9 @@ struct APIClient {
           .init(id: .init(), name: "Fun", color: 1),
           .init(id: .init(), name: "Sweets", color: 3)
         ]
+      },
+      conversions: { _ in 
+        .init(data: [String : Float]())
       }
     )
   }

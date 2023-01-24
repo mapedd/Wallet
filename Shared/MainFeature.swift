@@ -50,6 +50,7 @@ struct Main : ReducerProtocol {
     var editMode: EditMode = .inactive
     var statistics: Statistics.State?
     var categories: [Category]
+    var conversions: ConversionResult?
     
     var showStatistics: Bool {
       statistics != nil
@@ -63,11 +64,24 @@ struct Main : ReducerProtocol {
     }
     
     mutating func recalculateTotal() {
+      
+      guard let conversions else {
+        print("not loaded conversions")
+        return
+      }
+      
       let sum = self.records.reduce(Decimal.zero, { partialResult, recordState in
+        let recordCurrency = recordState.record.currencyCode
+       guard
+        let conversion: Float = conversions.data[recordCurrency]
+        else {
+          return partialResult
+        }
+        let convertedAmount = recordState.record.amount / Decimal(floatLiteral: Double(conversion))
         if recordState.record.type == .expense {
-          return partialResult - recordState.record.amount
+          return partialResult - convertedAmount
         } else if recordState.record.type == .income {
-          return partialResult + recordState.record.amount
+          return partialResult + convertedAmount
         } else {
           fatalError("not handled record type")
         }
@@ -109,6 +123,9 @@ struct Main : ReducerProtocol {
     case loadingCategoriesFailed(Swift.Error)
     case loadedCategories([Category])
     
+    case loadedConversions(ConversionResult)
+    case loadingConversionsFailed(Swift.Error)
+    
     case dismissDetails(Record.State?)
     
     case recordCreated(AppApi.Record.Detail)
@@ -141,7 +158,7 @@ struct Main : ReducerProtocol {
   
   func saving(_ record: MoneyRecord) -> EffectTask<Action> {
     
-    var categoryIds = record.categories.map { $0.id }
+    let categoryIds = record.categories.map { $0.id }
     
     let update = AppApi.Record.Update(
       id: record.id,
@@ -319,6 +336,7 @@ struct Main : ReducerProtocol {
         return Effect(value: .logOut)
         
       case .mainViewAppeared:
+        let base = state.currentCurrencyCode
         return .merge(
           .task(
             operation: {
@@ -339,14 +357,28 @@ struct Main : ReducerProtocol {
             catch: { error in
               return .loadingCategoriesFailed(error)
             }
+          ),
+          .task(
+            operation: {
+              let conversions = try await apiClient.conversions(base)
+              return .loadedConversions(conversions)
+            },
+            catch: { error in
+              return .loadingConversionsFailed(error)
+            }
           )
         )
         
       case .loadedRecords(let records):
         state.records = IdentifiedArrayOf<Record.State>(uniqueElements: records)
+        state.recalculateTotal()
         return .none
       case .loadedCategories(let categories):
         state.editorState.categories = categories
+        return .none
+      case .loadedConversions(let conversions):
+        state.conversions = conversions
+        state.recalculateTotal()
         return .none
       default:
         return .none
