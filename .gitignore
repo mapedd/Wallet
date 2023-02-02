@@ -1,6 +1,8 @@
 ## User settings
 */xcuserdata/
+xcuserdata/
 Wallet.xcodeproj/xcuserdata/*
+
 
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
@@ -22,6 +24,7 @@ DerivedData/
 .DS_Store
 *.sqlite
 Backend/.build
+Backend/.swiftpm/
 *.xcbkptlist
 Wallet.xcodeproj/xcuserdata/*
 

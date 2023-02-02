@@ -139,14 +139,12 @@ struct Main : ReducerProtocol {
   }
   
   func deleting(_ record: MoneyRecord) -> EffectTask<Action> {
-    let update = AppApi.Record.Update(
-      id: record.id,
-      updated: dateProvider.now,
-      deleted: dateProvider.now
-    )
+    var update = record.asUpdate
+    update.updated = dateProvider.now
+    update.deleted = dateProvider.now
     
     return .task(
-      operation: {
+      operation: {[update] in 
         let _ = try await apiClient.updateRecord(update)
         return .deleteSuccess
       },
@@ -223,17 +221,19 @@ struct Main : ReducerProtocol {
             categories: state.editorState.categories
           )
           
+          let update = AppApi.Record.Update(
+            id: newRecord.id,
+            title: newRecord.title,
+            amount: newRecord.amount,
+            type: newRecord.apiRecordType,
+            currencyCode: newRecord.currencyCode,
+            notes: newRecord.notes,
+            categoryIds: categories.map(\.id),
+            updated: dateProvider.now
+          )
+          
           return .task(
             operation: {
-              let update = AppApi.Record.Update(
-                id: newRecord.id,
-                title: newRecord.title,
-                amount: newRecord.amount,
-                type: newRecord.apiRecordType,
-                currencyCode: newRecord.currencyCode,
-                notes: nil,
-                updated: dateProvider.now
-              )
               if let record = try await apiClient.updateRecord(update) {
                 return .recordCreated(record)
               }
@@ -285,12 +285,11 @@ struct Main : ReducerProtocol {
         state.records.remove(atOffsets: indexSet)
         state.recalculateTotal()
         
-        let updates = records.map { record in
-          AppApi.Record.Update(
-            id: record.id,
-            updated: dateProvider.now,
-            deleted: dateProvider.now
-          )
+        let updates = records.map { recordState in
+          var update = recordState.record.asUpdate
+          update.updated = dateProvider.now
+          update.deleted = dateProvider.now
+          return update
         }
         
         return .task(
@@ -407,6 +406,22 @@ extension AppApi.Record.Detail {
         currencyCode: currencyCode,
         categories: categories.map { $0.asLocaleCategory }
       )
+    )
+  }
+}
+
+extension MoneyRecord {
+  var asUpdate: AppApi.Record.Update {
+    .init(
+      id: id,
+      title: title,
+      amount: amount,
+      type: apiRecordType,
+      currencyCode: currencyCode,
+      notes: notes,
+      categoryIds: categories.map(\.id),
+      updated: date,
+      deleted: nil
     )
   }
 }

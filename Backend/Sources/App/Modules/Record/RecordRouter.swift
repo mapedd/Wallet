@@ -12,15 +12,20 @@ struct RecordRouter: RouteCollection {
   
   var dateProvider: DateProvider
   let apiController: RecordAPIController
+  let frontendController: RecordFrontendController
   
   init(
     dateProvider: DateProvider
   ) {
     self.dateProvider = dateProvider
-    self.apiController = .init(dateProvider: dateProvider)
+    let apiController = RecordAPIController(dateProvider: dateProvider)
+    self.frontendController = .init(recordAPIController: apiController)
+    self.apiController = apiController
   }
   
   func boot(routes: RoutesBuilder) throws {
+    
+    routes.get("records", use: frontendController.recordsView)
     
     let tokenAuthenticator = UserTokenAuthenticator(
       dateProvider: dateProvider

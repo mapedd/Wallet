@@ -92,8 +92,13 @@ struct RecordAPIController {
     )
     
     try await record.create(on: req.db)
+    let createdIn = recordUpdate.updated
     let detail = try await record.asDetail(on: req.db)
     log("created", detail, req)
+    let createdOut = detail.updated
+    if createdIn != createdOut {
+      req.logger.info("dates not equal \(createdOut) \(createdIn)")
+    }
     return detail
   }
   
@@ -130,35 +135,13 @@ extension RecordModel {
     userId: UUID,
     dateProvider: DateProvider
   ) throws {
-    guard
-      let amount = update.amount
-    else {
-      throw RecordModelError.missingAmount
-    }
-    
-    guard
-      let currencyCode = update.currencyCode
-    else {
-      throw RecordModelError.missingCurrency
-    }
-    
-    guard
-      let type = update.type
-    else {
-      throw RecordModelError.missingType
-    }
-    
-    guard let title = update.title else {
-      throw RecordModelError.missingTitle
-    }
-    
     
     self.init(
       id: update.id,
-      amount: amount,
-      type: type,
-      currencyCode: currencyCode,
-      title: title,
+      amount: update.amount,
+      type: update.type,
+      currencyCode: update.currencyCode,
+      title: update.title,
       created: dateProvider.now,
       updated: dateProvider.now,
       userID: userId
@@ -170,25 +153,14 @@ extension RecordModel {
     dateProvider: DateProvider,
     db: Database
   ) async throws {
-    if let newTitle = update.title {
-      self.title = newTitle
-    }
     
-    if let newAmount = update.amount {
-      self.amount = newAmount
-    }
+    self.title = update.title
+    self.amount = update.amount
     self.updated = update.updated
-    if let newCurrency = update.currencyCode {
-      self.currencyCode = newCurrency
-    }
-    if let newNotes = update.notes {
-      self.notes = newNotes
-    }
-    if let type = update.type {
-      self.type = type
-    }
+    self.currencyCode = update.currencyCode
+    self.notes = update.notes
+    self.type = update.type
     self.deleted = update.deleted
-    
     
     let categories = try await  RecordCategoryModel.query(on: db).filter(\.$id ~~ update.categoryIds).all()
     

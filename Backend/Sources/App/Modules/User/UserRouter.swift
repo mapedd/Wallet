@@ -66,9 +66,9 @@ struct UserRouter: RouteCollection {
       .grouped("api")
       .get("users", use: apiController.listAll)
     
-    routes
-      .grouped("api")
-      .get("*", use: apiController.any)
+//    routes
+//      .grouped("api")
+//      .get("*", use: apiController.any)
   }
   
   func boot(routes: RoutesBuilder) throws {

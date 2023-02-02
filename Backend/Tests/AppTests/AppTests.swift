@@ -9,7 +9,6 @@
 import XCTVapor
 
 final class AppTests: AppTestCase {
-  
   func testHomePage() throws {
     let app = try createTestApp()
     defer { app.shutdown() }

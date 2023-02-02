@@ -9,6 +9,64 @@ import Vapor
 import FluentKit
 import AppApi
 
+enum CacheKey {
+  case conversions(ConversionsQuery)
+  
+  var rawValue: String {
+    switch self {
+    case .conversions(let query):
+      if query.currencies.isEmpty {
+        return "currency.conversions-\(query.baseCurrency)"
+      } else {
+        return "currency.conversions-\(query.baseCurrency)-\(query.currencies.joined(separator: "-"))"
+      }
+    }
+  }
+}
+
+extension Vapor.Cache {
+  func `get`<T>(_ key: CacheKey) async throws -> T? where T: Decodable {
+    return try await self.get(key.rawValue)
+  }
+  func set<T>(_ key: CacheKey, to value: T?) async throws where T: Encodable {
+    try await self.set(key.rawValue, to: value, expiresIn: .seconds(5)).get()
+  }
+  
+}
+
+
+extension Request {
+  func conversions(query: ConversionsQuery) async throws -> ConversionResult {
+        
+    if let cached: ConversionResult = try await cache.get(.conversions(query)) {
+      logger.info("returning cached currency conversions")
+      return cached
+    }
+    
+    let url: URI = "https://api.freecurrencyapi.com/v1/latest"
+    let apiKey = "IQRoPuHyC37OgfvjK037aRfxcWm99roenKYE2jOE"
+    
+    let response = try await client.get(url) { req in
+        try req.query.encode([
+          "apikey": apiKey,
+          "base_currency" : query.baseCurrency.uppercased(),
+          "currencies" : query.currencies.joined(separator: ",")
+        ])
+    }
+    
+    do {
+      let mappedResponse = try response.content.decode(ConversionResult.self)
+      
+      try await cache.set(.conversions(query),to: mappedResponse)
+      
+      return mappedResponse
+    } catch {
+      logger.error("error \(error)")
+      throw Abort(.internalServerError)
+    }
+  }
+}
+
 struct ConversionResult: Content {
   var data: [String:Float]
 }
@@ -45,26 +103,8 @@ struct CurrencyAPIController {
   }
   
   func conversions(req: Request) async throws -> ConversionResult {
-    
     let currencyQuery = try req.query.decode(ConversionsQuery.self)
-    let url: URI = "https://api.freecurrencyapi.com/v1/latest"
-    let apiKey = "IQRoPuHyC37OgfvjK037aRfxcWm99roenKYE2jOE"
-    
-    let response = try await req.client.get(url) { req in
-        try req.query.encode([
-          "apikey": apiKey,
-          "base_currency" : currencyQuery.baseCurrency.uppercased(),
-          "currencies" : currencyQuery.currencies.joined(separator: ",")
-        ])
-    }
-    
-    do {
-      let mappedResponse = try response.content.decode(ConversionResult.self)
-      return mappedResponse
-    } catch {
-      req.logger.error("error \(error)")
-      throw Abort(.internalServerError)
-    }
+    return try await req.conversions(query: currencyQuery)
   }
   
   

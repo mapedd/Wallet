@@ -58,23 +58,23 @@ public extension Record {
   struct Update: Codable,Hashable {
     
     public var id: UUID
-    public var title: String?
-    public var amount: Decimal?
-    public var type: RecordType?
-    public var currencyCode: Currency.Code?
-    public var notes: String?
+    public var title: String
+    public var amount: Decimal
+    public var type: RecordType
+    public var currencyCode: Currency.Code
+    public var notes: String
     public var categoryIds: [UUID]
     public var updated: Date
     public var deleted: Date?
     
     public init(
       id: UUID,
-      title: String? = nil,
-      amount: Decimal? = nil,
-      type: RecordType? = .expense,
-      currencyCode: Currency.Code? = nil,
-      notes: String? = nil,
-      categoryIds: [UUID]? = nil,
+      title: String,
+      amount: Decimal,
+      type: RecordType,
+      currencyCode: Currency.Code,
+      notes: String,
+      categoryIds: [UUID],
       updated: Date,
       deleted: Date? = nil
     ) {
@@ -84,7 +84,7 @@ public extension Record {
       self.type = type
       self.currencyCode = currencyCode
       self.notes = notes
-      self.categoryIds = categoryIds ?? []
+      self.categoryIds = categoryIds
       self.updated = updated
       self.deleted = deleted
     }

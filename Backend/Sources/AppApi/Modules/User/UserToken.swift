@@ -23,7 +23,7 @@ public extension User.Token {
     }
   }
   
-  struct Detail: Codable {
+  struct Detail: Codable, Hashable {
     public let id: UUID
     public let token: Value
     public let user: User.Account.Detail
@@ -39,7 +39,7 @@ public extension User.Token {
     }
   }
   
-  struct Value: Codable {
+  struct Value: Codable, Hashable {
     public let value: String
     public let expiry: Date
     public let refresh: String

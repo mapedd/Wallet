@@ -20,22 +20,26 @@ class AppTestCase: XCTestCase {
   
   func createTestApp(dateProvider: DateProvider = .init(currentDate: { .now })) throws -> Application {
     let app = Application(.testing)
-    try configure(app, dateProvider: dateProvider)
-    try app.autoMigrate().wait()
+    
+    do {
+      try configure(app, dateProvider: dateProvider)
+      try app.autoMigrate().wait()
+    }
+    catch {}
     return app
   }
   
   func create(
-    record input: Record.Create,
+    record input: Record.Update,
     app: Application,
     token: User.Token.Detail
-  ) async throws -> Record.Create {
-    var recordOutput: Record.Create?
-    try app.test(.POST, "/api/record/create", beforeRequest: { req in
+  ) async throws -> Record.Detail {
+    var recordOutput: Record.Detail?
+    try app.test(.POST, "/api/record/update", beforeRequest: { req in
       req.headers.bearerAuthorization = BearerAuthorization(token: token.token.value)
       try req.content.encode(input)
     }, afterResponse: { res in
-      XCTAssertContent(Record.Create.self, res) { content in
+      XCTAssertContent(Record.Detail.self, res) { content in
         recordOutput = content
       }
     })

@@ -7,11 +7,18 @@
 
 extension HookStorage {
 
-    func register<ReturnType>(_ name: String, use block: @escaping HookFunctionSignature<ReturnType>) {
+    func register<ReturnType>(
+        _ name: String,
+        use block: @escaping HookFunctionSignature<ReturnType>
+    ) {
         let function = AnyHookFunction { args -> Any in
             block(args)
         }
-        let pointer = HookFunctionPointer<HookFunction>(name: name, function: function, returnType: ReturnType.self)
+        let pointer = HookFunctionPointer<HookFunction>(
+            name: name,
+            function: function,
+            returnType: ReturnType.self
+        )
         pointers.append(pointer)
     }
 

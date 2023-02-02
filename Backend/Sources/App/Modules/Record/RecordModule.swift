@@ -27,13 +27,13 @@ struct RecordModule: ModuleInterface {
 //        app.logger.error("ponged")
 //      }
 //    }
-    app.webSocket("") { request, ws in
-      ws.send("You have been connected to WebSockets")
-      
-      ws.onText { ws, string in
-        ws.send(string.trimmingCharacters(in: .whitespacesAndNewlines).reversed())
-      }
-    }
+//    app.webSocket("") { request, ws in
+//      ws.send("You have been connected to WebSockets")
+//      
+//      ws.onText { ws, string in
+//        ws.send(string.trimmingCharacters(in: .whitespacesAndNewlines).reversed())
+//      }
+//    }
     try self.router.boot(routes: app.routes)
   }
 }

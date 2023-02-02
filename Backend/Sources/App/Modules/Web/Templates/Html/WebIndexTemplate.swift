@@ -70,6 +70,9 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                     .onClick("javascript:about();")
                                 
                                 if req.auth.has(AuthenticatedUser.self) {
+                                    A("Records")
+                                      .href("/records/")
+                                  
                                     A("Admin")
                                         .href("/admin/")
                                     

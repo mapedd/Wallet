@@ -206,8 +206,18 @@ enum Endpoint {
       switch endpoint {
       case .list:
         return "currency/list"
-      case .conversions(let base, _):
-        return "currency/conversions?baseCurrency=\(base)"
+      case .conversions(let base, let currencies):
+          var components = URLComponents(string: "currency/conversions")
+          var queryItems = [
+            URLQueryItem(name: "baseCurrency", value: base)
+          ]
+          if !currencies.isEmpty {
+              queryItems.append(
+                URLQueryItem(name: "currencies", value: currencies.joined(separator: ","))
+              )
+          }
+          components?.queryItems = queryItems
+          return components!.url!.absoluteString
       }
     }
   }

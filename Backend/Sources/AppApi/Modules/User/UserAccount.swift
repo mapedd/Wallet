@@ -36,7 +36,7 @@ public extension User.Account {
         }
     }
     
-    struct Detail: Codable {
+    struct Detail: Codable, Hashable {
         public let id: UUID
         public let email: String
         
