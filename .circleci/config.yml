@@ -6,7 +6,7 @@ jobs:
       xcode: 14.2.0
     environment:
       FL_OUTPUT_DIR: output
-      FASTLANE_LANE: ios test
+      FASTLANE_LANE: ios tests
     steps:
       - checkout
       - run: bundle install
@@ -23,7 +23,7 @@ jobs:
       xcode: 14.2.0
     environment:
       FL_OUTPUT_DIR: output
-      FASTLANE_LANE: mac test
+      FASTLANE_LANE: mac tests
     steps:
       - checkout
       - run: bundle install
