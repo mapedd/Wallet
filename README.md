@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/mapedd/wallet.svg?style=svg)](https://app.circleci.com/pipelines/github/mapedd/Wallet)
+[![CircleCI](https://circleci.com/gh/mapedd/Wallet.svg?style=svg)](https://app.circleci.com/pipelines/github/mapedd/Wallet)
 
 #Wallet
 
