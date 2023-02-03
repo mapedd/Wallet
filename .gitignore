@@ -30,3 +30,6 @@ Wallet.xcodeproj/xcuserdata/*
 
 *.xcuserdatad
 *.xcbkptlist
+
+Fastlane/test_output/
+Fastlane/report.xml

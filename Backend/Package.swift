@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "myProject",
+    name: "Wallet",
     platforms: [
        .macOS(.v12)
     ],

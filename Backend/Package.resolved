@@ -182,6 +182,15 @@
         }
       },
       {
+        "package": "swift-custom-dump",
+        "repositoryURL": "https://github.com/pointfreeco/swift-custom-dump",
+        "state": {
+          "branch": null,
+          "revision": "87dd388a193569b288d03cb4060db54f90d1a66f",
+          "version": "0.7.0"
+        }
+      },
+      {
         "package": "swift-html",
         "repositoryURL": "https://github.com/binarybirds/swift-html",
         "state": {
@@ -278,6 +287,15 @@
           "branch": null,
           "revision": "2d9d2188a08eef4a869d368daab21b3c08510991",
           "version": "2.6.1"
+        }
+      },
+      {
+        "package": "xctest-dynamic-overlay",
+        "repositoryURL": "https://github.com/pointfreeco/xctest-dynamic-overlay",
+        "state": {
+          "branch": null,
+          "revision": "16b23a295fa322eb957af98037f86791449de60f",
+          "version": "0.8.1"
         }
       }
     ]

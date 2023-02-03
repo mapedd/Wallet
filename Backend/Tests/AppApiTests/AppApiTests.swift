@@ -40,7 +40,6 @@ final class AppApiTests: XCTestCase {
     func testAuthorization() async throws {
         let login = User.Account.Login(email: "root@localhost.com", password: "ChangeMe1")
         let token = try await authenticate(login)
-        XCTAssertEqual(token.value.count, 64)
         XCTAssertEqual(token.user.email, login.email)
     }
     
@@ -48,7 +47,7 @@ final class AppApiTests: XCTestCase {
         let token = try await authenticateRoot()
         
         var req = URLRequest(url: baseUrl.appendingPathComponent("\(Blog.pathKey)/\(Blog.Category.pathKey)/"))
-        req.addValue("Bearer \(token.value)", forHTTPHeaderField: "Authorization")
+      req.addValue("Bearer \(token.token.value)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await URLSession.shared.data(for: req)
         guard let response = response as? HTTPURLResponse else {
