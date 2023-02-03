@@ -16,6 +16,11 @@
 default_platform(:ios)
 
 platform :ios do
+
+  before_all do
+    setup_circle_ci
+  end
+
   desc "Description of what the lane does"
   lane :custom_lane do
     # add actions here: https://docs.fastlane.tools/actions
@@ -27,9 +32,15 @@ platform :ios do
       scheme: "Wallet (iOS)"
     )
   end
+
 end
 
-platform :mac do 
+platform :mac do
+
+  before_all do
+    setup_circle_ci
+  end
+
   lane :tests do
     sh("cd ..")
     sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"AppTests\" test")
@@ -38,4 +49,5 @@ platform :mac do
     #   scheme: "AppTests"
     # )
   end
+
 end
