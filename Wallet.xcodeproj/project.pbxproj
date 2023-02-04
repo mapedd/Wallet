@@ -49,6 +49,22 @@
 		04AB3E9D28D79CE400C327A4 /* SummaryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9C28D79CE400C327A4 /* SummaryFeature.swift */; };
 		04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9F28D79CFF00C327A4 /* MainView.swift */; };
 		04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */; };
+		04B86889298ECB350031C525 /* LoginFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86888298ECB350031C525 /* LoginFeatureTests.swift */; };
+		04B8688B298ECF6A0031C525 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8688A298ECF6A0031C525 /* AuthManager.swift */; };
+		04B8688C298ECF6A0031C525 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8688A298ECF6A0031C525 /* AuthManager.swift */; };
+		04B8688E298ECF9C0031C525 /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8688D298ECF9C0031C525 /* EndPoint.swift */; };
+		04B8688F298ECF9C0031C525 /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8688D298ECF9C0031C525 /* EndPoint.swift */; };
+		04B86891298ECFAE0031C525 /* URLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86890298ECFAE0031C525 /* URLClient.swift */; };
+		04B86892298ECFAE0031C525 /* URLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86890298ECFAE0031C525 /* URLClient.swift */; };
+		04B86894298ECFDE0031C525 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86893298ECFDE0031C525 /* DateProvider.swift */; };
+		04B86895298ECFDE0031C525 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86893298ECFDE0031C525 /* DateProvider.swift */; };
+		04B86897298ED0090031C525 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86896298ED0090031C525 /* Token.swift */; };
+		04B86898298ED0090031C525 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86896298ED0090031C525 /* Token.swift */; };
+		04B8689A298ED0220031C525 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86899298ED0220031C525 /* HTTPMethod.swift */; };
+		04B8689B298ED0220031C525 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B86899298ED0220031C525 /* HTTPMethod.swift */; };
+		04B8689D298ED03E0031C525 /* ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8689C298ED03E0031C525 /* ConversionResult.swift */; };
+		04B8689E298ED03E0031C525 /* ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8689C298ED03E0031C525 /* ConversionResult.swift */; };
+		04B868A1298ED1BA0031C525 /* XCTestDynamicOverlay in Frameworks */ = {isa = PBXBuildFile; productRef = 04B868A0298ED1BA0031C525 /* XCTestDynamicOverlay */; };
 		04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */; };
 		04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED5328C2879600C68DB8 /* WalletApp.swift */; };
 		04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED5428C2879600C68DB8 /* ContentView.swift */; };
@@ -100,6 +116,14 @@
 		04AB3E9C28D79CE400C327A4 /* SummaryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryFeature.swift; sourceTree = "<group>"; };
 		04AB3E9F28D79CFF00C327A4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoneyRecord+UI.swift"; sourceTree = "<group>"; };
+		04B86888298ECB350031C525 /* LoginFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFeatureTests.swift; sourceTree = "<group>"; };
+		04B8688A298ECF6A0031C525 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		04B8688D298ECF9C0031C525 /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
+		04B86890298ECFAE0031C525 /* URLClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLClient.swift; sourceTree = "<group>"; };
+		04B86893298ECFDE0031C525 /* DateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProvider.swift; sourceTree = "<group>"; };
+		04B86896298ED0090031C525 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		04B86899298ED0220031C525 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		04B8689C298ED03E0031C525 /* ConversionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionResult.swift; sourceTree = "<group>"; };
 		04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewMultiPlatform.swift; sourceTree = "<group>"; };
 		04CCED5328C2879600C68DB8 /* WalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		04CCED5428C2879600C68DB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -130,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B868A1298ED1BA0031C525 /* XCTestDynamicOverlay in Frameworks */,
 				04CCED9128C2881C00C68DB8 /* ComposableArchitecture in Frameworks */,
 				0446E396294BC85000B62C95 /* AppApi in Frameworks */,
 				0446E3A5295267FB00B62C95 /* SwiftKeychainWrapper in Frameworks */,
@@ -165,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				0446E3B02953A76D00B62C95 /* AuthManagerTests.swift */,
+				04B86888298ECB350031C525 /* LoginFeatureTests.swift */,
 			);
 			path = WalletiOSTests;
 			sourceTree = "<group>";
@@ -231,6 +257,13 @@
 				04AB3E9628D79CA200C327A4 /* StatisticsFeature.swift */,
 				04AB3E9028D79C3900C327A4 /* MainFeature.swift */,
 				0446E39A2951DF8500B62C95 /* APIClient.swift */,
+				04B8689C298ED03E0031C525 /* ConversionResult.swift */,
+				04B86896298ED0090031C525 /* Token.swift */,
+				04B86893298ECFDE0031C525 /* DateProvider.swift */,
+				04B86890298ECFAE0031C525 /* URLClient.swift */,
+				04B8688D298ECF9C0031C525 /* EndPoint.swift */,
+				04B86899298ED0220031C525 /* HTTPMethod.swift */,
+				04B8688A298ECF6A0031C525 /* AuthManager.swift */,
 				0446E3BA2962106C00B62C95 /* KeyValueStore.swift */,
 				04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */,
 				04AB3E9928D79CC500C327A4 /* RecordDetailsFeature.swift */,
@@ -308,6 +341,7 @@
 				0446E395294BC85000B62C95 /* AppApi */,
 				0446E3982950A11D00B62C95 /* SwiftUINavigation */,
 				0446E3A4295267FB00B62C95 /* SwiftKeychainWrapper */,
+				04B868A0298ED1BA0031C525 /* XCTestDynamicOverlay */,
 			);
 			productName = "Wallet (iOS)";
 			productReference = 04CCED5A28C2879800C68DB8 /* Wallet IOS.app */;
@@ -348,6 +382,7 @@
 				04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 				0446E3A3295267FA00B62C95 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */,
 			);
 			productRefGroup = 04CCED5B28C2879800C68DB8 /* Products */;
 			projectDirPath = "";
@@ -397,14 +432,21 @@
 				0446E3BF2962156600B62C95 /* LoginFeature.swift in Sources */,
 				042A3C5F28DC782E00772365 /* MoneyRecord.swift in Sources */,
 				0446E3A22952678D00B62C95 /* Keychain.swift in Sources */,
+				04B8689E298ED03E0031C525 /* ConversionResult.swift in Sources */,
 				042A3C5E28DC782E00772365 /* SummaryFeature.swift in Sources */,
+				04B86895298ECFDE0031C525 /* DateProvider.swift in Sources */,
 				0446E39F2951E19E00B62C95 /* Login.swift in Sources */,
 				042A3C5A28DC782E00772365 /* MainFeature.swift in Sources */,
 				042A3C5D28DC782E00772365 /* RecordFeature.swift in Sources */,
 				0446E39C2951DF8500B62C95 /* APIClient.swift in Sources */,
 				042A3C5C28DC782E00772365 /* EditorFeature.swift in Sources */,
+				04B8688C298ECF6A0031C525 /* AuthManager.swift in Sources */,
+				04B8688F298ECF9C0031C525 /* EndPoint.swift in Sources */,
+				04B8689B298ED0220031C525 /* HTTPMethod.swift in Sources */,
 				0446E3BC2962106C00B62C95 /* KeyValueStore.swift in Sources */,
+				04B86898298ED0090031C525 /* Token.swift in Sources */,
 				042A3C5B28DC782E00772365 /* RecordDetailsFeature.swift in Sources */,
+				04B86892298ECFAE0031C525 /* URLClient.swift in Sources */,
 				042A3C2E28DC77B800772365 /* ContentView.swift in Sources */,
 				042A3C6028DC782E00772365 /* StatisticsFeature.swift in Sources */,
 				042A3C6128DC7A2900772365 /* EditorView.swift in Sources */,
@@ -415,6 +457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B86889298ECB350031C525 /* LoginFeatureTests.swift in Sources */,
 				0446E3B12953A76D00B62C95 /* AuthManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,17 +466,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B8688E298ECF9C0031C525 /* EndPoint.swift in Sources */,
+				04B8688B298ECF6A0031C525 /* AuthManager.swift in Sources */,
+				04B86891298ECFAE0031C525 /* URLClient.swift in Sources */,
 				0446E3B82962103100B62C95 /* Dependencies.swift in Sources */,
 				04CCED9328C28E8D00C68DB8 /* EditorView.swift in Sources */,
+				04B8689D298ED03E0031C525 /* ConversionResult.swift in Sources */,
 				04AB3E9728D79CA200C327A4 /* StatisticsFeature.swift in Sources */,
 				04AB3E8B28D79B9D00C327A4 /* RecordFeature.swift in Sources */,
 				0446E3BE2962156600B62C95 /* LoginFeature.swift in Sources */,
+				04B8689A298ED0220031C525 /* HTTPMethod.swift in Sources */,
 				0457C0E42978A7A8007ED1FD /* MultiPicker.swift in Sources */,
 				04CCED9628C2AD6C00C68DB8 /* RecordView.swift in Sources */,
 				04AB3E9128D79C3900C327A4 /* MainFeature.swift in Sources */,
 				04AB3E9D28D79CE400C327A4 /* SummaryFeature.swift in Sources */,
 				04AB3E9428D79C7400C327A4 /* MoneyRecord.swift in Sources */,
 				04AB3E8E28D79BB600C327A4 /* EditorFeature.swift in Sources */,
+				04B86897298ED0090031C525 /* Token.swift in Sources */,
+				04B86894298ECFDE0031C525 /* DateProvider.swift in Sources */,
 				0446E3BB2962106C00B62C95 /* KeyValueStore.swift in Sources */,
 				04AB3E9A28D79CC500C327A4 /* RecordDetailsFeature.swift in Sources */,
 				0446E3A12952678D00B62C95 /* Keychain.swift in Sources */,
@@ -790,6 +840,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/xctest-dynamic-overlay.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
 		04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -819,6 +877,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0446E3A3295267FA00B62C95 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
 			productName = SwiftKeychainWrapper;
+		};
+		04B868A0298ED1BA0031C525 /* XCTestDynamicOverlay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */;
+			productName = XCTestDynamicOverlay;
 		};
 		04CCED9028C2881C00C68DB8 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

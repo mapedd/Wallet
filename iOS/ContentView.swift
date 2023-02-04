@@ -52,7 +52,7 @@ struct Content: ReducerProtocol {
         state = .loggedIn(Main.State())
       case .loggedIn(.logOut):
         //        state.main.loading = true// show loading indicator
-        guard let token = keychain.readToken() else {
+        guard let _ = keychain.readToken() else {
           state = .loggedOut(Login.State())
           return .none
         }

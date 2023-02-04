@@ -44,8 +44,8 @@ struct Login: ReducerProtocol {
   }
   
   struct State: Equatable {
-    @BindableState var username = "tomek@gmail.com"
-    @BindableState var password = "maciek12"
+    @BindableState var username = ""
+    @BindableState var password = ""
     var loading = false
     var alert: AlertState<Action>?
   }
@@ -72,6 +72,7 @@ struct Login: ReducerProtocol {
       case .binding(_):
         return .none
       case .logIn:
+        state.loading = true
         return .task(
           operation: {[state] in
             let login = User.Account.Login(
@@ -92,9 +93,11 @@ struct Login: ReducerProtocol {
       case .register:
         return .none
       case .loggedIn:
+        state.loading = false
         // this should be handled on the higher level
         return .none
       case .loginFailed(let reason):
+        state.loading = false
         state.alert = AlertState(
           title: .init("Warning"),
           message: .init("Something went wrong...\(reason.description)"),
