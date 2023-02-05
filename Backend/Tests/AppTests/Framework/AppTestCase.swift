@@ -29,7 +29,7 @@ class AppTestCase: XCTestCase {
     return app
   }
   
-  func create(
+  func update(
     record input: Record.Update,
     app: Application,
     token: User.Token.Detail

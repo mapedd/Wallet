@@ -71,7 +71,8 @@ struct RecordAPIController {
       try await existingRecord.read(
         from: recordUpdate,
         dateProvider: dateProvider,
-        db: req.db
+        db: req.db,
+        logger: req.logger
       )
       try await existingRecord.save(on: req.db)
       let details = try await existingRecord.asDetail(on: req.db)
@@ -85,13 +86,17 @@ struct RecordAPIController {
       dateProvider: dateProvider
     )
     
+    try await record.create(on: req.db)
+    try await record.save(on: req.db)
+    
     try await record.read(
       from: recordUpdate,
       dateProvider: dateProvider,
-      db: req.db
+      db: req.db,
+      logger: req.logger
     )
     
-    try await record.create(on: req.db)
+    
     let createdIn = recordUpdate.updated
     let detail = try await record.asDetail(on: req.db)
     log("created", detail, req)
@@ -151,7 +156,8 @@ extension RecordModel {
   func read(
     from update: Record.Update,
     dateProvider: DateProvider,
-    db: Database
+    db: Database,
+    logger: Logger
   ) async throws {
     
     self.title = update.title
@@ -162,11 +168,50 @@ extension RecordModel {
     self.type = update.type
     self.deleted = update.deleted
     
-    let categories = try await  RecordCategoryModel.query(on: db).filter(\.$id ~~ update.categoryIds).all()
+    let requestedIds = update.categoryIds
     
-    for category in categories {
-      try await self.$categories.attach(category, method: .ifNotExists, on: db)
+    let existing = try await self.$categories.get(on: db)
+    
+    let existingIds: [UUID] = existing.map(\.id).compactMap{$0}
+    
+    let setRequested = Set(requestedIds)
+    let setExising = Set(existingIds)
+    
+    let detachIds = setExising.subtracting(setRequested)
+    let attachIds = setRequested.subtracting(setExising)
+    
+    logger.info("will attach \(attachIds), detach: \(detachIds)")
+    
+    for categoryId in attachIds {
+      
+      let category = try await RecordCategoryModel.query(on: db)
+        .filter(\.$id == categoryId)
+        .all()
+        .first
+      
+      if let category {
+        try await self.$categories.attach(category, method: .ifNotExists, on: db)
+      } else {
+        logger.error("requested to attach not existing category with id \(categoryId)")
+      }
     }
+    
+    for categoryId in detachIds {
+      let category = try await RecordCategoryModel.query(on: db)
+        .filter(\.$id == categoryId)
+        .all()
+        .first
+      
+      if let category {
+        try await self.$categories.detach(category, on: db)
+      } else {
+        logger.error("requested to detach not existing category with id \(categoryId)")
+      }
+    }
+    
+    let existingAfterChange = try await self.$categories.get(reload: true, on: db).map(\.id)
+    assert(Set(existingAfterChange) == Set(update.categoryIds))
+    
   }
   
   func asDetail(on db: Database) async throws ->  Record.Detail {

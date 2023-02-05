@@ -3,3 +3,11 @@
 #Wallet
 
 Sample wallet app with 100% Swift mobile, backend and web version, susing Vapor for backend and TCA for mobile app architecture
+
+
+To run the server, type
+
+
+```swift
+swift run in the /Backend directory
+```

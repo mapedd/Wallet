@@ -98,9 +98,10 @@ struct ContentView: View {
             )
           }
           CaseLet(state: /Content.State.loggedOut, action: Content.Action.loggedOut) { store in
-            LoginView(
-              store: store
-            )
+              LoginView(
+                store: store
+              )
+              .navigationBarTitle("Login")
           }
         }
         .onAppear{

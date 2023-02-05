@@ -98,17 +98,23 @@ struct Login: ReducerProtocol {
         return .none
       case .loginFailed(let reason):
         state.loading = false
-        state.alert = AlertState(
-          title: .init("Warning"),
-          message: .init("Something went wrong...\(reason.description)"),
-          primaryButton: .default(.init(verbatim: "OK")),
-          secondaryButton: .init(label: {
-            TextState("")
-          })
-        )
+        state.alert = .failed(reason)
         return .none
       }
     }
   }
   
+}
+
+extension AlertState {
+  static func failed(_ reason: Login.LoginFailureReason) -> AlertState {
+    AlertState(
+      title: .init("Warning"),
+      message: .init("Something went wrong...\(reason.description)"),
+      primaryButton: .default(.init(verbatim: "OK")),
+      secondaryButton: .init(label: {
+        TextState("")
+      })
+    )
+  }
 }

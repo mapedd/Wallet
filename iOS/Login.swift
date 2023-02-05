@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 
-struct LoginView: View {
+struct  LoginView: View {
   var store: StoreOf<Login>
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -20,13 +20,20 @@ struct LoginView: View {
           TextField("Email",
             text: viewStore.binding(\.$username)
           )
-          TextField("Password",
+          .autocapitalization(.none)
+          .disableAutocorrection(true)
+          .keyboardType(.emailAddress)
+          
+          SecureField("Password",
             text: viewStore.binding(\.$password)
           )
           Button("Log me in ") {
             viewStore.send(.logIn)
           }
-          Spacer()
+          Spacer().frame(height: 100)
+          Button("Register ") {
+            viewStore.send(.register)
+          }
         }
         .padding()
       }

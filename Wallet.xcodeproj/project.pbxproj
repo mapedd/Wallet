@@ -103,6 +103,7 @@
 		0446E3B72962103100B62C95 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		0446E3BA2962106C00B62C95 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
 		0446E3BD2962156600B62C95 /* LoginFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFeature.swift; sourceTree = "<group>"; };
+		04560432298EE8C6005031A8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0457C0E32978A7A7007ED1FD /* MultiPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPicker.swift; sourceTree = "<group>"; };
 		049CDBAB298D3CBB00ED3FC0 /* config.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = config.yml; path = .circleci/config.yml; sourceTree = "<group>"; };
 		049CDBB0298D3CC000ED3FC0 /* Appfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Appfile; sourceTree = "<group>"; };
@@ -235,6 +236,7 @@
 		04CCED4D28C2879600C68DB8 = {
 			isa = PBXGroup;
 			children = (
+				04560432298EE8C6005031A8 /* README.md */,
 				049CDBAC298D3CC000ED3FC0 /* fastlane */,
 				049CDBAB298D3CBB00ED3FC0 /* config.yml */,
 				04DB18B128DDC57400BAF531 /* Backend */,
