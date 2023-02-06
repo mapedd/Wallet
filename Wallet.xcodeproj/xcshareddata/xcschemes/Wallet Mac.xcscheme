@@ -52,6 +52,17 @@
                ReferencedContainer = "container:Wallet.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "04C505202991B50D008A6FE1"
+               BuildableName = "WalletMacTests.xctest"
+               BlueprintName = "WalletMacTests"
+               ReferencedContainer = "container:Wallet.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
