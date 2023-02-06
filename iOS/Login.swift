@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 
-struct  LoginView: View {
+struct LoginView: View {
   var store: StoreOf<Login>
   var body: some View {
     WithViewStore(self.store) { viewStore in

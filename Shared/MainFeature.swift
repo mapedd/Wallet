@@ -448,7 +448,7 @@ extension AppApi.Record.Detail {
   }
 }
 extension AppApi.RecordCategory.Detail {
-  var asLocaleCategory: Wallet_IOS.Category {
+  var asLocaleCategory: Category {
     .init(
       name: self.name,
       id: self.id,

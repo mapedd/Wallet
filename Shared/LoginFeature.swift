@@ -101,7 +101,7 @@ struct Login: ReducerProtocol {
               password: state.password
             )
             let user = try await apiClient.register(login)
-            // we registered user, now we can log him in 
+            // we registered user, now we can log him in
             if user != nil {
               return .logIn
             } else {

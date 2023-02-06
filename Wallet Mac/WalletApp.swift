@@ -12,15 +12,15 @@ import XCTestDynamicOverlay
 struct WalletApp: App {
   var body: some Scene {
     WindowGroup {
-      if !XCTIsTesting {
+      if !_XCTIsTesting {
         ContentView(
           store: .init(
-            initialState: .preview,
-            reducer: mainReducer,
-            environment: MainEnvironment()
+            initialState: .loggedOut(.init()),
+            reducer: Content()
           )
         )
       }
     }
+    .windowStyle(.hiddenTitleBar)
   }
 }

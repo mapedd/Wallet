@@ -9,67 +9,44 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ContentView: View {
-  let store: Store<MainState, MainAction>
-
-  @State var selectedRecord: RecordState?
-
-    var body: some View {
-      WithViewStore(self.store) { viewStore in
-        NavigationView {
-          VStack {
-            EditorView(
-              store: self.store.scope(
-                state: \.editorState,
-                action: MainAction.editorAction
-              )
+  var store: StoreOf<Content>
+  var body: some View {
+    NavigationView {
+      WithViewStore(self.store, observe: { $0 }) { viewStore in
+        SwitchStore(self.store) {
+          CaseLet(
+            state: /Content.State.loggedIn,
+            action: Content.Action.loggedIn
+          ) { store in
+            MainView(
+              store: store
             )
-            List() {
-
-              ForEach(viewStore.records) { recordState in
-                Text(recordState.record.title)
-                  .onTapGesture {
-                    selectedRecord = recordState
-                  }
-                .font(.headline)
-              }
-
-            }
-            .frame(minWidth: 250)
           }
-
-          detail
-            .frame(minWidth: 250)
+          CaseLet(
+            state: /Content.State.loggedOut,
+            action: Content.Action.loggedOut
+          ) { store in
+              LoginView(
+                store: store
+              )
+          }
         }
-        .frame(minWidth: 500)
+        .onAppear{
+          viewStore.send(.viewLoaded)
+        }
       }
     }
-
-  @ViewBuilder var detail: some View {
-    if let selectedRecord = selectedRecord {
-      DetailView(
-        recordState: selectedRecord
-      )
-    } else {
-      Text("nothing selected")
-    }
-  }
-}
-
-struct DetailView: View {
-  var recordState: RecordState
-  var body: some View {
-    Text(recordState.record.title)
+    
   }
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(
-          store: .init(
-            initialState: .preview,
-            reducer: mainReducer,
-            environment: MainEnvironment()
-          )
-        )
-    }
+  static var previews: some View {
+    ContentView(
+      store: .init(
+        initialState: .loggedOut(.init()),
+        reducer: Content()
+      )
+    )
+  }
 }

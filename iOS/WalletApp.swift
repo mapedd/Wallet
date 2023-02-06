@@ -6,17 +6,20 @@
 //
 
 import SwiftUI
+import XCTestDynamicOverlay
 
 @main
 struct WalletApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView(
-        store: .init(
-          initialState: .loggedOut(.init()),
-          reducer: Content()
+      if !_XCTIsTesting {
+        ContentView(
+          store: .init(
+            initialState: .loggedOut(.init()),
+            reducer: Content()
+          )
         )
-      )
+      }
     }
   }
 }

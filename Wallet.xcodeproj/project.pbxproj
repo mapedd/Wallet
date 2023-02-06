@@ -28,7 +28,6 @@
 		0446E39B2951DF8500B62C95 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39A2951DF8500B62C95 /* APIClient.swift */; };
 		0446E39C2951DF8500B62C95 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39A2951DF8500B62C95 /* APIClient.swift */; };
 		0446E39E2951E19E00B62C95 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* Login.swift */; };
-		0446E39F2951E19E00B62C95 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* Login.swift */; };
 		0446E3A12952678D00B62C95 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3A02952678D00B62C95 /* Keychain.swift */; };
 		0446E3A22952678D00B62C95 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E3A02952678D00B62C95 /* Keychain.swift */; };
 		0446E3A5295267FB00B62C95 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E3A4295267FB00B62C95 /* SwiftKeychainWrapper */; };
@@ -66,6 +65,16 @@
 		04B8689E298ED03E0031C525 /* ConversionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8689C298ED03E0031C525 /* ConversionResult.swift */; };
 		04B868A1298ED1BA0031C525 /* XCTestDynamicOverlay in Frameworks */ = {isa = PBXBuildFile; productRef = 04B868A0298ED1BA0031C525 /* XCTestDynamicOverlay */; };
 		04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */; };
+		04C5050C29919B7F008A6FE1 /* AppApi in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5050B29919B7F008A6FE1 /* AppApi */; };
+		04C5050E29919B89008A6FE1 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5050D29919B89008A6FE1 /* SwiftKeychainWrapper */; };
+		04C5051029919BB4008A6FE1 /* XCTestDynamicOverlay in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5050F29919BB4008A6FE1 /* XCTestDynamicOverlay */; };
+		04C5051329919CB7008A6FE1 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5051229919CB7008A6FE1 /* SwiftUINavigation */; };
+		04C5051529919CE6008A6FE1 /* ContentFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C5051429919CE6008A6FE1 /* ContentFeature.swift */; };
+		04C5051629919CE6008A6FE1 /* ContentFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C5051429919CE6008A6FE1 /* ContentFeature.swift */; };
+		04C505182991AED6008A6FE1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C505172991AED6008A6FE1 /* LoginView.swift */; };
+		04C505192991AED6008A6FE1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C505172991AED6008A6FE1 /* LoginView.swift */; };
+		04C5051B2991AEF2008A6FE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C5051A2991AEF2008A6FE1 /* MainView.swift */; };
+		04C5051C2991AEF2008A6FE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C5051A2991AEF2008A6FE1 /* MainView.swift */; };
 		04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED5328C2879600C68DB8 /* WalletApp.swift */; };
 		04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CCED5428C2879600C68DB8 /* ContentView.swift */; };
 		04CCED7F28C2879800C68DB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04CCED5528C2879800C68DB8 /* Assets.xcassets */; };
@@ -126,6 +135,9 @@
 		04B86899298ED0220031C525 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		04B8689C298ED03E0031C525 /* ConversionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionResult.swift; sourceTree = "<group>"; };
 		04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewMultiPlatform.swift; sourceTree = "<group>"; };
+		04C5051429919CE6008A6FE1 /* ContentFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentFeature.swift; sourceTree = "<group>"; };
+		04C505172991AED6008A6FE1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		04C5051A2991AEF2008A6FE1 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		04CCED5328C2879600C68DB8 /* WalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		04CCED5428C2879600C68DB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		04CCED5528C2879800C68DB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -141,6 +153,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				042A3C5928DC782800772365 /* ComposableArchitecture in Frameworks */,
+				04C5050C29919B7F008A6FE1 /* AppApi in Frameworks */,
+				04C5051029919BB4008A6FE1 /* XCTestDynamicOverlay in Frameworks */,
+				04C5051329919CB7008A6FE1 /* SwiftUINavigation in Frameworks */,
+				04C5050E29919B89008A6FE1 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +186,8 @@
 			isa = PBXGroup;
 			children = (
 				042A3C2D28DC77B800772365 /* ContentView.swift */,
+				04C5051A2991AEF2008A6FE1 /* MainView.swift */,
+				04C505172991AED6008A6FE1 /* LoginView.swift */,
 				042A3C5528DC780400772365 /* EditorView.swift */,
 				042A3C5428DC780300772365 /* WalletApp.swift */,
 				042A3C2F28DC77B900772365 /* Assets.xcassets */,
@@ -270,6 +288,7 @@
 				04AB3E8A28D79B9D00C327A4 /* RecordFeature.swift */,
 				04AB3E9928D79CC500C327A4 /* RecordDetailsFeature.swift */,
 				04AB3E9328D79C7400C327A4 /* MoneyRecord.swift */,
+				04C5051429919CE6008A6FE1 /* ContentFeature.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -302,6 +321,10 @@
 			name = "Wallet Mac";
 			packageProductDependencies = (
 				042A3C5828DC782800772365 /* ComposableArchitecture */,
+				04C5050B29919B7F008A6FE1 /* AppApi */,
+				04C5050D29919B89008A6FE1 /* SwiftKeychainWrapper */,
+				04C5050F29919BB4008A6FE1 /* XCTestDynamicOverlay */,
+				04C5051229919CB7008A6FE1 /* SwiftUINavigation */,
 			);
 			productName = "Wallet Mac";
 			productReference = 042A3C2928DC77B800772365 /* Wallet Mac.app */;
@@ -433,14 +456,16 @@
 				042A3C5628DC780400772365 /* WalletApp.swift in Sources */,
 				0446E3BF2962156600B62C95 /* LoginFeature.swift in Sources */,
 				042A3C5F28DC782E00772365 /* MoneyRecord.swift in Sources */,
+				04C5051629919CE6008A6FE1 /* ContentFeature.swift in Sources */,
 				0446E3A22952678D00B62C95 /* Keychain.swift in Sources */,
+				04C505192991AED6008A6FE1 /* LoginView.swift in Sources */,
 				04B8689E298ED03E0031C525 /* ConversionResult.swift in Sources */,
 				042A3C5E28DC782E00772365 /* SummaryFeature.swift in Sources */,
 				04B86895298ECFDE0031C525 /* DateProvider.swift in Sources */,
-				0446E39F2951E19E00B62C95 /* Login.swift in Sources */,
 				042A3C5A28DC782E00772365 /* MainFeature.swift in Sources */,
 				042A3C5D28DC782E00772365 /* RecordFeature.swift in Sources */,
 				0446E39C2951DF8500B62C95 /* APIClient.swift in Sources */,
+				04C5051C2991AEF2008A6FE1 /* MainView.swift in Sources */,
 				042A3C5C28DC782E00772365 /* EditorFeature.swift in Sources */,
 				04B8688C298ECF6A0031C525 /* AuthManager.swift in Sources */,
 				04B8688F298ECF9C0031C525 /* EndPoint.swift in Sources */,
@@ -479,6 +504,7 @@
 				0446E3BE2962156600B62C95 /* LoginFeature.swift in Sources */,
 				04B8689A298ED0220031C525 /* HTTPMethod.swift in Sources */,
 				0457C0E42978A7A8007ED1FD /* MultiPicker.swift in Sources */,
+				04C5051B2991AEF2008A6FE1 /* MainView.swift in Sources */,
 				04CCED9628C2AD6C00C68DB8 /* RecordView.swift in Sources */,
 				04AB3E9128D79C3900C327A4 /* MainFeature.swift in Sources */,
 				04AB3E9D28D79CE400C327A4 /* SummaryFeature.swift in Sources */,
@@ -490,6 +516,7 @@
 				04AB3E9A28D79CC500C327A4 /* RecordDetailsFeature.swift in Sources */,
 				0446E3A12952678D00B62C95 /* Keychain.swift in Sources */,
 				0425AE5728C9356A0032A4FD /* StatisticsView.swift in Sources */,
+				04C5051529919CE6008A6FE1 /* ContentFeature.swift in Sources */,
 				0421FC2D28C697A600487827 /* SummaryView.swift in Sources */,
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
@@ -497,6 +524,7 @@
 				04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */,
 				04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */,
 				043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */,
+				04C505182991AED6008A6FE1 /* LoginView.swift in Sources */,
 				04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */,
 				0446E39B2951DF8500B62C95 /* APIClient.swift in Sources */,
 			);
@@ -523,7 +551,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallet Mac/Preview Content\"";
-				DEVELOPMENT_TEAM = F8544XK3Q3;
+				DEVELOPMENT_TEAM = M84U5M38D2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -552,7 +580,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallet Mac/Preview Content\"";
-				DEVELOPMENT_TEAM = F8544XK3Q3;
+				DEVELOPMENT_TEAM = M84U5M38D2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -884,6 +912,25 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */;
 			productName = XCTestDynamicOverlay;
+		};
+		04C5050B29919B7F008A6FE1 /* AppApi */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppApi;
+		};
+		04C5050D29919B89008A6FE1 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0446E3A3295267FA00B62C95 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		04C5050F29919BB4008A6FE1 /* XCTestDynamicOverlay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */;
+			productName = XCTestDynamicOverlay;
+		};
+		04C5051229919CB7008A6FE1 /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
+			productName = SwiftUINavigation;
 		};
 		04CCED9028C2881C00C68DB8 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
