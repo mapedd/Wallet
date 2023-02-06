@@ -21,10 +21,7 @@ platform :ios do
     setup_circle_ci
   end
 
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
-  end
+  desc "Builds and tests iOS app"
   lane :tests do
     run_tests(
       project: "Wallet.xcodeproj",
@@ -41,13 +38,17 @@ platform :mac do
     setup_circle_ci
   end
 
-  lane :tests do
+  lane :tests_server do
     sh("cd ..")
     sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"AppTests\" test")
-    # run_tests(
-    #   project: "Wallet.xcodeproj",
-    #   scheme: "AppTests"
-    # )
+  end
+  
+    desc "Builds and tests iOS app"
+  lane :tests_mac_app do
+    run_tests(
+      project: "Wallet.xcodeproj",
+      scheme: "Wallet Mac"
+    )
   end
 
 end
