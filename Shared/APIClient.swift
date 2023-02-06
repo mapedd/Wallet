@@ -13,28 +13,29 @@ struct APIClient {
   
   var signIn: (User.Account.Login) async throws -> User.Token.Detail?
   var signOut: () async throws -> ActionResult
+  var register: (User.Account.Login) async throws -> User.Account.Detail?
   var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
   var listRecords: () async throws -> [AppApi.Record.Detail]
   var listCurrencies: () async throws -> [AppApi.Currency.List]
   var listCategories: () async throws -> [AppApi.RecordCategory.Detail]
   var conversions: (Currency.Code) async throws -> ConversionResult
-
-
+  
+  
 }
 extension APIClient {
   static var live: APIClient {
-
+    
     let session = URLSession.shared
     let url = URL(string: "http://localhost:8080/api/")!
-
+    
     let authURLClient = URLClient(
       baseURL: url,
       session: session,
       tokenProvider: nil
     )
-
+    
     let keychain = Keychain.live
-
+    
     let authNetwork = AuthNetwork(
       refreshToken: { refreshToken in
         authURLClient.tokenProvider = .init(
@@ -48,7 +49,7 @@ extension APIClient {
         return apiToken.toLocalToken
       }
     )
-
+    
     let authManager = AuthManager.init(
       keychain: keychain,
       authNetwork: authNetwork,
@@ -56,7 +57,7 @@ extension APIClient {
         currentDate: { .now }
       )
     )
-
+    
     let urlClient = URLClient(
       baseURL: url,
       session: session,
@@ -67,13 +68,16 @@ extension APIClient {
         refreshToken: authManager.tryRefreshCurrentToken
       )
     )
-
+    
     return APIClient(
       signIn: { login in
         try await urlClient.fetch(endpoint: .signIn(login))
       },
       signOut: {
         try await urlClient.fetch(endpoint: .signOut)
+      },
+      register: { login in
+        try await urlClient.fetch(endpoint: .register(login))
       },
       updateRecord: { record in
         try await urlClient.fetch(endpoint: .updateRecord(record))
@@ -111,6 +115,12 @@ extension APIClient {
       },
       signOut: {
         ActionResult(success: true)
+      },
+      register: { _ in
+          .init(
+            id: UUID(),
+            email: "email"
+          )
       },
       updateRecord: {
         .init(
@@ -165,6 +175,10 @@ extension APIClient {
       signOut: {
         XCTFail("unimplemented")
         return .init(success: false)
+      },
+      register: {_ in
+        XCTFail("unimplemented")
+        return nil
       },
       updateRecord: { _ in
         XCTFail("unimplemented")

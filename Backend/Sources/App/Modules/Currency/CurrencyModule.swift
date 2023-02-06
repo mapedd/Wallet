@@ -19,7 +19,6 @@ struct CurrencyModule: ModuleInterface {
   }
   
   func boot(_ app: Application) throws {
-    app.migrations.add(RecordModelMigrations.v1())
     try self.router.boot(routes: app.routes)
   }
 }

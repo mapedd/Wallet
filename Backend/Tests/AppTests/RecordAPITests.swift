@@ -67,7 +67,7 @@ extension Record.Update {
 
 final class RecordAPITests: AppTestCase {
   
-  func testCreatingRecords() async throws {
+  func testCreatingRecords() async throws { 
     let app = try createTestApp()
     defer {
       app.shutdown()
@@ -150,10 +150,11 @@ final class RecordAPITests: AppTestCase {
     let categoryModel0 = RecordCategoryModel(id: nil, name: "category_0", color: 1)
     let categoryModel1 = RecordCategoryModel(id: nil, name: "category_1", color: 2)
     
-    try await categoryModel0.create(on: app.db)
-    try await categoryModel0.save(on: app.db)
-    try await categoryModel1.create(on: app.db)
-    try await categoryModel1.save(on: app.db)
+    
+    try await [
+      categoryModel0,
+      categoryModel1
+    ].create(on: app.db)
     
     var record = Record.Update.sample(1) // create without categories
     record.categoryIds = [

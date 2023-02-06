@@ -19,7 +19,6 @@ final class RecordModel: DatabaseModelInterface {
       static var currency: FieldKey { "currency" }
       static var title: FieldKey { "title" }
       static var notes: FieldKey { "notes" }
-//      static var categoryID: FieldKey { "category_id" }
       static var created: FieldKey { "created" }
       static var deleted: FieldKey { "deleted" }
       static var updated: FieldKey { "updated" }
@@ -48,13 +47,13 @@ final class RecordModel: DatabaseModelInterface {
   @Siblings(through: RecordToCategoryPivot.self, from: \.$record, to: \.$category)
   var categories: [RecordCategoryModel]
   
-  @Field(key: FieldKeys.v1.created)
-  var created: Date
+  @Timestamp(key: FieldKeys.v1.created, on: .create, format: .iso8601)
+  var created: Date?
   
-  @Field(key: FieldKeys.v1.updated)
-  var updated: Date
+  @Timestamp(key: FieldKeys.v1.updated, on: .update, format: .iso8601)
+  var updated: Date?
   
-  @Field(key: FieldKeys.v1.deleted)
+  @Timestamp(key: FieldKeys.v1.deleted, on: .delete, format: .iso8601)
   var deleted: Date?
   
   @Parent(key: FieldKeys.v1.userID)

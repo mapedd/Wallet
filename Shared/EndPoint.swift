@@ -16,6 +16,7 @@ enum Endpoint {
   }
   case signIn(User.Account.Login)
   case signOut
+  case register(User.Account.Login)
   case refreshToken(User.Token.Refresh)
   case updateRecord(AppApi.Record.Update)
   case listRecords
@@ -25,6 +26,8 @@ enum Endpoint {
   var httpMethod: HTTPMethod {
     switch self {
     case .signIn(let login):
+      return .POST(login)
+    case .register(let login):
       return .POST(login)
     case .refreshToken(let token):
       return .POST(token)
@@ -47,6 +50,8 @@ enum Endpoint {
       return "sign-out/"
     case .signIn:
       return "sign-in/"
+    case .register:
+      return "register/"
     case .refreshToken:
       return "refresh-token/"
     case .listRecords:
@@ -77,7 +82,7 @@ enum Endpoint {
 
   var isAuthenticated: Bool {
     switch self {
-    case .signIn:
+    case .signIn, .register:
       return false
     default:
       return true

@@ -47,6 +47,7 @@ struct Login: ReducerProtocol {
     @BindableState var username = ""
     @BindableState var password = ""
     var loading = false
+    var buttonsEnabled = false
     var alert: AlertState<Action>?
   }
   
@@ -70,6 +71,7 @@ struct Login: ReducerProtocol {
         state.alert = nil
         return .none
       case .binding(_):
+        state.buttonsEnabled = !state.username.isEmpty && !state.password.isEmpty
         return .none
       case .logIn:
         state.loading = true
@@ -91,7 +93,25 @@ struct Login: ReducerProtocol {
           }
         )
       case .register:
-        return .none
+        state.loading = true
+        return .task(
+          operation: {[state] in
+            let login = User.Account.Login(
+              email: state.username,
+              password: state.password
+            )
+            let user = try await apiClient.register(login)
+            // we registered user, now we can log him in 
+            if user != nil {
+              return .logIn
+            } else {
+              return .loginFailed(.apiError(Error.userNotFound))
+            }
+          },
+          catch: { error in
+            return .loginFailed(.apiError(error))
+          }
+        )
       case .loggedIn:
         state.loading = false
         // this should be handled on the higher level

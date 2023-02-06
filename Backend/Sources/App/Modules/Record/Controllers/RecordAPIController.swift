@@ -183,11 +183,7 @@ extension RecordModel {
     logger.info("will attach \(attachIds), detach: \(detachIds)")
     
     for categoryId in attachIds {
-      
-      let category = try await RecordCategoryModel.query(on: db)
-        .filter(\.$id == categoryId)
-        .all()
-        .first
+      let category = try await RecordCategoryModel.find(categoryId, on: db)
       
       if let category {
         try await self.$categories.attach(category, method: .ifNotExists, on: db)
@@ -197,10 +193,7 @@ extension RecordModel {
     }
     
     for categoryId in detachIds {
-      let category = try await RecordCategoryModel.query(on: db)
-        .filter(\.$id == categoryId)
-        .all()
-        .first
+      let category = try await RecordCategoryModel.find(categoryId, on: db)
       
       if let category {
         try await self.$categories.detach(category, on: db)
@@ -215,7 +208,11 @@ extension RecordModel {
   }
   
   func asDetail(on db: Database) async throws ->  Record.Detail {
-    guard let categories = try? await self.$categories.get(on: db) else {
+    guard
+      let created,
+      let updated,
+      let categories = try? await self.$categories.get(on: db)
+    else {
       throw Abort(.internalServerError)
     }
     return .init(

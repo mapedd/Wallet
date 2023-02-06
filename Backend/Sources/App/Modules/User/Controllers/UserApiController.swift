@@ -184,15 +184,56 @@ struct UserApiController {
   func register(req: Request) async throws -> User.Account.Detail {
     let login = try req.content.decode(User.Account.Login.self)
     
+    guard checkValid(email: login.email) else {
+      throw Abort(.badRequest, reason: "invalid email")
+    }
+    
     let user = UserAccountModel(
       email: login.email,
       password: try Bcrypt.hash(login.password)
     )
-    try await user.create(on: req.db)
+    do {
+      try await user.create(on: req.db)
+    } catch {
+      req.logger.error("error creating user \(error)")
+      throw Abort(.conflict,reason: "user with this email already exists")
+    }
     
     return User.Account.Detail.init(
       id: user.id!,
       email: user.email
     )
+  }
+  
+  func checkValid(email: String) -> Bool {
+    let emailDetector = try? NSDataDetector(  // 1
+      types: NSTextCheckingResult.CheckingType.link.rawValue
+    )
+
+    let rangeOfStrToValidate = NSRange(  // 2
+      email.startIndex..<email.endIndex,
+      in: email
+    )
+
+    let matches = emailDetector?.matches(  // 3
+      in: email,
+      options: [],
+      range: rangeOfStrToValidate
+    )
+    
+    guard matches?.count == 1 else {  // 1
+      return false
+    }
+    let singleMatch = matches?.first
+
+    guard singleMatch?.range == rangeOfStrToValidate else {  // 2
+      return false
+    }
+
+    guard singleMatch?.url?.scheme == "mailto" else {  // 3
+      return false
+    }
+
+    return true
   }
 }

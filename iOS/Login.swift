@@ -30,10 +30,12 @@ struct  LoginView: View {
           Button("Log me in ") {
             viewStore.send(.logIn)
           }
+          .disabled(!viewStore.buttonsEnabled)
           Spacer().frame(height: 100)
           Button("Register ") {
             viewStore.send(.register)
           }
+          .disabled(!viewStore.buttonsEnabled)
         }
         .padding()
       }
