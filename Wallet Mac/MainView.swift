@@ -31,6 +31,9 @@ struct MainView : View {
           .frame(minWidth: 250)
         }
       }
+      .onAppear{
+        viewStore.send(.mainViewAppeared)
+      }
     }
   }
 }
