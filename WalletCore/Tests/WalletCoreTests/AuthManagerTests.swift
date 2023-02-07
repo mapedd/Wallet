@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Wallet_IOS
+@testable import WalletCore
 import AppApi
 
 final class AuthManagerTests: XCTestCase {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import XCTestDynamicOverlay
+import WalletCore
 
 @main
 struct WalletApp: App {

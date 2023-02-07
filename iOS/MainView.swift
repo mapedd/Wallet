@@ -7,7 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
-
+import WalletCore
 
 extension Main.State {
   var iOSEditMode : SwiftUI.EditMode {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ConversionResult: Hashable, Codable {
-  var data: [String:Float]
+public struct ConversionResult: Hashable, Codable {
+  public var data: [String:Float]
 }
 

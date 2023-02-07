@@ -22,14 +22,16 @@ extension User.Token.Detail {
   }
 }
 
-struct Content: ReducerProtocol {
+public struct Content: ReducerProtocol {
+
+  public init() {}
   
-  enum State: Equatable {
+  public enum State: Equatable {
     case loggedIn(Main.State)
     case loggedOut(Login.State)
   }
   
-  enum Action {
+  public enum Action {
     case loggedIn(Main.Action)
     case loggedOut(Login.Action)
     case successfullyLoggedOut
@@ -39,7 +41,7 @@ struct Content: ReducerProtocol {
   @Dependency(\.apiClient) var apiClient
   @Dependency(\.keychain) var keychain
   
-  var body: some ReducerProtocol<State,Action> {
+  public var body: some ReducerProtocol<State,Action> {
     Scope(state: /State.loggedIn, action: /Action.loggedIn) {
       Main()
     }

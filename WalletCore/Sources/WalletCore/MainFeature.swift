@@ -13,9 +13,11 @@ enum LocalError : Error {
   case cannotCreateRecord
 }
 
-struct Main : ReducerProtocol {
+public struct Main : ReducerProtocol {
+
+  public init() {}
   
-  struct State: Equatable {
+  public struct State: Equatable {
     init(
       editorState: Editor.State = .init(currency: .usd),
       records: IdentifiedArrayOf<Record.State> = [],
@@ -23,7 +25,7 @@ struct Main : ReducerProtocol {
       title: String = "Wallet",
       editMode: State.EditMode = .inactive,
       statistics: Statistics.State? = nil,
-      categories: [Category] = []
+      categories: [MoneyRecord.Category] = []
     ) {
       self.editorState = editorState
       self.records = records
@@ -37,22 +39,22 @@ struct Main : ReducerProtocol {
     }
     
     
-    enum EditMode: Equatable {
+    public enum EditMode: Equatable {
       case inactive
       case transient
       case active
     }
     
-    var editorState: Editor.State
-    var records: IdentifiedArrayOf<Record.State>
-    var summaryState: Summary.State
-    var title: String
-    var editMode: EditMode = .inactive
-    var statistics: Statistics.State?
-    var categories: [Category]
-    var conversions: ConversionResult?
+    public var editorState: Editor.State
+    public var records: IdentifiedArrayOf<Record.State>
+    public var summaryState: Summary.State
+    public var title: String
+    public var editMode: EditMode = .inactive
+    public var statistics: Statistics.State?
+    public var categories: [MoneyRecord.Category]
+    public var conversions: ConversionResult?
     
-    var showStatistics: Bool {
+    public var showStatistics: Bool {
       statistics != nil
     }
     
@@ -91,10 +93,10 @@ struct Main : ReducerProtocol {
       self.summaryState.baseCurrencyCode = currentCurrencyCode
     }
     
-    static let preview = Self.init(
+    public static let preview = Self.init(
       editorState: .init(
         currency: .preview,
-        categories: Category.previews
+        categories: MoneyRecord.Category.previews
       ),
       records: IdentifiedArray(uniqueElements: Record.State.sample),
       summaryState: .init(baseCurrencyCode: "USD"),
@@ -103,7 +105,7 @@ struct Main : ReducerProtocol {
     
   }
   
-  enum Action {
+  public enum Action {
     case editorAction(Editor.Action)
     case recordAction(id: Record.State.ID, action: Record.Action)
     case summaryAction(Summary.Action)
@@ -121,7 +123,7 @@ struct Main : ReducerProtocol {
     case loadedRecords([Record.State])
     
     case loadingCategoriesFailed(Swift.Error)
-    case loadedCategories([Category])
+    case loadedCategories([MoneyRecord.Category])
     
     case loadedConversions(ConversionResult)
     case loadingConversionsFailed(Swift.Error)
@@ -183,7 +185,7 @@ struct Main : ReducerProtocol {
   @Dependency(\.apiClient) var apiClient
   @Dependency(\.dateProvider) var dateProvider
   
-  var body: some ReducerProtocol<State, Action> {
+  public var body: some ReducerProtocol<State, Action> {
     Scope(state: \.editorState, action: /Action.editorAction) {
       Editor()
     }
@@ -195,7 +197,7 @@ struct Main : ReducerProtocol {
       case let .editorAction(editorAction):
         switch editorAction {
         case .addButtonTapped:
-          var categories: [Category] = []
+          var categories: [MoneyRecord.Category] = []
           if let newCategory = state.editorState.category {
             categories.append(newCategory)
           }
@@ -448,7 +450,7 @@ extension AppApi.Record.Detail {
   }
 }
 extension AppApi.RecordCategory.Detail {
-  var asLocaleCategory: Category {
+  var asLocaleCategory: MoneyRecord.Category {
     .init(
       name: self.name,
       id: self.id,

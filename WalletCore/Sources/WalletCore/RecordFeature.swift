@@ -9,26 +9,38 @@ import Foundation
 import ComposableArchitecture
 import AppApi
 
-struct Record : ReducerProtocol {
-  struct State: Equatable, Identifiable {
-    var record: MoneyRecord
-    var details: RecordDetails.State?
+public struct Record : ReducerProtocol {
+  
+  public init() {}
+
+  public struct State: Equatable, Identifiable {
+    public init(
+      record: MoneyRecord,
+      details: RecordDetails.State? = nil
+    ) {
+      self.record = record
+      self.details = details
+    }
+
+
+    public var record: MoneyRecord
+    public var details: RecordDetails.State?
     
-    var id: UUID {
+    public var id: UUID {
       record.id
     }
-    var isSheetPresented: Bool {
+    public var isSheetPresented: Bool {
       details != nil
     }
   }
   
-  enum Action {
+  public enum Action {
     case showCategoryPickerTapped
     case setSheet(isPresented:Bool)
     case detailsAction(RecordDetails.Action)
   }
   
-  var body: some ReducerProtocol<State, Action> {
+  public var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
       switch action {
       case .setSheet(isPresented: true):
@@ -62,7 +74,7 @@ struct Record : ReducerProtocol {
 }
 
 extension Record.State {
-  static var sample: [Record.State] = [
+  public static var sample: [Record.State] = [
     Record.State(
       record: .init(
         id: .init(),
@@ -115,21 +127,21 @@ extension Record.State {
 }
 
 extension AppApi.Currency.List {
-  static var eur = AppApi.Currency.List(
+  public static var eur = AppApi.Currency.List(
     code: "EUR",
     name: "Euro",
     namePlural: "Euros",
     symbol: "€",
     symbolNative: "€"
   )
-  static var usd = AppApi.Currency.List(
+  public static var usd = AppApi.Currency.List(
     code: "USD",
     name: "Dollar",
     namePlural: "Dollars",
     symbol: "$",
     symbolNative: "$"
   )
-  static var pln = AppApi.Currency.List(
+  public static var pln = AppApi.Currency.List(
     code: "PLN",
     name: "Polish Zloty",
     namePlural: "Polish Zlotys",

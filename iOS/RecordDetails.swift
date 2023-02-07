@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import AppApi
+import WalletCore
 
 struct RecordDetailsView: View {
   var store: StoreOf<RecordDetails>
@@ -133,7 +134,7 @@ struct RecordDetailsView_Previews: PreviewProvider {
   }
 }
 
-extension Category : Readable {
+extension MoneyRecord.Category : Readable {
   var readableDescription: String {
     name
   }

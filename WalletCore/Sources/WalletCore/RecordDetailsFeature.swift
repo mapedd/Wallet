@@ -9,23 +9,56 @@ import Foundation
 import ComposableArchitecture
 import AppApi
 
-struct RecordDetails: ReducerProtocol {
-  struct State: Equatable {
-    var record: MoneyRecord
-    var availableCategories: [Category] = []
+public struct RecordDetails: ReducerProtocol {
+  
+  public init() {}
 
-    struct RenderableState: Hashable {
-      @BindableState var amount: String
-      @BindableState var title: String
-      @BindableState var notes: String
-      @BindableState var currencyCode: Currency.Code
-      @BindableState var assignedCategories: [Category]
-      @BindableState var recordType: MoneyRecord.RecordType
-      @BindableState var date: Date
-      var availableCategories: [Category]
+  public struct State: Equatable {
+    
+    public init(
+      record: MoneyRecord,
+      availableCategories: [MoneyRecord.Category] = []
+    ) {
+      self.record = record
+      self.availableCategories = availableCategories
     }
 
-    var renderableState: RenderableState {
+    
+    public var record: MoneyRecord
+    public var availableCategories: [MoneyRecord.Category] = []
+
+    public struct RenderableState: Hashable {
+      public init(
+        amount: String,
+        title: String,
+        notes: String,
+        currencyCode: Currency.Code,
+        assignedCategories: [MoneyRecord.Category],
+        recordType: MoneyRecord.RecordType,
+        date: Date,
+        availableCategories: [MoneyRecord.Category]
+      ) {
+        self.amount = amount
+        self.title = title
+        self.notes = notes
+        self.currencyCode = currencyCode
+        self.assignedCategories = assignedCategories
+        self.recordType = recordType
+        self.date = date
+        self.availableCategories = availableCategories
+      }
+
+      @BindableState public var amount: String
+      @BindableState public var title: String
+      @BindableState public var notes: String
+      @BindableState public var currencyCode: Currency.Code
+      @BindableState public var assignedCategories: [MoneyRecord.Category]
+      @BindableState public var recordType: MoneyRecord.RecordType
+      @BindableState public var date: Date
+      public var availableCategories: [MoneyRecord.Category]
+    }
+
+    public var renderableState: RenderableState {
       set {
         self.record.amount = Decimal(string: newValue.amount) ?? .zero
         self.record.title = newValue.title
@@ -50,7 +83,7 @@ struct RecordDetails: ReducerProtocol {
       }
     }
 
-    static let preview = State(
+    public static let preview = State(
       record: .init(
         id: .init(),
         date: .init(),
@@ -65,17 +98,17 @@ struct RecordDetails: ReducerProtocol {
   }
   
   
-  enum Action: BindableAction {
+  public enum Action: BindableAction {
     case didAppear
-    case loadedCategories([Category])
+    case loadedCategories([MoneyRecord.Category])
     case loadingCategoriesFailed(Swift.Error)
     case changeType(MoneyRecord.RecordType)
     case deleteRecordTapped
     case binding(BindingAction<State>)
-    case categoryTapped(Category)
+    case categoryTapped(MoneyRecord.Category)
     case hideDetails
 
-    static func view(_ viewAction: RenderableAction) -> Self {
+    public static func view(_ viewAction: RenderableAction) -> Self {
       switch viewAction {
       case .didAppear:
         return .didAppear
@@ -92,11 +125,11 @@ struct RecordDetails: ReducerProtocol {
     }
 
 
-    enum RenderableAction: BindableAction {
+    public enum RenderableAction: BindableAction {
       case didAppear
       case binding(BindingAction<State.RenderableState>)
       case deleteRecordTapped
-      case categoryTapped(Category)
+      case categoryTapped(MoneyRecord.Category)
       case hideDetails
     }
 
@@ -104,7 +137,7 @@ struct RecordDetails: ReducerProtocol {
   
   @Dependency(\.apiClient) var apiClient
   
-  var body: some ReducerProtocol<State, Action> {
+  public var body: some ReducerProtocol<State, Action> {
     BindingReducer()
 
     Reduce { state, action in

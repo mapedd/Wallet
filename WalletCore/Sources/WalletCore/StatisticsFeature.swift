@@ -20,22 +20,24 @@ extension MoneyRecord {
   }
 }
 
-struct Statistics: ReducerProtocol {
+public struct Statistics: ReducerProtocol {
+
+  public init() {}
   
-  struct State: Equatable {
+  public struct State: Equatable {
     
-    var records: IdentifiedArrayOf<Record.State> = []
-    var filter: Filter = .expenseType(.expense)
-    var dateFilter: Filter = .dateRange(.thisWeek)
-    var showDateFilter = false
-    var baseCurrency: AppApi.Currency.Code
+    public var records: IdentifiedArrayOf<Record.State> = []
+    public var filter: Filter = .expenseType(.expense)
+    public var dateFilter: Filter = .dateRange(.thisWeek)
+    public var showDateFilter = false
+    public var baseCurrency: AppApi.Currency.Code
     
-    var formattedFilteredTotal: String {
+    public var formattedFilteredTotal: String {
       return filteredTotal.formatted(.currency(code: baseCurrency))
     }
     
-    enum DateRange: Identifiable, Hashable, CaseIterable {
-      var id: String {
+    public enum DateRange: Identifiable, Hashable, CaseIterable {
+      public var id: String {
         self.stringValue
       }
       
@@ -49,7 +51,7 @@ struct Statistics: ReducerProtocol {
       case last6Months
       case lastYear
       
-      var stringValue: String {
+      public var stringValue: String {
         switch self {
         case .today:
           return "Today"
@@ -105,11 +107,11 @@ struct Statistics: ReducerProtocol {
         }
       }
     }
-    enum Filter: Hashable {
+    public enum Filter: Hashable {
       case expenseType(MoneyRecord.RecordType)
       case dateRange(DateRange)
       
-      var stringValue: String {
+      public var stringValue: String {
         switch self {
         case .expenseType(let type):
           return type == .expense ? "Expense" : "Income"
@@ -119,7 +121,7 @@ struct Statistics: ReducerProtocol {
       }
     }
     
-    var filteredTotal: Decimal  {
+    public var filteredTotal: Decimal  {
       let sum = filtered.reduce(Decimal.zero, { partialResult, recordState in
         if recordState.record.type == .expense {
           return partialResult - recordState.record.amount
@@ -139,7 +141,7 @@ struct Statistics: ReducerProtocol {
       }
     }
     
-    var filtered: IdentifiedArrayOf<Record.State> {
+    public var filtered: IdentifiedArrayOf<Record.State> {
       records
         .filter {
           $0.record.apply(filter: self.dateFilter)
@@ -149,7 +151,7 @@ struct Statistics: ReducerProtocol {
         }
     }
     
-    static let preview = Self.init(records: [
+    public static let preview = Self.init(records: [
       Record.State(
         record: .init(
           id: .init(),
@@ -178,13 +180,13 @@ struct Statistics: ReducerProtocol {
                                    baseCurrency: "USD")
   }
   
-  enum Action {
+  public enum Action {
     case changeFilter(State.Filter)
     case recordAction(id: Record.State.ID, action: Record.Action)
     case changeDateFilter(State.Filter)
   }
   
-  var body: some ReducerProtocol<State,Action> {
+  public var body: some ReducerProtocol<State,Action> {
     Reduce { state, action in
       switch action {
       case .changeFilter(let filter):

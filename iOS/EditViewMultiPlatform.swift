@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WalletCore
 
 extension Main.State.EditMode {
   var iOSEditMode: SwiftUI.EditMode {

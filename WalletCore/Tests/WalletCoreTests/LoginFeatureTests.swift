@@ -6,10 +6,10 @@
 //
 
 import XCTest
-@testable import Wallet_IOS
 import ComposableArchitecture
 import XCTestDynamicOverlay
 import AppApi
+import WalletCore
 
 
 extension UUID {

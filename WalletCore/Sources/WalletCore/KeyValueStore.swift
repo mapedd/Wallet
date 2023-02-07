@@ -7,8 +7,7 @@
 
 import Foundation
 
-
-struct KeyValueStore {
+public struct KeyValueStore {
   var write: (_ key: String, _ value: String) -> Void
   var read: (_ key: String) -> String?
   

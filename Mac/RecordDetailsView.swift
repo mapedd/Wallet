@@ -6,10 +6,11 @@
 //
 
 import Foundation
-
+import WalletCore
 import SwiftUI
 import ComposableArchitecture
 import AppApi
+
 
 struct RecordDetailsView: View {
   var store: StoreOf<RecordDetails>

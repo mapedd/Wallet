@@ -9,17 +9,16 @@ import Foundation
 import AppApi
 import XCTestDynamicOverlay
 
-struct APIClient {
+public struct APIClient {
   
-  var signIn: (User.Account.Login) async throws -> User.Token.Detail?
-  var signOut: () async throws -> ActionResult
-  var register: (User.Account.Login) async throws -> User.Account.Detail?
-  var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
-  var listRecords: () async throws -> [AppApi.Record.Detail]
-  var listCurrencies: () async throws -> [AppApi.Currency.List]
-  var listCategories: () async throws -> [AppApi.RecordCategory.Detail]
-  var conversions: (Currency.Code) async throws -> ConversionResult
-  
+  public var signIn: (User.Account.Login) async throws -> User.Token.Detail?
+  public var signOut: () async throws -> ActionResult
+  public var register: (User.Account.Login) async throws -> User.Account.Detail?
+  public var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
+  public var listRecords: () async throws -> [AppApi.Record.Detail]
+  public var listCurrencies: () async throws -> [AppApi.Currency.List]
+  public var listCategories: () async throws -> [AppApi.RecordCategory.Detail]
+  public var conversions: (Currency.Code) async throws -> ConversionResult
   
 }
 extension APIClient {

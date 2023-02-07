@@ -15,7 +15,7 @@ private enum APIClientKey: DependencyKey {
 }
 
 extension DependencyValues {
-  var apiClient: APIClient {
+  public var apiClient: APIClient {
     get { self[APIClientKey.self] }
     set { self[APIClientKey.self] = newValue }
   }
@@ -39,7 +39,7 @@ private enum KeyValueStoreProviderKey: DependencyKey {
 }
 
 extension DependencyValues {
-  var keyValueStore: KeyValueStore {
+  public var keyValueStore: KeyValueStore {
     get { self[KeyValueStoreProviderKey.self] }
     set { self[KeyValueStoreProviderKey.self] = newValue }
   }

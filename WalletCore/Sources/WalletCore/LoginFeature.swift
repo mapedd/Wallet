@@ -10,10 +10,12 @@ import ComposableArchitecture
 import AppApi
 import SwiftUINavigation
 
-struct Login: ReducerProtocol {
+public struct Login: ReducerProtocol {
+
+  public init() {}
   
-  enum LoginFailureReason: Hashable {
-    static func == (lhs: Login.LoginFailureReason, rhs: Login.LoginFailureReason) -> Bool {
+  public enum LoginFailureReason: Hashable {
+    public static func == (lhs: Login.LoginFailureReason, rhs: Login.LoginFailureReason) -> Bool {
       if
         case .apiError(let lerror) = lhs,
         case .apiError(let rerror) = rhs
@@ -23,7 +25,7 @@ struct Login: ReducerProtocol {
       return false
     }
     
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
       if case .apiError(let error) = self {
         hasher.combine(error.localizedDescription.hashValue)
       }
@@ -31,7 +33,7 @@ struct Login: ReducerProtocol {
     
     case apiError(Swift.Error)
     
-    var description: String {
+    public var description: String {
       switch self {
       case .apiError(let error):
         return error.localizedDescription
@@ -43,15 +45,29 @@ struct Login: ReducerProtocol {
     case userNotFound
   }
   
-  struct State: Equatable {
-    @BindableState var username = ""
-    @BindableState var password = ""
-    var loading = false
-    var buttonsEnabled = false
-    var alert: AlertState<Action>?
+  public struct State: Equatable {
+    public init(
+      username: String = "",
+      password: String = "",
+      loading: Bool = false,
+      buttonsEnabled: Bool = false,
+      alert: AlertState<Login.Action>? = nil
+    ) {
+      self.username = username
+      self.password = password
+      self.loading = loading
+      self.buttonsEnabled = buttonsEnabled
+      self.alert = alert
+    }
+
+    @BindableState public var username = ""
+    @BindableState public var password = ""
+    public var loading = false
+    public var buttonsEnabled = false
+    public var alert: AlertState<Action>?
   }
   
-  enum Action: BindableAction, Equatable {
+  public enum Action: BindableAction, Equatable {
     case binding(BindingAction<State>)
     case logIn
     case register
@@ -63,7 +79,7 @@ struct Login: ReducerProtocol {
   
   @Dependency(\.apiClient) var apiClient
   
-  var body: some ReducerProtocol<State, Action> {
+  public var body: some ReducerProtocol<State, Action> {
     BindingReducer()
     Reduce { state, action in
       switch action {
@@ -126,7 +142,7 @@ struct Login: ReducerProtocol {
   
 }
 
-extension AlertState {
+public extension AlertState {
   static func failed(_ reason: Login.LoginFailureReason) -> AlertState {
     AlertState(
       title: .init("Warning"),

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import WalletCore
 
 struct RecordView: View {
   var store: StoreOf<Record>
@@ -65,7 +66,7 @@ struct RecordView_Previews: PreviewProvider {
                   type: .expense,
                   amount: Decimal(floatLiteral: 12.1),
                   currencyCode: "USD",
-                  categories: Category.previews
+                  categories: MoneyRecord.Category.previews
                 )
               ),
               reducer: Record()

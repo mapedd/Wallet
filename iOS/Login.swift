@@ -7,7 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
-
+import WalletCore
 
 struct LoginView: View {
   var store: StoreOf<Login>

@@ -9,9 +9,7 @@ import Foundation
 import ComposableArchitecture
 import AppApi
 
-
-
-extension Currency.List {
+public extension Currency.List {
   static var examples: [Currency.List] {
     [
       .usd,
@@ -38,40 +36,60 @@ extension AppApi.Currency.List {
   }
 }
 
-struct Editor: ReducerProtocol {
+public struct Editor: ReducerProtocol {
+
+  public init() {}
   
-  struct State: Equatable {
-    @BindableState var text = "New Record title"
-    @BindableState var amount = "0.00"
-    @BindableState var currency: AppApi.Currency.List
-    @BindableState var recordType = MoneyRecord.RecordType.expense
-    @BindableState var category: Category? = nil
-    var addButtonDisabled = true
-    var categories: [Category] = []
+  public struct State: Equatable {
+    public init(
+      text: String = "New Record title",
+      amount: String = "0.00",
+      currency: Currency.List,
+      recordType: MoneyRecord.RecordType = MoneyRecord.RecordType.expense,
+      category: MoneyRecord.Category? = nil,
+      addButtonDisabled: Bool = true,
+      categories: [MoneyRecord.Category] = []
+    ) {
+      self.text = text
+      self.amount = amount
+      self.currency = currency
+      self.recordType = recordType
+      self.category = category
+      self.addButtonDisabled = addButtonDisabled
+      self.categories = categories
+    }
+
+    @BindableState public var text = "New Record title"
+    @BindableState public var amount = "0.00"
+    @BindableState public var currency: AppApi.Currency.List
+    @BindableState public var recordType = MoneyRecord.RecordType.expense
+    @BindableState public var category: MoneyRecord.Category? = nil
+    public var addButtonDisabled = true
+    public var categories: [MoneyRecord.Category] = []
     
-    static let preview = Self.init(
+    public static let preview = Self.init(
       text: "Buying groceries",
       amount: "123.00",
       currency: .preview,
       recordType: .expense,
       category: nil,
       addButtonDisabled: false,
-      categories: Category.previews
+      categories: MoneyRecord.Category.previews
     )
     
   }
   
   
   
-  enum Action:BindableAction {
+  public enum Action:BindableAction {
     case binding(BindingAction<State>)
     case changeRecordType(MoneyRecord.RecordType)
     case addButtonTapped
-    case categoryPicked(Category?)
+    case categoryPicked(MoneyRecord.Category?)
   }
   
   
-  var body: some ReducerProtocol<State,Action> {
+  public var body: some ReducerProtocol<State,Action> {
     BindingReducer()
     Reduce { state, action in
       switch action {

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
+import WalletCore
 
 struct LoginView: View {
   var screen = NSScreen.main?.visibleFrame

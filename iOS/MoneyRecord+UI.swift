@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WalletCore
 
 extension MoneyRecord.RecordType {
   var color: UIColor {

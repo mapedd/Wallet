@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import WalletCore
 
 struct SummaryView: View {
   var store: StoreOf<Summary>

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
+import WalletCore
 
 struct MainView : View {
   var store: StoreOf<Main>
