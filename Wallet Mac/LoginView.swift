@@ -21,19 +21,26 @@ struct LoginView: View {
           .fontWeight(.heavy)
         
         
-        TextField(
-          text: viewStore.binding(\.$username),
-          prompt: Text("Email"),
-          label: {
-            Label("Email", image: "pencil.line")
-          }
-        )
-        .disableAutocorrection(true)
-        
-        SecureField("Password",
-          text: viewStore.binding(\.$password),
-          prompt: Text("Password")
-        )
+        Group {
+          TextField(
+            text: viewStore.binding(\.$username),
+            prompt: Text("Email"),
+            label: {
+              Label("Email", image: "pencil.line")
+            }
+          )
+          .disableAutocorrection(true)
+
+          SecureField("Password",
+            text: viewStore.binding(\.$password),
+            prompt: Text("Password")
+          )
+        }
+        .frame(maxWidth: 250)
+
+        Spacer()
+          .frame(height: 50)
+
         Button("Log me in ") {
           viewStore.send(.logIn)
         }
@@ -46,8 +53,20 @@ struct LoginView: View {
         
         Spacer()
       }
+      .padding()
       .ignoresSafeArea(.all, edges: .all)
       .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
     }
+  }
+}
+
+struct LoginView_Previews: PreviewProvider {
+  static var previews: some View {
+    LoginView(
+      store: .init(
+        initialState: .init(),
+        reducer: Login()
+      )
+    )
   }
 }

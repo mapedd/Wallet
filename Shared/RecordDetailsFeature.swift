@@ -73,6 +73,7 @@ struct RecordDetails: ReducerProtocol {
     case deleteRecordTapped
     case binding(BindingAction<State>)
     case categoryTapped(Category)
+    case hideDetails
 
     static func view(_ viewAction: RenderableAction) -> Self {
       switch viewAction {
@@ -85,6 +86,8 @@ struct RecordDetails: ReducerProtocol {
         return .deleteRecordTapped
       case .categoryTapped(let category):
         return .categoryTapped(category)
+      case .hideDetails:
+        return .hideDetails
       }
     }
 
@@ -94,6 +97,7 @@ struct RecordDetails: ReducerProtocol {
       case binding(BindingAction<State.RenderableState>)
       case deleteRecordTapped
       case categoryTapped(Category)
+      case hideDetails
     }
 
   }
@@ -131,7 +135,6 @@ struct RecordDetails: ReducerProtocol {
         } else {
           state.record.categories.append(category)
         }
-        
         return .none
       default:
         return .none

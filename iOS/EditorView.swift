@@ -9,21 +9,6 @@ import SwiftUI
 import ComposableArchitecture
 import AppApi
 
-extension Currency.List {
-  static var examples: [Currency.List] {
-    [
-      .usd,
-      .pln
-    ]
-  }
-}
-
-extension Currency.List: Identifiable {
-  public var id: String {
-    code
-  }
-}
-
 struct EditorView: View {
   var store: StoreOf<Editor>
   var body: some View {

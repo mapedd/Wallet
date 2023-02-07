@@ -47,6 +47,9 @@ struct Record : ReducerProtocol {
         if case .deleteRecordTapped = recordDetailsAction {
           state.details = nil
         }
+        if case .hideDetails = recordDetailsAction {
+          state.details = nil
+        }
         return .none
       default:
         return .none

@@ -129,6 +129,5 @@ struct EditorView_Previews: PreviewProvider {
         reducer: Editor()
       )
     )
-    .padding(40)
   }
 }

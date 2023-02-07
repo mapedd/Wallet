@@ -9,6 +9,23 @@ import Foundation
 import ComposableArchitecture
 import AppApi
 
+
+
+extension Currency.List {
+  static var examples: [Currency.List] {
+    [
+      .usd,
+      .pln
+    ]
+  }
+}
+
+extension Currency.List: Identifiable {
+  public var id: String {
+    code
+  }
+}
+
 extension AppApi.Currency.List {
   static var preview: AppApi.Currency.List {
     .init(
