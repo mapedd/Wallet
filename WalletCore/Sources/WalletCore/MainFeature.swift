@@ -334,7 +334,7 @@ public struct Main : ReducerProtocol {
         }
         
       case .logOutButtonTapped:
-        return Effect(value: .logOut)
+        return EffectTask(value: .logOut)
         
       case .mainViewAppeared:
         let base = state.currentCurrencyCode

@@ -59,11 +59,11 @@ public struct Editor: ReducerProtocol {
       self.categories = categories
     }
 
-    @BindableState public var text = "New Record title"
-    @BindableState public var amount = "0.00"
-    @BindableState public var currency: AppApi.Currency.List
-    @BindableState public var recordType = MoneyRecord.RecordType.expense
-    @BindableState public var category: MoneyRecord.Category? = nil
+    @BindingState public var text = "New Record title"
+    @BindingState public var amount = "0.00"
+    @BindingState public var currency: AppApi.Currency.List
+    @BindingState public var recordType = MoneyRecord.RecordType.expense
+    @BindingState public var category: MoneyRecord.Category? = nil
     public var addButtonDisabled = true
     public var categories: [MoneyRecord.Category] = []
     

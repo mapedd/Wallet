@@ -60,8 +60,8 @@ public struct Login: ReducerProtocol {
       self.alert = alert
     }
 
-    @BindableState public var username = ""
-    @BindableState public var password = ""
+    @BindingState public var username = ""
+    @BindingState public var password = ""
     public var loading = false
     public var buttonsEnabled = false
     public var alert: AlertState<Action>?

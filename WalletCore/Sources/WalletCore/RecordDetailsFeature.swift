@@ -48,13 +48,13 @@ public struct RecordDetails: ReducerProtocol {
         self.availableCategories = availableCategories
       }
 
-      @BindableState public var amount: String
-      @BindableState public var title: String
-      @BindableState public var notes: String
-      @BindableState public var currencyCode: Currency.Code
-      @BindableState public var assignedCategories: [MoneyRecord.Category]
-      @BindableState public var recordType: MoneyRecord.RecordType
-      @BindableState public var date: Date
+      @BindingState public var amount: String
+      @BindingState public var title: String
+      @BindingState public var notes: String
+      @BindingState public var currencyCode: Currency.Code
+      @BindingState public var assignedCategories: [MoneyRecord.Category]
+      @BindingState public var recordType: MoneyRecord.RecordType
+      @BindingState public var date: Date
       public var availableCategories: [MoneyRecord.Category]
     }
 

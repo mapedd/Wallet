@@ -16,8 +16,9 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
          .package(name: "AppApi", path: "../Backend"),
          .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "0.8.2"),
-         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.47.2"),
-         .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0")
+         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "0.50.1"),
+         .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
+         .package(url: "https://github.com/pointfreeco/swiftui-navigation", exact: "0.6.1")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -27,6 +28,7 @@ let package = Package(
             dependencies: [
               "AppApi",
               .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
+              .product(name: "SwiftUINavigation", package: "swiftui-navigation"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
               .product(name: "SwiftKeychainWrapper", package: "SwiftKeychainWrapper")
             ]
