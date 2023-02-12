@@ -46,10 +46,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "WalletCoreIntegrationTests"
-               BuildableName = "WalletCoreIntegrationTests"
-               BlueprintName = "WalletCoreIntegrationTests"
-               ReferencedContainer = "container:WalletCore">
+               BlueprintIdentifier = "048ACB3B299959830067F772"
+               BuildableName = "WalletiOSTests.xctest"
+               BlueprintName = "WalletiOSTests"
+               ReferencedContainer = "container:Wallet.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
