@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1410"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "#say &quot;Pre build scripts running.&quot;&#10;#exec &gt; &quot;${PROJECT_DIR}/prebuild.log&quot; 2&gt;&amp;1&#10;#exec &gt; &quot;$HOME/Desktop/prebuild.log&quot; 2&gt;&amp;1&#10;#echo &quot;Starting build scheme Pre-actions&quot; &gt; &quot;$HOME/Desktop/prebuild.log&quot;&#10;&#10;&#10;#workspace_path = $WORKSPACE_PATH&#10;#echo $workspace_path&#10;#suffix = &quot;Wallet.xcodeproj/project.xcworkspace&quot;&#10;#trimmed=${workspace_path&quot;$suffix&quot;}&#10;#&quot;$HOME/Documents/Wallet/Scripts/KillBackendAfterIntegrationTesting.sh&quot;&#10;#cd &quot;$HOME/Documents/Wallet/Backend&quot;&#10;#&quot;$HOME/Documents/Wallet/Scripts/LaunchBackendForIntegrationTesting.sh&quot;&#10;&#10;&#10;#touch &quot;$HOME/Desktop/xcode-pre-action.log&quot;&#10;#touch $SRCROOT/Scripts/logs_pre.log&#10;#&quot;../$(SRCROOT)/Scripts/logs_pre.log&quot; 2&gt;&amp;1&#10;#exec &amp;&gt;&gt; &quot;$HOME/Desktop/xcode-pre-action.log&quot;&#10;#zsh $(SRCROOT)/Scripts/LaunchBackendForIntegrationTesting.sh&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "WalletCoreIntegrationTests"
+                     BuildableName = "WalletCoreIntegrationTests"
+                     BlueprintName = "WalletCoreIntegrationTests"
+                     ReferencedContainer = "container:">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "#touch &quot;$HOME/Desktop/xcode-pre-action.log&quot;&#10;#say &quot;Post build scripts running.&quot;&#10;#exec &gt; &quot;$HOME/Desktop/postbuild.log&quot; 2&gt;&amp;1&#10;#exec &amp;&gt;&gt; &quot;$HOME/Desktop/xcode-post-action.log&quot;&#10;#zsh $(SRCROOT)/Scripts/KillBackendAfterIntegrationTesting.sh&#10;&quot;$HOME/Documents/Wallet/Scripts/KillBackendAfterIntegrationTesting.sh&quot;&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "WalletCoreIntegrationTests"
+                     BuildableName = "WalletCoreIntegrationTests"
+                     BlueprintName = "WalletCoreIntegrationTests"
+                     ReferencedContainer = "container:">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WalletCoreIntegrationTests"
+               BuildableName = "WalletCoreIntegrationTests"
+               BlueprintName = "WalletCoreIntegrationTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

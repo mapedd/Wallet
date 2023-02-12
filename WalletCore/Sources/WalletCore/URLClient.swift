@@ -23,13 +23,13 @@ class URLClient {
   }()
 
   let baseURL: URL
-  let session: URLSession
+  let session: URLSessionProtocol
   var tokenProvider: TokenProvider?
 //  var task: URLSessionWebSocketTask
 
   init(
     baseURL: URL,
-    session: URLSession,
+    session: URLSessionProtocol,
     tokenProvider: TokenProvider?
   ) {
     self.baseURL = baseURL
@@ -89,19 +89,26 @@ class URLClient {
     endpoint: Endpoint
   ) async throws -> T {
     let start = CFAbsoluteTimeGetCurrent()
-    let data = try await fetchData(request: request(from: endpoint))
-    let elapsed = CFAbsoluteTimeGetCurrent() - start
-    let formatted = String(format: "%.2f seconds", elapsed)
-    debugPrint("[\(endpoint.httpMethod.rawValue)]: \(endpoint.path) \(formatted) ")
     
     do {
-      return try decoder.decode(T.self, from: data)
-    } catch {
-      if let backendError = try? decoder.decode(BackendError.self, from: data) {
-        throw backendError
+      let data = try await fetchData(request: request(from: endpoint))
+      let elapsed = CFAbsoluteTimeGetCurrent() - start
+      let formatted = String(format: "%.2f seconds", elapsed)
+      debugPrint("[\(endpoint.httpMethod.rawValue)]: \(endpoint.path) \(formatted) ")
+      
+      
+      do {
+        return try decoder.decode(T.self, from: data)
+      } catch {
+        if let backendError = try? decoder.decode(BackendError.self, from: data) {
+          throw backendError
+        }
+        throw error
       }
+    } catch {
       throw error
     }
+    
   }
   
   struct BackendError: Error, Codable {

@@ -8,6 +8,7 @@
 import XCTest
 import ComposableArchitecture
 @testable import Wallet_Mac
+import WalletCore
 
 final class WalletMacTests: XCTestCase {
   func testInit() {

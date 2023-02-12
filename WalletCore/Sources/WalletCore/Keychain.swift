@@ -8,20 +8,20 @@
 import Foundation
 import SwiftKeychainWrapper
 
-struct Keychain {
+public struct Keychain {
 
 	private enum Key: String, CaseIterable {
 		case token = "com.mapedd.wallet.token"
 	}
   
-  var saveToken: (Token?) -> Void
-  var readToken: () -> Token?
+  public var saveToken: (Token?) -> Void
+  public var readToken: () -> Token?
 
-	func removeAll() {
+  public func removeAll() {
     saveToken(nil)
 	}
 
-	static var live: Keychain {
+  public static var live: Keychain {
 		let wrapper = KeychainWrapper.standard
 
 		return Keychain(
@@ -43,7 +43,7 @@ struct Keychain {
 		)
 	}
 	
-	static var loggedIn: Keychain {
+  public static var loggedIn: Keychain {
     var data: [Key: Any] = [
       Key.token : Token(value: "dasd", validDate: .init(), refreshToken: "dasd"),
 		]
@@ -58,7 +58,7 @@ struct Keychain {
 		)
 	}
 
-	static var preview: Keychain {
+  public static var preview: Keychain {
     var data: [Key: Any] = [:]
     
     return Keychain(

@@ -43,14 +43,13 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO"
-            testExecutionOrdering = "random">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0446E3AD2953A76C00B62C95"
-               BuildableName = "WalletiOSTests.xctest"
-               BlueprintName = "WalletiOSTests"
-               ReferencedContainer = "container:Wallet.xcodeproj">
+               BlueprintIdentifier = "WalletCoreIntegrationTests"
+               BuildableName = "WalletCoreIntegrationTests"
+               BlueprintName = "WalletCoreIntegrationTests"
+               ReferencedContainer = "container:WalletCore">
             </BuildableReference>
          </TestableReference>
       </Testables>

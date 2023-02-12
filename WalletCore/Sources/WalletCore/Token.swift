@@ -14,10 +14,10 @@ struct TokenProvider {
 }
 
 
-struct Token: Codable, Sendable {
-  let value: String
-  let validDate: Date
-  let refreshToken: String
+public struct Token: Codable, Sendable {
+  public let value: String
+  public let validDate: Date
+  public let refreshToken: String
 
   var encodable: Encodable {
     .init(token: self)

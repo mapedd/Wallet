@@ -8,6 +8,7 @@ jobs:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: ios tests
     steps:
+      - run: brew install vapor
       - checkout
       - run: bundle install
       - run:
@@ -25,6 +26,7 @@ jobs:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: mac tests_mac_app
     steps:
+      - run: brew install vapor
       - checkout
       - run: bundle install
       - run:
@@ -42,6 +44,7 @@ jobs:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: mac tests_server
     steps:
+      - run: brew install vapor
       - checkout
       - run: bundle install
       - run:

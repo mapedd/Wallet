@@ -7,16 +7,20 @@
 
 import Foundation
 
-struct DateProvider {
-  var currentDate: () -> Date
+public struct DateProvider {
+  public init(currentDate: @escaping () -> Date) {
+    self.currentDate = currentDate
+  }
+  
+  public var currentDate: () -> Date
 
-  var now: Date {
+  public var now: Date {
     currentDate()
   }
 
-  static let live = DateProvider {
+  public static let live = DateProvider {
     .now
   }
 
-  static let preview = DateProvider.live
+  public static let preview = DateProvider.live
 }

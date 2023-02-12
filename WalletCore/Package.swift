@@ -18,7 +18,9 @@ let package = Package(
          .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "0.8.2"),
          .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "0.50.1"),
          .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
-         .package(url: "https://github.com/pointfreeco/swiftui-navigation", exact: "0.6.1")
+         .package(url: "https://github.com/pointfreeco/swiftui-navigation", exact: "0.6.1"),
+         .package(url: "https://github.com/JohnSundell/ShellOut.git", from: "2.0.0"),
+         .package(url: "https://github.com/vapor/vapor", from: "4.54.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -35,6 +37,19 @@ let package = Package(
         ),
         .testTarget(
             name: "WalletCoreTests",
-            dependencies: ["WalletCore"]),
+            dependencies: [
+              "WalletCore"
+            ]
+        ),
+        .testTarget(
+            name: "WalletCoreIntegrationTests",
+            dependencies: [
+              "WalletCore",
+              .product(name: "Vapor", package: "vapor"),
+              .product(name: "XCTVapor", package: "vapor"),
+              .product(name: "ShellOut", package: "ShellOut"),
+              .product(name: "App", package: "AppApi")
+            ]
+        )
     ]
 )

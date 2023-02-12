@@ -60,6 +60,11 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     try module.setUp(app)
   }
   
+  app.routes.get("shutdown") { req in
+    app.shutdown()
+    return ""
+  }
+  
   /// use automatic database migration
   try app.autoMigrate().wait()
 }

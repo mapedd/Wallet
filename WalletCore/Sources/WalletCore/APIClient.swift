@@ -16,15 +16,38 @@ public struct APIClient {
   public var register: (User.Account.Login) async throws -> User.Account.Detail?
   public var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
   public var listRecords: () async throws -> [AppApi.Record.Detail]
-  public var listCurrencies: () async throws -> [AppApi.Currency.List]
+  
+  public var createCategory: (AppApi.RecordCategory.Create) async throws -> AppApi.RecordCategory.Detail
   public var listCategories: () async throws -> [AppApi.RecordCategory.Detail]
+  
+  public var listCurrencies: () async throws -> [AppApi.Currency.List]
   public var conversions: (Currency.Code) async throws -> ConversionResult
   
 }
+
+public protocol URLSessionProtocol {
+  func data(
+    for request: URLRequest
+  ) async throws -> (Data, URLResponse)
+}
+
+extension URLSession: URLSessionProtocol {
+  public func data(
+    for request: URLRequest
+  ) async throws -> (Data, URLResponse) {
+    try await data(for: request, delegate: nil)
+  }
+}
+
 extension APIClient {
-  static var live: APIClient {
+  public static var live: APIClient {
+    .live(keychain: .live, session: URLSession.shared)
+  }
+  public static func live(
+    keychain: Keychain,
+    session: URLSessionProtocol
+  ) -> APIClient {
     
-    let session = URLSession.shared
     let url = URL(string: "http://localhost:8080/api/")!
     
     let authURLClient = URLClient(
@@ -32,8 +55,6 @@ extension APIClient {
       session: session,
       tokenProvider: nil
     )
-    
-    let keychain = Keychain.live
     
     let authNetwork = AuthNetwork(
       refreshToken: { refreshToken in
@@ -44,7 +65,8 @@ extension APIClient {
           refreshToken: {}
         )
         // handle refresh token getting 401
-        let apiToken: User.Token.Detail = try await authURLClient.fetch(endpoint: .refreshToken(.init(refresh: refreshToken)))
+        let endpoint = Endpoint.auth(.refreshToken(.init(refresh: refreshToken)))
+        let apiToken: User.Token.Detail = try await authURLClient.fetch(endpoint: endpoint)
         return apiToken.toLocalToken
       }
     )
@@ -70,28 +92,31 @@ extension APIClient {
     
     return APIClient(
       signIn: { login in
-        try await urlClient.fetch(endpoint: .signIn(login))
+        try await urlClient.fetch(endpoint: Endpoint.auth(.signIn(login)))
       },
       signOut: {
-        try await urlClient.fetch(endpoint: .signOut)
+        try await urlClient.fetch(endpoint: Endpoint.auth(.signOut))
       },
       register: { login in
-        try await urlClient.fetch(endpoint: .register(login))
+        try await urlClient.fetch(endpoint: Endpoint.auth(.register(login)))
       },
       updateRecord: { record in
-        try await urlClient.fetch(endpoint: .updateRecord(record))
+        try await urlClient.fetch(endpoint: Endpoint.record(.updateRecord(record)))
       },
       listRecords: {
-        try await urlClient.fetch(endpoint: .listRecords)
+        try await urlClient.fetch(endpoint: Endpoint.record(.listRecords))
       },
-      listCurrencies: {
-        try await urlClient.fetch(endpoint: .currency(.list))
+      createCategory: { create in
+        try await urlClient.fetch(endpoint: Endpoint.category(.create(create)))
       },
       listCategories: {
-        try await urlClient.fetch(endpoint: .listCategories)
+        try await urlClient.fetch(endpoint: Endpoint.category(.list))
+      },
+      listCurrencies: {
+        try await urlClient.fetch(endpoint: Endpoint.currency(.list))
       },
       conversions: { code in
-        try await urlClient.fetch(endpoint: .currency(.conversions(base: code, currencies: [])))
+        try await urlClient.fetch(endpoint: Endpoint.currency(.conversions(base: code, currencies: [])))
       }
     )
   }
@@ -135,15 +160,18 @@ extension APIClient {
       listRecords: {
         []
       },
-      listCurrencies: {
-        [
-          .init(code: "USD", name: "Dollar", namePlural: "Dollars", symbol: "$", symbolNative: "$")
-        ]
+      createCategory: { _ in
+          .init(id: UUID(), name: "category name", color: 123)
       },
       listCategories: {
         [
           .init(id: .init(), name: "Fun", color: 1),
           .init(id: .init(), name: "Sweets", color: 3)
+        ]
+      },
+      listCurrencies: {
+        [
+          .init(code: "USD", name: "Dollar", namePlural: "Dollars", symbol: "$", symbolNative: "$")
         ]
       },
       conversions: { _ in
@@ -187,11 +215,15 @@ extension APIClient {
         XCTFail("unimplemented")
         return []
       },
-      listCurrencies: {
+      createCategory: { _ in
+        XCTFail("unimplemented")
+        return .init(id: .init(), name: "", color: -1)
+      },
+      listCategories: {
         XCTFail("unimplemented")
         return []
       },
-      listCategories: {
+      listCurrencies: {
         XCTFail("unimplemented")
         return []
       },

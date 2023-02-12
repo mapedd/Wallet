@@ -12,7 +12,7 @@ import IdentifiedCollections
 import SwiftUINavigation
 import AppApi
 
-extension User.Token.Detail {
+public extension User.Token.Detail {
   var toLocalToken: Token {
     .init(
       value: self.token.value,

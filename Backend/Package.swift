@@ -8,6 +8,7 @@ let package = Package(
     ],
     products: [
         .library(name: "AppApi", targets: ["AppApi"]),
+        .library(name: "App", targets: ["App"])
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor", from: "4.54.0"),
