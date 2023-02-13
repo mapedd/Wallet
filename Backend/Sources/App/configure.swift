@@ -34,7 +34,7 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
   app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
   
   /// extend paths to always contain a trailing slash
-//  app.middleware.use(ExtendPathMiddleware())
+  //  app.middleware.use(ExtendPathMiddleware())
   
   /// setup sessions
   app.sessions.use(.fluent)
@@ -63,6 +63,12 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
   app.routes.get("shutdown") { req in
     app.shutdown()
     return ""
+  }
+  
+  let websocketManager = WebsocketManager(app: app)
+  
+  app.webSocket("channel") { _, ws in
+    websocketManager.connect(ws)
   }
   
   /// use automatic database migration

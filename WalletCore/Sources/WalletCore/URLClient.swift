@@ -6,10 +6,8 @@
 //
 
 import Foundation
+import AppApi
 
-struct Message: Codable {
-  var text: String
-}
 
 class URLClient {
   
@@ -42,7 +40,7 @@ class URLClient {
     //    let websocket = URL(string: "wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV")!
     //    let websocket = URL(string: "ws://localhost:8080/api/websocket")!
     //    let websocket = URL(string: "ws://127.0.0.1:8080/records/websocket")!
-    let websocket = URL(string: "ws://127.0.0.1:8080/websocket")!
+    let websocket = URL(string: "ws://127.0.0.1:8080/channel")!
     let task = session.webSocketTask(with: websocket)
     self.task = task
     task.resume()
@@ -51,17 +49,17 @@ class URLClient {
       print("received \(receive)")
     }
     
-    
-    let message = Message(text: "hello from iOS \(Date())")
+//
+//    let message = Message(text: "hello from iOS \(Date())")
     let _enoder = JSONEncoder()
-    if
-      let data = try? _enoder.encode(message),
-      let string = String(data: data, encoding: .utf8)
-    {
-      Task {
-        try await task.send(.string(string))
-      }
-    }
+//    if
+//      let data = try? _enoder.encode(message),
+//      let string = String(data: data, encoding: .utf8)
+//    {
+//      Task {
+//        try await task.send(.string(string))
+//      }
+//    }
     
     
     //    let timer = Timer.scheduledTimer(
@@ -84,14 +82,22 @@ class URLClient {
     DispatchQueue.global(qos: .background).async {
       let timer = Timer(timeInterval: 3, repeats: true) { _ in
         print("After 3 seconds in the background")
-        let message = Message(text: "hello from iOS \(Date())")
+        
+        let message = WebsocketMessage(
+          client: UUID(),
+          data:  Websocket.Connect(id: UUID(), connect: true)
+        )
+        
         
         if
-          let data = try? _enoder.encode(message),
-          let string = String(data: data, encoding: .utf8)
+          let data = try? _enoder.encode(message)
         {
           Task {
-            try await task.send(.string(string))
+            do {
+              try await task.send(.data(data))
+            } catch {
+              print("send failed \(error)")
+            }
           }
         }
       }

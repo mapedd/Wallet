@@ -56,44 +56,44 @@ struct RecordModule: ModuleInterface {
 //        ws.send("dupa")
 //      }
 //    }
-    
-    
-    var clientConnections = Set<WebSocket>()
-
-    app.webSocket("websocket") { req, client in
-      client.pingInterval = .seconds(10)
-
-      clientConnections.insert(client)
-      
-      client.onClose.whenComplete { _ in
-        clientConnections.remove(client)
-      }
-      
-      client.onText { ws, text in
-        do {
-          guard let data = text.data(using: .utf8) else {
-            return
-          }
-
-          let incomingMessage = try JSONDecoder().decode(Message.self, from: data)
-
-          let outgoingMessage = Message(text: incomingMessage.text.uppercased())
-          
-          let json = try JSONEncoder().encode(outgoingMessage)
-          
-          guard let jsonString = String(data: json, encoding: .utf8) else {
-            return
-          }
-
-          for connection in clientConnections {
-            connection.send(jsonString)
-          }
-        }
-        catch {
-          print(error)
-        }
-      }
-    }
+//
+//
+//    var clientConnections = Set<WebSocket>()
+//
+//    app.webSocket("websocket") { req, client in
+//      client.pingInterval = .seconds(10)
+//
+//      clientConnections.insert(client)
+//
+//      client.onClose.whenComplete { _ in
+//        clientConnections.remove(client)
+//      }
+//
+//      client.onText { ws, text in
+//        do {
+//          guard let data = text.data(using: .utf8) else {
+//            return
+//          }
+//
+//          let incomingMessage = try JSONDecoder().decode(Message.self, from: data)
+//
+//          let outgoingMessage = Message(text: incomingMessage.text.uppercased())
+//
+//          let json = try JSONEncoder().encode(outgoingMessage)
+//
+//          guard let jsonString = String(data: json, encoding: .utf8) else {
+//            return
+//          }
+//
+//          for connection in clientConnections {
+//            connection.send(jsonString)
+//          }
+//        }
+//        catch {
+//          print(error)
+//        }
+//      }
+//    }
     
     try self.router.boot(routes: app.routes)
   }
