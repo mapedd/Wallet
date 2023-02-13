@@ -96,6 +96,9 @@ struct RecordAPIController {
       logger: req.logger
     )
     
+    let ws = req.application.websocketManager
+    try await ws.send(recordChanged: record, userId: user.id)
+    
     
     let createdIn = recordUpdate.updated
     let detail = try await record.asDetail(on: req.db)
@@ -106,7 +109,6 @@ struct RecordAPIController {
     }
     return detail
   }
-  
   
   func createCategory(req: Request) async throws -> RecordCategory.Detail {
     let categoryUpdate = try req.content.decode(RecordCategory.Create.self)
@@ -253,4 +255,27 @@ extension Sequence {
 
         return values
     }
+}
+
+
+extension WebsocketManager {
+   func send(
+    recordChanged: RecordModel,
+    userId: UUID
+  ) async throws {
+    let connectedClients = await clients.active.compactMap { $0 as WebsocketClient }
+    guard !connectedClients.isEmpty else {
+      return
+    }
+    
+    try await connectedClients.asyncForEach { client in
+    
+      let update = Websocket.RecordUpdate(title: recordChanged.title, id: recordChanged.id!)
+      let msg = WebsocketMessage<Websocket.RecordUpdate>(client: userId, data: update)
+      let data = try! JSONEncoder().encode(msg)
+      
+      try await client.socket.send([UInt8](data))
+    }
+  }
+  
 }

@@ -117,7 +117,9 @@ public struct Main : ReducerProtocol {
     case hideStatistics
     case logOut
     case logOutButtonTapped
-    case mainViewAppeared
+    case task
+    
+    case recordChanged(UUID)
     
     case loadingRecordsFailed(Swift.Error)
     case loadedRecords([Record.State])
@@ -184,6 +186,7 @@ public struct Main : ReducerProtocol {
   
   @Dependency(\.apiClient) var apiClient
   @Dependency(\.dateProvider) var dateProvider
+  @Dependency(\.logger) var logger
   
   public var body: some ReducerProtocol<State, Action> {
     Scope(state: \.editorState, action: /Action.editorAction) {
@@ -336,7 +339,7 @@ public struct Main : ReducerProtocol {
       case .logOutButtonTapped:
         return EffectTask(value: .logOut)
         
-      case .mainViewAppeared:
+      case .task:
         let base = state.currentCurrencyCode
         return .merge(
           .task(
@@ -367,7 +370,26 @@ public struct Main : ReducerProtocol {
             catch: { error in
               return .loadingConversionsFailed(error)
             }
-          )
+          ),
+          .fireAndForget {
+            do {
+              try await apiClient.subscribeToRecordChanges(UUID())
+            } catch {
+              logger.error("error subscribing to record changed \(error)")
+            }
+          },
+          .run { send in
+            logger.info("running websocket listener")
+            do {
+              for try await recordId in apiClient.recordsChanged() {
+                logger.info("received websocket message record change")
+                  await send(.recordChanged(recordId))
+              }
+            } catch {
+              logger.error("error receiving record changed \(error)")
+            }
+            
+          }
         )
         
       case .loadedRecords(let records):
@@ -380,6 +402,11 @@ public struct Main : ReducerProtocol {
       case .loadedConversions(let conversions):
         state.conversions = conversions
         state.recalculateTotal()
+        return .none
+        
+      case .recordChanged(let recordId):
+        // we should refresh record or fetch it here
+        logger.info("record chagned event \(recordId)")
         return .none
       default:
         return .none

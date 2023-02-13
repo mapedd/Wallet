@@ -23,6 +23,8 @@ public struct APIClient {
   public var listCurrencies: () async throws -> [AppApi.Currency.List]
   public var conversions: (Currency.Code) async throws -> ConversionResult
   
+  public var recordsChanged: () -> AsyncThrowingStream<UUID, Swift.Error>
+  public var subscribeToRecordChanges: (UUID) async throws -> Void
 }
 
 public protocol URLSessionProtocol {
@@ -119,8 +121,55 @@ extension APIClient {
       },
       conversions: { code in
         try await urlClient.fetch(endpoint: Endpoint.currency(.conversions(base: code, currencies: [])))
+      },
+      recordsChanged: {
+        streamOfChangedRecords(task: urlClient.websocketTask)
+      },
+      subscribeToRecordChanges: { userId in
+        try await subscribeToRecordChange(userId: userId, task: urlClient.websocketTask)
       }
     )
+  }
+  
+  static func subscribeToRecordChange(
+    userId: UUID,
+    task: URLSessionWebSocketTask
+  ) async throws {
+    
+    
+    let message = WebsocketMessage(
+      client: userId,
+      data:  Websocket.Connect(id: userId, connect: true)
+    )
+    
+    let _enoder = JSONEncoder()
+    do {
+      let data = try _enoder.encode(message)
+      try await task.send(.data(data))
+    } catch {
+      throw error
+    }
+  }
+  
+  static func streamOfChangedRecords(task: URLSessionWebSocketTask) -> AsyncThrowingStream<UUID, Swift.Error> {
+    AsyncThrowingStream { continuation in
+      task.receive { receive in
+        print("received \(receive)")
+        switch receive {
+        case .failure(let error):
+          continuation.finish(throwing: error)
+        case .success(.data(let data)):
+          let decoder = JSONDecoder()
+          if let update = try? decoder.decode(WebsocketMessage<Websocket.RecordUpdate>.self, from: data) {
+            continuation.yield(update.data.id)
+          }
+        case .success(.string(_)):
+          continuation.finish()
+        case .success(_):
+          continuation.finish()
+        }
+      }
+    }
   }
 }
 
@@ -178,6 +227,12 @@ extension APIClient {
       },
       conversions: { _ in
           .init(data: [String : Float]())
+      },
+      recordsChanged: {
+        AsyncThrowingStream { _ in }
+      },
+      subscribeToRecordChanges: { _ in
+        
       }
     )
   }
@@ -232,6 +287,13 @@ extension APIClient {
       conversions: { _ in
         XCTFail("unimplemented")
         return .init(data: [String : Float]())
+      },
+      recordsChanged: {
+        XCTFail("unimplemented")
+        return AsyncThrowingStream { _ in }
+      },
+      subscribeToRecordChanges: { _ in
+        XCTFail("unimplemented")
       }
     )
   }

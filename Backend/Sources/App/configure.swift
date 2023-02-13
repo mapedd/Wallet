@@ -65,10 +65,11 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     return ""
   }
   
-  let websocketManager = WebsocketManager(app: app)
+  let webSocketManager = WebsocketManager(app: app)
+  app.websocketManager = webSocketManager
   
   app.webSocket("channel") { _, ws in
-    websocketManager.connect(ws)
+    webSocketManager.connect(ws)
   }
   
   /// use automatic database migration

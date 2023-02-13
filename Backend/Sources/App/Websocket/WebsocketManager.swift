@@ -1,6 +1,29 @@
 import Vapor
 import Fluent
 
+
+extension Application {
+
+    private struct WebSocketManagerKey: StorageKey {
+        typealias Value = WebsocketManager
+    }
+
+    var websocketManager: WebsocketManager {
+        get {
+            if let existing = storage[WebSocketManagerKey.self] {
+                return existing
+            }
+            let new = WebsocketManager(app: self)
+            storage[WebSocketManagerKey.self] = new
+            return new
+        }
+        set {
+            storage[WebSocketManagerKey.self] = newValue
+        }
+    }
+}
+
+
 class WebsocketManager {
   var clients: WebsocketClients
   var app: Application
@@ -26,11 +49,11 @@ class WebsocketManager {
       
       app.logger.info("Added client app: \(msg.client)")
       
-      do {
-        try await notify()
-      } catch {
-        app.logger.info("error notifiing \(error)")
-      }
+//      do {
+//        try await notify()
+//      } catch {
+//        app.logger.info("error notifiing \(error)")
+//      }
     }
     
     ws.onText { ws, _ in
@@ -38,36 +61,36 @@ class WebsocketManager {
     }
   }
   
-  func notify() async throws {
-    let connectedClients = await clients.active.compactMap { $0 as WebsocketClient }
-    guard !connectedClients.isEmpty else {
-      return
-    }
-    
-    try await connectedClients.asyncForEach { client in
-    
-      guard
-        let user = try await UserAccountModel
-          .query(on: app.db)
-          .filter(\.$id == client.id)
-          .first()
-      else {
-        return
-      }
-      
-      let records =  try await user
-        .$records
-        .query(on: app.db)
-        .filter(\.$deleted == nil)
-        .all()
-      
-      let person = Websocket.Person(name: user.email, male: true, age: records.count)
-      let msg = WebsocketMessage<Websocket.Person>(client: client.id, data: person)
-      let data = try! JSONEncoder().encode(msg)
-      
-      try await client.socket.send([UInt8](data))
-    }
-  }
+//  func notify() async throws {
+//    let connectedClients = await clients.active.compactMap { $0 as WebsocketClient }
+//    guard !connectedClients.isEmpty else {
+//      return
+//    }
+//
+//    try await connectedClients.asyncForEach { client in
+//
+//      guard
+//        let user = try await UserAccountModel
+//          .query(on: app.db)
+//          .filter(\.$id == client.id)
+//          .first()
+//      else {
+//        return
+//      }
+//
+//      let records =  try await user
+//        .$records
+//        .query(on: app.db)
+//        .filter(\.$deleted == nil)
+//        .all()
+//
+//      let person = Websocket.Person(name: user.email, male: true, age: records.count)
+//      let msg = WebsocketMessage<Websocket.Person>(client: client.id, data: person)
+//      let data = try! JSONEncoder().encode(msg)
+//
+//      try await client.socket.send([UInt8](data))
+//    }
+//  }
 }
 
 extension Sequence {

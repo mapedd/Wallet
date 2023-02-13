@@ -1,18 +1,15 @@
 import Foundation
 
 public extension Websocket {
-  public struct Person: Codable {
-    public let name: String
-    public let male: Bool
-    public let age: Int
+  public struct RecordUpdate: Codable {
+    public let title: String
+    public let id: UUID
     public init(
-      name: String,
-      male: Bool,
-      age: Int
+      title: String,
+      id: UUID
     ) {
-      self.name = name
-      self.male = male
-      self.age = age
+      self.title = title
+      self.id = id
     }
   }
 }
