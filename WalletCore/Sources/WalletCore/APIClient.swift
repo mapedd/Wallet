@@ -29,6 +29,8 @@ public protocol URLSessionProtocol {
   func data(
     for request: URLRequest
   ) async throws -> (Data, URLResponse)
+  
+  func webSocketTask(with url: URL) -> URLSessionWebSocketTask
 }
 
 extension URLSession: URLSessionProtocol {

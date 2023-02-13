@@ -7,26 +7,29 @@
 
 import Foundation
 
+struct Message: Codable {
+  var text: String
+}
 
 class URLClient {
-
+  
   lazy var encoder: JSONEncoder = {
     let encoder = JSONEncoder()
     encoder.dateEncodingStrategy = .iso8601
     return encoder
   }()
-
+  
   lazy var decoder: JSONDecoder = {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
     return decoder
   }()
-
+  
   let baseURL: URL
   let session: URLSessionProtocol
   var tokenProvider: TokenProvider?
-//  var task: URLSessionWebSocketTask
-
+  var task: URLSessionWebSocketTask
+  var timer: Timer?
   init(
     baseURL: URL,
     session: URLSessionProtocol,
@@ -35,34 +38,70 @@ class URLClient {
     self.baseURL = baseURL
     self.session = session
     self.tokenProvider = tokenProvider
-
-//    let websocket = URL(string: "wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV")!
-//    let websocket = URL(string: "ws://localhost:8080/api/websocket")!
-//    let websocket = URL(string: "ws://127.0.0.1:8080/records/websocket")!
-//    let websocket = URL(string: "ws://127.0.0.1:8080")!
-//    self.task = session.webSocketTask(with: websocket)
-//    self.task.resume()
-//
-//    task.receive { receive in
-//      print("received \(receive)")
-//    }
-//
-//
-//    Timer.scheduledTimer(
-//      withTimeInterval: 3,
-//      repeats: true
-//    ) {[weak self] timer in
-//      let message = URLSessionWebSocketTask.Message.string("hi I'm the client")
-//
-//      self?.task.send(message) { error in
-//        if let error {
-//          print("sending ws message failed \(String(describing: error))")
-//        }
-//      }
-//    }
-
+    //
+    //    let websocket = URL(string: "wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV")!
+    //    let websocket = URL(string: "ws://localhost:8080/api/websocket")!
+    //    let websocket = URL(string: "ws://127.0.0.1:8080/records/websocket")!
+    let websocket = URL(string: "ws://127.0.0.1:8080/websocket")!
+    let task = session.webSocketTask(with: websocket)
+    self.task = task
+    task.resume()
+    
+    task.receive { receive in
+      print("received \(receive)")
+    }
+    
+    
+    let message = Message(text: "hello from iOS \(Date())")
+    let _enoder = JSONEncoder()
+    if
+      let data = try? _enoder.encode(message),
+      let string = String(data: data, encoding: .utf8)
+    {
+      Task {
+        try await task.send(.string(string))
+      }
+    }
+    
+    
+    //    let timer = Timer.scheduledTimer(
+    //      withTimeInterval: 1,
+    //      repeats: true
+    //    ) { timer in
+    //      let message = Message(text: "hello from iOS \(Date())")
+    //
+    //      if
+    //        let data = try? _enoder.encode(message),
+    //        let string = String(data: data, encoding: .utf8)
+    //      {
+    //        Task {
+    //          try await task.send(.string(string))
+    //        }
+    //      }
+    //
+    //    }
+    
+    DispatchQueue.global(qos: .background).async {
+      let timer = Timer(timeInterval: 3, repeats: true) { _ in
+        print("After 3 seconds in the background")
+        let message = Message(text: "hello from iOS \(Date())")
+        
+        if
+          let data = try? _enoder.encode(message),
+          let string = String(data: data, encoding: .utf8)
+        {
+          Task {
+            try await task.send(.string(string))
+          }
+        }
+      }
+      let runLoop = RunLoop.current
+      runLoop.add(timer, forMode: .default)
+      runLoop.run()
+    }
+    
   }
-
+  
   func request(
     from endPoint: Endpoint
   ) async throws -> URLRequest {
@@ -80,11 +119,11 @@ class URLClient {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       }
     }
-
+    
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     return request
   }
-
+  
   func fetch<T: Decodable>(
     endpoint: Endpoint
   ) async throws -> T {
@@ -119,15 +158,15 @@ class URLClient {
       String(describing: self)
     }
   }
-
+  
   private func fetchData(
     request: URLRequest,
     allowRetry: Bool = true
   ) async throws -> Data {
     do {
-
+      
       let (data, urlResponse) = try await session.data(for:request)
-
+      
       // check the http status code and refresh + retry if we received 401 Unauthorized
       if let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode == 401 {
         if let tokenProvider, allowRetry {
@@ -135,11 +174,11 @@ class URLClient {
           let (data, _) = try await session.data(for:request)
           return data
         }
-
+        
         throw AuthError.unauthorized
       }
-
-
+      
+      
       return data
     } catch {
       throw error
