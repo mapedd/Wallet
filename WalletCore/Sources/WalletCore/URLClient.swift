@@ -183,6 +183,10 @@ class URLClient {
         
         throw AuthError.unauthorized
       }
+
+      if let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode == 404 {
+        throw AuthError.userNotFound
+      }
       
       
       return data

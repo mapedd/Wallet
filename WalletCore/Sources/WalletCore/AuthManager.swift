@@ -12,11 +12,12 @@ struct AuthNetwork {
   var refreshToken: (String) async throws -> Token
 }
 
-enum AuthError: Error {
+public enum AuthError: Error {
   case unauthorized // refreshing token failed
   case missingRefreshToken // expiryDate lapsed but cannot find refresh token
   case tokenExpired // expiryDate is lapsed
   case noTokenStored // default state
+  case userNotFound // user not registered
 }
 
 actor AuthManager {

@@ -48,7 +48,7 @@ struct UserApiController {
   
   func signInApi(req: Request) async throws -> User.Token.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
-      throw Abort(.unauthorized)
+      throw Abort(.notFound)
     }
     
     let token = UserTokenModel(

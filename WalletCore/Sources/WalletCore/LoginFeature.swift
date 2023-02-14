@@ -144,13 +144,41 @@ public struct Login: ReducerProtocol {
 
 public extension AlertState {
   static func failed(_ reason: Login.LoginFailureReason) -> AlertState {
-    AlertState(
-      title: .init("Warning"),
-      message: .init("Something went wrong...\(reason.description)"),
-      primaryButton: .default(.init(verbatim: "OK")),
-      secondaryButton: .init(label: {
-        TextState("")
-      })
+    switch reason {
+    case .apiError(let error):
+      if let error = error as? AuthError { // user not registered
+        if error == .userNotFound {
+          return userNotRegistered
+        }
+      }
+    }
+
+    return genericAlert(reason)
+  }
+
+  static func genericAlert(_ reason: Login.LoginFailureReason) -> AlertState {
+    .init(
+      title: { .init("Warning")},
+      actions: {
+        ButtonState(
+          role: .cancel) {
+            TextState("Ok")
+          }
+      },
+      message: { .init("Something went wrong...\(reason.description)") }
+    )
+  }
+
+  static var userNotRegistered : AlertState {
+    .init(
+      title: { .init("Hold on")},
+      actions: {
+        ButtonState(
+          role: .cancel) {
+            TextState("Ok")
+          }
+      },
+      message: { .init("There's no user with this email/password")}
     )
   }
 }
