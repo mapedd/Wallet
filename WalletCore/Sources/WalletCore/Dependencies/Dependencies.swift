@@ -23,7 +23,7 @@ extension DependencyValues {
 
 private enum APIClientKey: DependencyKey {
   static let liveValue = APIClient.live
-  static let previewValue = APIClient.mock
+  static let previewValue = APIClient.preview
   static let testValue = APIClient.test
 }
 

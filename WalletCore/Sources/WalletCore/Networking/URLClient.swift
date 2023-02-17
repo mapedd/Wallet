@@ -26,7 +26,7 @@ class URLClient {
   let baseURL: URL
   let session: URLSessionProtocol
   var tokenProvider: TokenProvider?
-  var websocketTask: URLSessionWebSocketTask
+  var websocketTask: URLSessionWebSocketTaskProtocol
   var timer: Timer?
   init(
     baseURL: URL,
@@ -41,7 +41,7 @@ class URLClient {
     //    let websocket = URL(string: "ws://localhost:8080/api/websocket")!
     //    let websocket = URL(string: "ws://127.0.0.1:8080/records/websocket")!
     let websocket = URL(string: "ws://127.0.0.1:8080/channel")!
-    let task = session.webSocketTask(with: websocket)
+    let task = session.webSocket(with: websocket)
     self.websocketTask = task
     task.resume()
     

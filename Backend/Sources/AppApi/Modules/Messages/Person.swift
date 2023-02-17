@@ -1,7 +1,7 @@
 import Foundation
 
 public extension Websocket {
-  public struct RecordUpdate: Codable {
+  struct RecordUpdate: Codable {
     public let title: String
     public let id: UUID
     public init(

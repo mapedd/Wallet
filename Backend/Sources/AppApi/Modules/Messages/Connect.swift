@@ -3,7 +3,7 @@ import Foundation
 public enum Websocket {}
 
 public extension Websocket {
-  public struct Connect: Codable {
+  struct Connect: Codable {
     public var id: UUID
     public var connect: Bool
     

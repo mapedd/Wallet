@@ -76,6 +76,9 @@ struct RecordAPIController {
       )
       try await existingRecord.save(on: req.db)
       let details = try await existingRecord.asDetail(on: req.db)
+      let ws = req.application.websocketManager
+      try await ws.send(recordChanged: existingRecord, userId: user.id)
+      
       log("updated", details, req)
       return details
     }
@@ -268,13 +271,13 @@ extension WebsocketManager {
       return
     }
     
-    try await connectedClients.asyncForEach { client in
+    await connectedClients.asyncForEach { client in
     
       let update = Websocket.RecordUpdate(title: recordChanged.title, id: recordChanged.id!)
       let msg = WebsocketMessage<Websocket.RecordUpdate>(client: userId, data: update)
       let data = try! JSONEncoder().encode(msg)
       
-      try await client.socket.send([UInt8](data))
+      client.socket.send([UInt8](data))
     }
   }
   
