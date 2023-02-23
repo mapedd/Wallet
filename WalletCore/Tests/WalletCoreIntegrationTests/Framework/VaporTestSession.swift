@@ -35,7 +35,7 @@ class VaporWebSocket: URLSessionWebSocketTaskProtocol {
   }
   
   func send(_ message: URLSessionWebSocketTask.Message) async throws {
-    
+      
   }
 }
 

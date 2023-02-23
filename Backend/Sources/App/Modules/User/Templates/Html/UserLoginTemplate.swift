@@ -9,29 +9,47 @@ import Vapor
 import SwiftHtml
 
 struct UserLoginTemplate: TemplateRepresentable {
-
-    var context: UserLoginContext
-    
-    init(_ context: UserLoginContext) {
-        self.context = context
-    }
-
-    @TagBuilder
-    func render(_ req: Request) -> Tag {
-        WebIndexTemplate(.init(title: context.title)) {
-            Div {
-                Section {
-                    P(context.icon)
-                    H1(context.title)
-                    P(context.message)
-                }
-                .class("lead")
-
-                context.form.render(req)
-            }
-            .id("user-login")
-            .class("container")
+  
+  var context: UserLoginContext
+  
+  init(_ context: UserLoginContext) {
+    self.context = context
+  }
+  
+  @TagBuilder
+  func render(_ req: Request) -> Tag {
+    WebIndexTemplate(.init(title: context.title)) {
+      Div {
+        Section {
+          P(context.icon)
+          H1(context.title)
+          P(context.message)
         }
-        .render(req)
+        .class("lead")
+        
+        context.form.render(req)
+        
+        if context.showForgotPassword {
+          Section {
+            A("Forgot your password?")
+              .href(UserRouter.Route.forgotPassword.href)
+              .target(.blank)
+            
+          }
+        }
+        
+        if context.showRegister {
+          Section {
+            A("Register")
+              .href(UserRouter.Route.register.href)
+              .target(.blank)
+          }
+        }
+        
+      }
+      .id("user-login")
+      .class("container")
     }
+    .render(req)
+  }
 }

@@ -16,7 +16,7 @@ struct BlogCategoryEditor: ModelEditorInterface {
         self.form = form
     }
 
-    @FormComponentBuilder
+    @ArrayBuilder<FormComponent>
     var formFields: [FormComponent] {
         InputField("title")
             .config {

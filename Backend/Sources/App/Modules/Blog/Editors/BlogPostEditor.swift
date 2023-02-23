@@ -23,7 +23,7 @@ struct BlogPostEditor: ModelEditorInterface {
         self.form = form
     }
 
-    @FormComponentBuilder
+    @ArrayBuilder<FormComponent>
     var formFields: [FormComponent] {
         ImageField("image", path: "blog/post")
             .read {

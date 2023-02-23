@@ -15,7 +15,7 @@ public protocol ModelEditorInterface: FormComponent {
     
     init(model: Model, form: AbstractForm)
         
-    @FormComponentBuilder
+    @ArrayBuilder<FormComponent>
     var formFields: [FormComponent] { get }
 }
 

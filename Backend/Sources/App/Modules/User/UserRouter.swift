@@ -9,6 +9,22 @@ import Vapor
 
 struct UserRouter: RouteCollection {
   
+  enum Route: String {
+    case signIn = "sign-in"
+    case forgotPassword = "forgot-password"
+    case deleteAccount = "delete-account"
+    case signOut = "sign-out"
+    case register = "register"
+    
+    var href : String {
+      "/\(rawValue)"
+    }
+    
+    var pathComponent: PathComponent {
+      return .constant(rawValue)
+    }
+  }
+  
   var dateProvider: DateProvider
   let frontendController = UserFrontendController()
   let apiController: UserApiController
@@ -22,13 +38,20 @@ struct UserRouter: RouteCollection {
   
   func bootFrontend(_ routes: RoutesBuilder) throws {
     routes
-      .get("sign-in", use: frontendController.signInView)
+      .get(Route.signIn.pathComponent, use: frontendController.signInView)
+    
+    routes
+      .get(Route.forgotPassword.pathComponent, use: frontendController.forgotPassword)
+    
+    routes
+      .get(Route.register.pathComponent, use: frontendController.register)
     
     routes
       .grouped(UserCredentialsAuthenticator())
       .post("sign-in", use: frontendController.signInAction)
     
-    routes.get("sign-out", use: frontendController.signOut)
+    routes
+      .get(Route.signOut.pathComponent, use: frontendController.signOut)
     
   }
   
