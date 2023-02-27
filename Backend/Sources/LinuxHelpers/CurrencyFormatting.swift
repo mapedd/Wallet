@@ -20,15 +20,17 @@ public extension Decimal {
       }
     }
     
+    
+#if canImport(Darwin)
     if #available(iOS 15.0, *) {
       return self.formatted(.currency(code: code))
     }
     else {
-#if canImport(Darwin)
       return safeImplementation(code)
-#else
-      return safeImplementation(code)
-#endif
     }
+#else
+    return safeImplementation(code)
+#endif
   }
+  
 }
