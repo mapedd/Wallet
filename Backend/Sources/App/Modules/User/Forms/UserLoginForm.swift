@@ -16,9 +16,9 @@ final class UserLoginForm: AbstractForm {
     self.init(
       action: .init(
         method: .post,
-        url: "/sign-in/"
+        url: mode.urlAction
       ),
-      submit: "Sign in"
+      submit: mode.titleAction
     )
     self.mode = mode
     self.fields = createFields()
@@ -35,7 +35,7 @@ final class UserLoginForm: AbstractForm {
         FormFieldValidator.required($1)
         FormFieldValidator.email($1)
       }
-    if mode == .signin {
+    if mode != .remindPassword {
       InputField("password")
         .config {
           $0.output.context.label.required = true
@@ -46,26 +46,4 @@ final class UserLoginForm: AbstractForm {
         }
     }
   }
-  
-  
-  //  @FormComponentBuilder
-  //  func createFields() -> [FormComponent] {
-  //    InputField("email")
-  //      .config {
-  //        $0.output.context.label.required = true
-  //        $0.output.context.type = .email
-  //      }
-  //      .validators {
-  //        FormFieldValidator.required($1)
-  //        FormFieldValidator.email($1)
-  //      }
-  //    InputField("password")
-  //      .config {
-  //        $0.output.context.label.required = true
-  //        $0.output.context.type = .password
-  //      }
-  //      .validators {
-  //        FormFieldValidator.required($1)
-  //      }
-  //  }
 }

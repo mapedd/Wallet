@@ -9,10 +9,12 @@ import Vapor
 
 struct UserFrontendController {
   
+  var userApiController: UserApiController
+  
   private func renderSignInView(_ req: Request, _ form: UserLoginForm) -> Response {
     let template = UserLoginTemplate(
-      .init(
-        mode: .signin,
+      context: .init(
+        mode: form.mode,
         form: form.render(req: req)
       )
     )
@@ -20,11 +22,11 @@ struct UserFrontendController {
   }
   
   func signInView(_ req: Request) async throws -> Response {
-    renderSignInView(req, .init())
+    renderSignInView(req, .init(mode: .signin))
   }
   
   func register(_ req: Request) async throws -> Response {
-    renderSignInView(req, .init(mode: .remindPassword))
+    renderSignInView(req, .init(mode: .register))
   }
   
   func forgotPassword(_ req: Request) async throws -> Response {
@@ -43,6 +45,15 @@ struct UserFrontendController {
       form.error = "Invalid email or password."
     }
     return renderSignInView(req, form)
+  }
+  
+  func registerAction(_ req: Request) async throws -> Response {
+    let user = try await userApiController.register(req: req)
+    return req.redirect(to: "/")
+  }
+  
+  func remindPasswordAction(_ req: Request) async throws -> Response {
+    return req.redirect(to: "/")
   }
   
   func signOut(req: Request) throws -> Response {

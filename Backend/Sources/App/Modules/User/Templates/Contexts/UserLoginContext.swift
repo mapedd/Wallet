@@ -11,7 +11,31 @@ struct UserLoginContext {
     case signin
     case register
     case remindPassword
+    
+    var urlAction: String {
+      switch self {
+      case .signin:
+        return UserRouter.Route.signIn.href
+      case .register:
+        return UserRouter.Route.register.href
+      case .remindPassword:
+        return UserRouter.Route.forgotPassword.href
+      }
+    }
+    
+    var titleAction: String {
+      switch self {
+      case .signin:
+        return "Sign in"
+      case .register:
+        return "Register"
+      case .remindPassword:
+        return "Send email"
+      }
+    }
   }
+  
+  
   
   var icon: String {
     "🤙"

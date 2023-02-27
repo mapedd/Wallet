@@ -7,6 +7,7 @@
 
 import Vapor
 import FluentKit
+import mailslurp
 
 extension User.Token.Detail: Content {}
 extension User.Account.Detail: Content {}
@@ -181,6 +182,45 @@ struct UserApiController {
     return ActionResult(success: true)
   }
   
+  func remindPassword(req: Request) async throws -> ActionResult {
+    return ActionResult(success: true)
+  }
+  
+  func send(to email: String) async throws -> Bool {
+    let sendOptions = SimpleSendEmailOptions(
+      senderId: UUID(),
+      to: email,
+      body: "hello",
+      subject: "welcome"
+    )
+    
+//   try await(
+//    CommonActionsControllerAPI.sendEmailSimpleWithRequestBuilder(simpleSendEmailOptions: sendOptions)
+//       .addHeader(name: "x-api-key", value: "d1575fc277bd18c02537cd1adb2c41a1608c346848e1c85c6970fb8d229a5d35")
+//       .execute()
+//       .done { response in
+//         // handle success
+//       }
+//       .catch(policy: .allErrors) { err in
+//         // handle error
+//         guard let e = err as? mailslurp.ErrorResponse else {
+//             print(err.localizedDescription)
+//             return
+//         }
+//         // pattern match the error to access status code and data
+//         // MailSlurp returns 4xx errors when invalid parameters or
+//         // unsatisfiable request. See the message and status code
+//         switch e {
+//         case .error(let statusCode, let data, _, _):
+//             let msg = String(decoding: data!, as: UTF8.self)
+//             let error = "\(statusCode) Bad request: \(msg)"
+//            print(error)
+//         }
+//   )
+    
+    return true
+  }
+  
   func register(req: Request) async throws -> User.Account.Detail {
     let login = try req.content.decode(User.Account.Login.self)
     
@@ -198,6 +238,35 @@ struct UserApiController {
       req.logger.error("error creating user \(error)")
       throw Abort(.conflict,reason: "user with this email already exists")
     }
+    
+//    let email = SendGridEmail(
+//      personalizations: nil,
+//      from: .init(email: login.email),
+//      replyTo: nil,
+//      subject: "Welcome, confirm your email",
+//      content: [["text/plain" : "Welcome, click here to confirm your email"]],
+//      attachments: nil,
+//      templateId: nil,
+//      sections: nil,
+//      headers: [:],
+//      categories: [],
+//      customArgs: [:],
+//      sendAt: .now,
+//      batchId: UUID().uuidString,
+//      asm: nil,
+//      ipPoolName: "",
+//      mailSettings: .init(),
+//      trackingSettings: .init()
+//    )
+//
+//    let _ = try await req
+//      .application
+//      .sendgrid
+//      .client
+//      .send(emails: [email], on: req.eventLoop)
+//      .get()
+    
+    try await send(to: login.email)
     
     return User.Account.Detail.init(
       id: user.id!,

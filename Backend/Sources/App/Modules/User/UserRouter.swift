@@ -26,14 +26,15 @@ struct UserRouter: RouteCollection {
   }
   
   var dateProvider: DateProvider
-  let frontendController = UserFrontendController()
-  let apiController: UserApiController
+  var frontendController: UserFrontendController
+  var apiController: UserApiController
   
   init(
     dateProvider: DateProvider
   ) {
     self.dateProvider = dateProvider
     self.apiController = .init(dateProvider: dateProvider)
+    self.frontendController = .init(userApiController: self.apiController)
   }
   
   func bootFrontend(_ routes: RoutesBuilder) throws {
@@ -48,7 +49,13 @@ struct UserRouter: RouteCollection {
     
     routes
       .grouped(UserCredentialsAuthenticator())
-      .post("sign-in", use: frontendController.signInAction)
+      .post(Route.signIn.pathComponent, use: frontendController.signInAction)
+    
+    routes
+      .get(Route.forgotPassword.pathComponent, use: frontendController.remindPasswordAction)
+    
+    routes
+      .post(Route.register.pathComponent, use: frontendController.registerAction)
     
     routes
       .get(Route.signOut.pathComponent, use: frontendController.signOut)
@@ -84,6 +91,10 @@ struct UserRouter: RouteCollection {
     routes
       .grouped("api")
       .post("register", use: apiController.register)
+    
+    routes
+      .grouped("api")
+      .post(Route.forgotPassword.pathComponent, use: apiController.remindPassword)
     
     routes
       .grouped("api")

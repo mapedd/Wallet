@@ -8,6 +8,7 @@
 import Vapor
 import Fluent
 import FluentSQLiteDriver
+//import SendGrid
 import Liquid
 import LiquidLocalDriver
 @_exported import AppApi
@@ -71,6 +72,8 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
   app.webSocket("channel") { _, ws in
     webSocketManager.connect(ws)
   }
+//
+//  app.sendgrid.initialize()
   
   /// use automatic database migration
   try app.autoMigrate().wait()

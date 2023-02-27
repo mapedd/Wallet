@@ -12,7 +12,7 @@ struct UserLoginTemplate: TemplateRepresentable {
   
   var context: UserLoginContext
   
-  init(_ context: UserLoginContext) {
+  init(context: UserLoginContext) {
     self.context = context
   }
   
@@ -33,7 +33,6 @@ struct UserLoginTemplate: TemplateRepresentable {
           Section {
             A("Forgot your password?")
               .href(UserRouter.Route.forgotPassword.href)
-              .target(.blank)
             
           }
         }
@@ -42,7 +41,6 @@ struct UserLoginTemplate: TemplateRepresentable {
           Section {
             A("Register")
               .href(UserRouter.Route.register.href)
-              .target(.blank)
           }
         }
         

@@ -18,7 +18,8 @@ let package = Package(
         .package(url: "https://github.com/binarybirds/liquid-local-driver", from: "1.3.0"),
         .package(url: "https://github.com/binarybirds/swift-html", from: "1.2.0"),
         .package(url: "https://github.com/binarybirds/spec", from: "1.2.0"),
-        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.7.0")
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.7.0"),
+        .package(url: "https://github.com/mailslurp/mailslurp-client-swift", from: "15.16.22")
     ],
     targets: [
         .target(name: "AppApi", dependencies: []),
@@ -30,6 +31,7 @@ let package = Package(
             .product(name: "LiquidLocalDriver", package: "liquid-local-driver"),
             .product(name: "SwiftHtml", package: "swift-html"),
             .product(name: "SwiftSvg", package: "swift-html"),
+            .product(name: "mailslurp", package: "mailslurp-client-swift"),
             .target(name: "AppApi")
         ]),
         .executableTarget(name: "Run", dependencies: ["App"]),
