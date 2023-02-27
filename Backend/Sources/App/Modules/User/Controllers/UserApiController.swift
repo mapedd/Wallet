@@ -206,34 +206,16 @@ struct UserApiController {
   }
   
   func checkValid(email: String) -> Bool {
-    let emailDetector = try? NSDataDetector(  // 1
-      types: NSTextCheckingResult.CheckingType.link.rawValue
-    )
-
-    let rangeOfStrToValidate = NSRange(  // 2
-      email.startIndex..<email.endIndex,
-      in: email
-    )
-
-    let matches = emailDetector?.matches(  // 3
-      in: email,
-      options: [],
-      range: rangeOfStrToValidate
-    )
-    
-    guard matches?.count == 1 else {  // 1
+    do {
+      let emailRegex = try NSRegularExpression(pattern: "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$", options: .caseInsensitive)
+      let textRange = NSRange(location: 0, length: email.count)
+      if emailRegex.firstMatch(in: email, options: [], range: textRange) != nil {
+        return true
+      } else {
+        return false
+      }
+    } catch  {
       return false
     }
-    let singleMatch = matches?.first
-
-    guard singleMatch?.range == rangeOfStrToValidate else {  // 2
-      return false
-    }
-
-    guard singleMatch?.url?.scheme == "mailto" else {  // 3
-      return false
-    }
-
-    return true
   }
 }

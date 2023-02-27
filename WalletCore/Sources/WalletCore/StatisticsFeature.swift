@@ -33,7 +33,7 @@ public struct Statistics: ReducerProtocol {
     public var baseCurrency: AppApi.Currency.Code
     
     public var formattedFilteredTotal: String {
-      return filteredTotal.formatted(.currency(code: baseCurrency))
+      return filteredTotal.formatted(currency: baseCurrency)
     }
     
     public enum DateRange: Identifiable, Hashable, CaseIterable {

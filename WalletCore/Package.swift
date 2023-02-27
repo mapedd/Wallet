@@ -29,6 +29,7 @@ let package = Package(
             name: "WalletCore",
             dependencies: [
               "AppApi",
+              .product(name: "LinuxHelpers", package: "AppApi"),
               .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
               .product(name: "SwiftUINavigation", package: "swiftui-navigation"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),

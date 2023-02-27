@@ -152,7 +152,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "609B14DE-E517-40E9-ADAE-C11E205D9666"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Middleware/FileMiddleware.swift"
@@ -162,38 +162,6 @@
             endingLineNumber = "63"
             landmarkName = "respond(to:chainingTo:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "609B14DE-E517-40E9-ADAE-C11E205D9666 - 4cbf65df7effcde8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Vapor.FileMiddleware.respond(to: Vapor.Request, chainingTo: Vapor.Responder) -&gt; NIOCore.EventLoopFuture&lt;Vapor.Response&gt;"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Middleware/FileMiddleware.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "1588">
-               </Location>
-               <Location
-                  uuid = "609B14DE-E517-40E9-ADAE-C11E205D9666 - ad83824849dd61b3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Vapor.FileMiddleware.respond(to: Vapor.Request, chainingTo: Vapor.Responder) -&gt; NIOCore.EventLoopFuture&lt;Vapor.Response&gt;"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Middleware/FileMiddleware.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "1588">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -247,54 +215,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6DE9BBDF-23A9-4DF4-A22D-D9BF5602E491"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
-            landmarkName = "register(req:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6DE9BBDF-23A9-4DF4-A22D-D9BF5602E491 - e50f377d091badd9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "193"
-                  endingLineNumber = "193"
-                  offsetFromSymbolStart = "468">
-               </Location>
-               <Location
-                  uuid = "6DE9BBDF-23A9-4DF4-A22D-D9BF5602E491 - 433d0ea3e390182"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "193"
-                  endingLineNumber = "193"
-                  offsetFromSymbolStart = "468">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "668F76A7-EAC7-447C-899E-256C8E5808F2"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -322,38 +242,6 @@
             endingLineNumber = "16"
             landmarkName = "register(collection:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5C1B4EA4-226B-4383-9699-3A1146B1FFF7 - c4387b078d9d63ea"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Vapor.RoutesBuilder.register(collection: Vapor.RouteCollection) throws -&gt; ()"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Routing/RouteCollection.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "16"
-                  endingLineNumber = "16"
-                  offsetFromSymbolStart = "56">
-               </Location>
-               <Location
-                  uuid = "5C1B4EA4-226B-4383-9699-3A1146B1FFF7 - 25049c90babfcfb1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Vapor.RoutesBuilder.register(collection: Vapor.RouteCollection) throws -&gt; ()"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/vapor/Sources/Vapor/Routing/RouteCollection.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "16"
-                  endingLineNumber = "16"
-                  offsetFromSymbolStart = "56">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -423,84 +311,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1ECDA620-6B99-4425-839A-DA6BF02CB6F4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "register(req:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1ECDA620-6B99-4425-839A-DA6BF02CB6F4 - e50f377d091baaa1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "120">
-               </Location>
-               <Location
-                  uuid = "1ECDA620-6B99-4425-839A-DA6BF02CB6F4 - bf2bc80b38964002"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "836">
-               </Location>
-               <Location
-                  uuid = "1ECDA620-6B99-4425-839A-DA6BF02CB6F4 - 433d0ea3e3906fa"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "120">
-               </Location>
-               <Location
-                  uuid = "1ECDA620-6B99-4425-839A-DA6BF02CB6F4 - 5e172f9c0fb4ec59"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "836">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "A4CF1F0F-7006-4165-AE2F-3B20CAE6F44E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -508,8 +318,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "signOut(req:)"
             landmarkType = "7">
             <Locations>
@@ -556,8 +366,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "181"
-            endingLineNumber = "181"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
             landmarkName = "signOut(req:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -572,8 +382,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "signOut(req:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -588,8 +398,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "signOut(req:)"
             landmarkType = "7">
             <Locations>
@@ -1131,8 +941,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
             landmarkName = "signInApi(req:)"
             landmarkType = "7">
             <Locations>
@@ -1407,8 +1217,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "signInApi(req:)"
             landmarkType = "7">
             <Locations>
@@ -1850,8 +1660,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "signOut(req:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2356,42 +2166,10 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
             landmarkName = "details(req:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5B390EF3-9DC0-4A25-BE2F-F6BF7877A670 - 57f30c97031e7e25"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "79"
-                  endingLineNumber = "79"
-                  offsetFromSymbolStart = "124">
-               </Location>
-               <Location
-                  uuid = "5B390EF3-9DC0-4A25-BE2F-F6BF7877A670 - b6cfeb00343cd27e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "79"
-                  endingLineNumber = "79"
-                  offsetFromSymbolStart = "124">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2404,42 +2182,10 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "details(req:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A50DA4A6-AE79-4A77-93FC-C8428015D141 - 57f30c97031e7e58"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "82"
-                  endingLineNumber = "82"
-                  offsetFromSymbolStart = "276">
-               </Location>
-               <Location
-                  uuid = "A50DA4A6-AE79-4A77-93FC-C8428015D141 - b6cfeb00343cd203"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "82"
-                  endingLineNumber = "82"
-                  offsetFromSymbolStart = "276">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2452,42 +2198,10 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "details(req:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "2288273A-62C8-414E-A2CE-CC17562092E6 - 42bcb3e0cf3f91b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87"
-                  offsetFromSymbolStart = "716">
-               </Location>
-               <Location
-                  uuid = "2288273A-62C8-414E-A2CE-CC17562092E6 - e5172ca93bd15540"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87"
-                  offsetFromSymbolStart = "716">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2500,42 +2214,10 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "details(req:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0030CE85-55F3-4F66-8757-FA94BFCF4028 - 42bcb3e0cf3f976"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
-                  offsetFromSymbolStart = "568">
-               </Location>
-               <Location
-                  uuid = "0030CE85-55F3-4F66-8757-FA94BFCF4028 - e5172ca93bd1552d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for App.UserApiController.details(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
-                  offsetFromSymbolStart = "568">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2548,8 +2230,8 @@
             filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "signOut(req:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2846,86 +2528,6 @@
                   offsetFromSymbolStart = "84">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "54D2C25B-DA22-4B26-9015-160856ABEB2B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/Run/main.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7D202319-9AB9-4C24-9C7D-4C564CDBBC9F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/Run/main.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "95D53D60-1A79-47F4-9EB9-304633B85D7F"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/Run/main.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C436E10D-C5CE-405E-A84A-E395C83C606C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/Run/main.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E417D44D-C108-4C11-9581-7A50B395B14E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/Run/main.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "unknown"
-            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3289,7 +2891,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "1C533925-4C22-40D9-9634-D1352EE3A0BF"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WalletCore/Sources/WalletCore/ContentFeature.swift"
@@ -3404,42 +3006,10 @@
             filePath = "Backend/Sources/App/configure.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
             landmarkName = "configure(_:dateProvider:)"
             landmarkType = "9">
-            <Locations>
-               <Location
-                  uuid = "F92B8C1F-C74C-45CC-AD44-729E22A3DF7C - 5381f42e4393769c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Vapor.Request) -&gt; Swift.String in App.configure(_: Vapor.Application, dateProvider: App.DateProvider) throws -&gt; ()"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/configure.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "48">
-               </Location>
-               <Location
-                  uuid = "F92B8C1F-C74C-45CC-AD44-729E22A3DF7C - b2bd13b974b1dac7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Vapor.Request) -&gt; Swift.String in App.configure(_: Vapor.Application, dateProvider: App.DateProvider) throws -&gt; ()"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/configure.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "48">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4238,114 +3808,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "register(req:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3 - e50f377d091bad3c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "636">
-               </Location>
-               <Location
-                  uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3 - fb077d766e774288"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3 - bf2bc80b3896479f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "Run"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "88">
-               </Location>
-               <Location
-                  uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3 - 433d0ea3e390167"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "636">
-               </Location>
-               <Location
-                  uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3 - 1a3b9ae15955eed3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  uuid = "CC2D8FFC-7A32-497E-A5BB-F9674FA430C3 - 5e172f9c0fb4ebc4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for App.UserApiController.register(req: Vapor.Request) async throws -&gt; AppApi.User.Account.Detail"
-                  moduleName = "WalletCoreIntegrationTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserApiController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "88">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "8B539347-E23E-4547-A641-E45E1FA042C5"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -4507,7 +3969,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "AECB4592-7E85-458B-AF95-2BC5A4CDB54D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Backend/Sources/App/Modules/Record/Controllers/RecordAPIController.swift"
@@ -4532,6 +3994,243 @@
             startingLineNumber = "112"
             endingLineNumber = "112"
             landmarkName = "createCategory(req:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "96C78655-E05C-4D7F-978E-39D7432291F7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "signInAction(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "96C78655-E05C-4D7F-978E-39D7432291F7 - ad58b18fffe68091"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for App.UserFrontendController.signInAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "644">
+               </Location>
+               <Location
+                  uuid = "96C78655-E05C-4D7F-978E-39D7432291F7 - 6d5b554ce52dbf9d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for App.UserFrontendController.signInAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "96C78655-E05C-4D7F-978E-39D7432291F7 - c4431944cb5318ed"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for App.UserFrontendController.signInAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4DB66857-23BB-4F32-8411-D890640EF432"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "signInAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F5497007-2E33-49C0-BD55-40BAEC707C75"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "signInAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9921FE06-23A7-4B7B-9368-67141420BA27"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "signInAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AEC84ECD-25F8-473F-8DB2-B5B41C98571B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "registerAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4DCED096-10E1-4D16-A14B-818FEE148945"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "registerAction(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4DCED096-10E1-4D16-A14B-818FEE148945 - d27bfe34c0c9d066"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "App.UserFrontendController.registerAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "188">
+               </Location>
+               <Location
+                  uuid = "4DCED096-10E1-4D16-A14B-818FEE148945 - e5a11c516dbbdb09"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) await resume partial function for App.UserFrontendController.registerAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "4DCED096-10E1-4D16-A14B-818FEE148945 - 1042609e6a9efd33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) suspend resume partial function for App.UserFrontendController.registerAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "4DCED096-10E1-4D16-A14B-818FEE148945 - ea9033a83f818332"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for App.UserFrontendController.registerAction(Vapor.Request) async throws -&gt; Vapor.Response"
+                  moduleName = "Run"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mapedd/Documents/Wallet/Backend/Sources/App/Modules/User/Controllers/UserFrontendController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0AA0B747-D38F-4007-9835-3B21B220EF2E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/sendgrid-kit/Sources/SendGridKit/SendGridClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "send(emails:on:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A5FB4A1-D106-4839-8A43-823FEFD420DB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/Wallet-adhiuzuyurvhglhfeyjsmapewbrm/SourcePackages/checkouts/sendgrid-kit/Sources/SendGridKit/SendGridClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "send(emails:on:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
