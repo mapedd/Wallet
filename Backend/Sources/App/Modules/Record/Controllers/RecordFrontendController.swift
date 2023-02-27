@@ -7,6 +7,7 @@
 
 
 import Vapor
+import LinuxHelpers
 import Fluent
 
 struct RecordFrontendController {
@@ -14,7 +15,7 @@ struct RecordFrontendController {
   var recordAPIController: RecordAPIController
   
   func totalTitle(_ sum: Decimal, code: String) -> String {
-    "Total: \(sum.formatted(.currency(code: code)))"
+    "Total: \(sum.formatted(currency: code)))"
   }
   
   func recordsView(req: Request) async throws -> Response {
