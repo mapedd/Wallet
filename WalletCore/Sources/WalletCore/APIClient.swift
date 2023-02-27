@@ -75,7 +75,7 @@ extension APIClient {
       keychain: keychain,
       authNetwork: authNetwork,
       dateProvider: .init(
-        currentDate: { .now }
+        currentDate: { Date() }
       )
     )
     
@@ -153,7 +153,7 @@ extension APIClient {
           amount: $0.amount,
           type: .expense,
           currencyCode: "usd",
-          created: .now,
+          created: Date(),
           updated: $0.updated
         )
       },

@@ -8,6 +8,7 @@
 
 import Vapor
 import SwiftHtml
+import LinuxHelpers
 
 extension UserRecordsContext {
   var tableContext: TableContext {
@@ -43,7 +44,7 @@ extension Record.Detail {
     type == .expense ? "-" : "+"
   }
   var formattedAmount: String {
-    sign + amount.formatted(.currency(code: currencyCode))
+    sign + amount.formatted(currency: currencyCode)
   }
 }
 

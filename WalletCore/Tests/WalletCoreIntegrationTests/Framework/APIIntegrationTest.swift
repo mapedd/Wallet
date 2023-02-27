@@ -65,7 +65,7 @@ class APIIntegrationTest: XCTestCase {
   
   
   func createTestApp(
-    dateProvider: App.DateProvider = .init(currentDate: { .now })
+    dateProvider: App.DateProvider = .init(currentDate: { Date() })
   ) throws -> Application {
     let app = Application(.testing)
     

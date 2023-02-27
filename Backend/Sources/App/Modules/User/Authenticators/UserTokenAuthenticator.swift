@@ -20,7 +20,7 @@ public struct DateProvider {
   }
   
   public var tokenExpiryDate: Date {
-    .now.addingTimeInterval(60)
+    Date().addingTimeInterval(60)
   }
 }
 

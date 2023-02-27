@@ -19,7 +19,7 @@ public struct DateProvider {
   }
 
   public static let live = DateProvider {
-    .now
+    Date()
   }
 
   public static let preview = DateProvider.live

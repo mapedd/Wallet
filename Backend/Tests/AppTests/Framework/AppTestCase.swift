@@ -18,7 +18,7 @@ class AppTestCase: XCTestCase {
     static let tomBob = UserLogin(email: "tom@bob.com", password: "abc")
   }
   
-  func createTestApp(dateProvider: DateProvider = .init(currentDate: { .now })) throws -> Application {
+  func createTestApp(dateProvider: DateProvider = .init(currentDate: { Date() })) throws -> Application {
     let app = Application(.testing)
     
     do {
