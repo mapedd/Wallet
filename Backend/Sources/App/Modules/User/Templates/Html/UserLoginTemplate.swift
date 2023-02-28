@@ -11,14 +11,17 @@ import SwiftHtml
 struct UserLoginTemplate: TemplateRepresentable {
   
   var context: UserLoginContext
-  
-  init(context: UserLoginContext) {
-    self.context = context
+
+  func indexTemplate(_ req:Request) -> WebIndexContext {
+    .init(
+      title: context.title,
+      showTopMenu: !req.application.environment.isComingSoon
+    )
   }
   
   @TagBuilder
   func render(_ req: Request) -> Tag {
-    WebIndexTemplate(.init(title: context.title)) {
+    WebIndexTemplate(indexTemplate(req)) {
       Div {
         Section {
           P(context.icon)

@@ -69,8 +69,13 @@
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "SENDGRID_API_KEY"
-            value = "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"
+            key = "COMING_SOON"
+            value = ""
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "SERVER_URL"
+            value = "http://www.portfelmapedd.online/"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

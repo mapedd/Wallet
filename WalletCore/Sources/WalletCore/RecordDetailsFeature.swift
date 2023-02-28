@@ -71,7 +71,7 @@ public struct RecordDetails: ReducerProtocol {
       }
       get {
         .init(
-          amount: record.amount.formatted(),
+          amount: record.amount.formatted(currency: record.currencyCode),
           title: record.title,
           notes: record.notes,
           currencyCode: record.currencyCode,

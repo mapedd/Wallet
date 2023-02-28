@@ -13,13 +13,37 @@ import Liquid
 import LiquidLocalDriver
 @_exported import AppApi
 
+
+extension Environment {
+  var isComingSoon: Bool {
+    Environment.get("COMING_SOON") != nil
+  }
+}
+
 public func configure(_ app: Application, dateProvider: DateProvider) throws {
   
   if app.environment == .testing {
     app.databases.use(.sqlite(.memory), as: .sqlite)
   } else {
     /// setup Fluent with a SQLite database under the Resources directory
-    let dbPath = app.directory.resourcesDirectory + "db.sqlite"
+    
+    let directory = app.directory.resourcesDirectory
+    
+    var isDir:ObjCBool = true
+    if !FileManager.default.fileExists(atPath: directory, isDirectory: &isDir) {
+      app.logger.notice("directory \(directory) for db does not exist, creating it")
+      try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+    } else {
+      app.logger.notice("directory \(directory) for db does exist")
+    }
+    
+    if app.environment.isComingSoon {
+      app.logger.notice("coming soon mode enabled")
+    } else {
+      app.logger.notice("coming soon mode disabled")
+    }
+    
+    let dbPath = directory + "db.sqlite"
     app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
   }
   

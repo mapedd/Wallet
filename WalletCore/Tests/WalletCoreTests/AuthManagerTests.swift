@@ -26,7 +26,7 @@ final class AuthManagerTests: XCTestCase {
     
     var currentDate: () -> Date
     
-    init(currentDate: @escaping () -> Date = { .now }) {
+    init(currentDate: @escaping () -> Date = { Date() }) {
       self.currentDate = currentDate
     }
     
@@ -137,7 +137,7 @@ final class AuthManagerTests: XCTestCase {
         harness.storedRefreshTokens.append(refreshToken)
         try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 30)
         return Harness.refreshedToken(
-          date: .now,
+          date: Date(),
           counter: harness.storedRefreshTokens.count
         )
       }

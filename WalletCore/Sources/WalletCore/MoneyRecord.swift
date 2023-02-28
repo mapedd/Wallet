@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LinuxHelpers
 
 public struct MoneyRecord: Equatable, Identifiable {
   
@@ -28,7 +29,7 @@ public struct MoneyRecord: Equatable, Identifiable {
     self.currencyCode = currencyCode
     self.categories = categories
   }
-
+  
   public enum RecordType: Equatable {
     case income
     case expense
@@ -57,9 +58,9 @@ public struct MoneyRecord: Equatable, Identifiable {
 }
 
 extension MoneyRecord {
-
+  
   public struct Category: Hashable, Identifiable {
-
+    
     public init(
       name: String,
       id: UUID,
@@ -69,12 +70,12 @@ extension MoneyRecord {
       self.id = id
       self.color = color
     }
-
-
+    
+    
     public var name: String
     public var id: UUID
     public var color: Int
-
+    
     public static var previews = [
       Category(name: "Food", id: .init(), color: 1),
       Category(name: "Car", id: .init(), color: 3),
@@ -84,7 +85,8 @@ extension MoneyRecord {
 }
 
 public extension MoneyRecord {
-    var formattedCopy : String {
-      "\(amount.formatted(.currency(code: currencyCode))) - \(title)"
-    }
+  var formattedCopy : String {
+    "\(amount.formatted(currency: currencyCode)) - \(title)"
+  }
 }
+
