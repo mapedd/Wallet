@@ -18,7 +18,15 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     app.databases.use(.sqlite(.memory), as: .sqlite)
   } else {
     /// setup Fluent with a SQLite database under the Resources directory
-    let dbPath = app.directory.resourcesDirectory + "db.sqlite"
+    
+    let directory = app.directory.resourcesDirectory
+    
+    var isDir:ObjCBool = true
+    if !FileManager.default.fileExists(atPath: directory, isDirectory: &isDir) {
+        try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+    }
+    
+    let dbPath = directory + "db.sqlite"
     app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
   }
   
