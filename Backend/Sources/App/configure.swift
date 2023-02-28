@@ -12,6 +12,13 @@ import Liquid
 import LiquidLocalDriver
 @_exported import AppApi
 
+
+extension Environment {
+  var isComingSoon: Bool {
+    Environment.get("COMING_SOON") != nil
+  }
+}
+
 public func configure(_ app: Application, dateProvider: DateProvider) throws {
   
   if app.environment == .testing {
