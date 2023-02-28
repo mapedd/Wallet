@@ -30,16 +30,16 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     
     var isDir:ObjCBool = true
     if !FileManager.default.fileExists(atPath: directory, isDirectory: &isDir) {
-      app.logger.info("directory \(directory) for db does not exist, creating it")
+      app.logger.notice("directory \(directory) for db does not exist, creating it")
       try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
     } else {
-      app.logger.info("directory \(directory) for db does exist")
+      app.logger.notice("directory \(directory) for db does exist")
     }
     
     if app.environment.isComingSoon {
-      app.logger.info("coming soon mode enabled")
+      app.logger.notice("coming soon mode enabled")
     } else {
-      app.logger.info("coming soon mode disabled")
+      app.logger.notice("coming soon mode disabled")
     }
     
     let dbPath = directory + "db.sqlite"
