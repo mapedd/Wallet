@@ -30,7 +30,16 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     
     var isDir:ObjCBool = true
     if !FileManager.default.fileExists(atPath: directory, isDirectory: &isDir) {
-        try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+      app.logger.info("directory \(directory) for db does not exist, creating it")
+      try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+    } else {
+      app.logger.info("directory \(directory) for db does exist")
+    }
+    
+    if app.environment.isComingSoon {
+      app.logger.info("coming soon mode enabled")
+    } else {
+      app.logger.info("coming soon mode disabled")
     }
     
     let dbPath = directory + "db.sqlite"
@@ -49,7 +58,7 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
   app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
   
   /// extend paths to always contain a trailing slash
-//  app.middleware.use(ExtendPathMiddleware())
+  //  app.middleware.use(ExtendPathMiddleware())
   
   /// setup sessions
   app.sessions.use(.fluent)
