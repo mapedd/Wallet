@@ -15,6 +15,7 @@ struct UserRouter: RouteCollection {
     case deleteAccount = "delete-account"
     case signOut = "sign-out"
     case register = "register"
+    case confirmPassword = "confirmPassword"
     
     var href : String {
       "/\(rawValue)"
@@ -60,6 +61,9 @@ struct UserRouter: RouteCollection {
     routes
       .get(Route.signOut.pathComponent, use: frontendController.signOut)
     
+    routes
+      .get(Route.confirmPassword.pathComponent, use: frontendController.confirmPassword)
+    
   }
   
   func bootAPI(_ routes: RoutesBuilder) throws {
@@ -99,6 +103,7 @@ struct UserRouter: RouteCollection {
     routes
       .grouped("api")
       .get("users", use: apiController.listAll)
+    
     
 //    routes
 //      .grouped("api")

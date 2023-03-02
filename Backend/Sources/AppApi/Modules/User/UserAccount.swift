@@ -44,6 +44,10 @@ public extension User.Account {
             self.id = id
             self.email = email
         }
+      
+      public var fullName: String {
+        "New User"
+      }
     }
     
     struct Create: Codable {

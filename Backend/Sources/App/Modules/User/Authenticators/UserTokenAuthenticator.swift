@@ -8,6 +8,12 @@
 import Vapor
 import Fluent
 
+extension TimeInterval {
+  static func minutes(_ minutes: Int) -> TimeInterval {
+    return TimeInterval(minutes) * 60
+  }
+}
+
 public struct DateProvider {
   public init(
     currentDate: @escaping () -> Date
@@ -19,8 +25,15 @@ public struct DateProvider {
     currentDate()
   }
   
+  public func emailConfirmationValid(date: Date) -> Bool {
+    if date + .minutes(30) > now {
+      return false
+    } else {
+      return true
+    }
+  }
   public var tokenExpiryDate: Date {
-    Date().addingTimeInterval(60)
+    now.addingTimeInterval(60)
   }
 }
 

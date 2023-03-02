@@ -185,41 +185,6 @@ struct UserApiController {
     return ActionResult(success: true)
   }
   
-  func send(to email: String) async throws -> Bool {
-//    let sendOptions = SimpleSendEmailOptions(
-//      senderId: UUID(),
-//      to: email,
-//      body: "hello",
-//      subject: "welcome"
-//    )
-    
-//   try await(
-//    CommonActionsControllerAPI.sendEmailSimpleWithRequestBuilder(simpleSendEmailOptions: sendOptions)
-//       .addHeader(name: "x-api-key", value: "d1575fc277bd18c02537cd1adb2c41a1608c346848e1c85c6970fb8d229a5d35")
-//       .execute()
-//       .done { response in
-//         // handle success
-//       }
-//       .catch(policy: .allErrors) { err in
-//         // handle error
-//         guard let e = err as? mailslurp.ErrorResponse else {
-//             print(err.localizedDescription)
-//             return
-//         }
-//         // pattern match the error to access status code and data
-//         // MailSlurp returns 4xx errors when invalid parameters or
-//         // unsatisfiable request. See the message and status code
-//         switch e {
-//         case .error(let statusCode, let data, _, _):
-//             let msg = String(decoding: data!, as: UTF8.self)
-//             let error = "\(statusCode) Bad request: \(msg)"
-//            print(error)
-//         }
-//   )
-    
-    return true
-  }
-  
   func register(req: Request) async throws -> User.Account.Detail {
     let login = try req.content.decode(User.Account.Login.self)
     
@@ -231,6 +196,7 @@ struct UserApiController {
       email: login.email,
       password: try Bcrypt.hash(login.password)
     )
+    
     do {
       try await user.create(on: req.db)
     } catch {
@@ -238,39 +204,60 @@ struct UserApiController {
       throw Abort(.conflict,reason: "user with this email already exists")
     }
     
-//    let email = SendGridEmail(
-//      personalizations: nil,
-//      from: .init(email: login.email),
-//      replyTo: nil,
-//      subject: "Welcome, confirm your email",
-//      content: [["text/plain" : "Welcome, click here to confirm your email"]],
-//      attachments: nil,
-//      templateId: nil,
-//      sections: nil,
-//      headers: [:],
-//      categories: [],
-//      customArgs: [:],
-//      sendAt: .now,
-//      batchId: UUID().uuidString,
-//      asm: nil,
-//      ipPoolName: "",
-//      mailSettings: .init(),
-//      trackingSettings: .init()
-//    )
-//
-//    let _ = try await req
-//      .application
-//      .sendgrid
-//      .client
-//      .send(emails: [email], on: req.eventLoop)
-//      .get()
+    let token = EmailConfirmationToken()
+    token.$user.id = user.id!
+    token.email = login.email
     
-    try await send(to: login.email)
+    do {
+      try await token.create(on: req.db)
+    } catch {
+      req.logger.error("error creating registration token \(error)")
+      throw Abort(.internalServerError)
+    }
+    
+//    let domain = "portfelmapedd.online"
+    let domain = "localhost:8080"
+    let domainSender = "portfelmapedd.online"
+    let productName = "Wallet"
+    
+    
+    let registerLink = "http://www.\(domain)/\(UserRouter.Route.confirmPassword.pathComponent)?token=\(try! token.requireID().uuidString)"
+    
+    req.logger.notice("registered user, generating confirm link: \(registerLink)")
+    
+    let query = MailerSendEmail.Request(
+      from: .init(
+        email: "welcome@\(domainSender)",
+        name: "Tomek"
+      ),
+      to: [
+        .init(
+          email: login.email,
+          name: "New user"
+        )
+      ],
+      subject: "Welcome to \(productName)!",
+      text: "",
+      html:  """
+        <p>You've requested to register your account. <a
+        href="\(registerLink)">
+        Click here</a> to confirm your email.
+        It's valid for only 30 minutes</p>
+        """
+    )
+    
+    try await req.sendRegistrationEmail(query: query)
+    
+    req.logger.notice("sent email confirmation from \(query.from.email) to \(query.to.first!.email)")
     
     return User.Account.Detail.init(
       id: user.id!,
       email: user.email
     )
+  }
+  
+  func resetPassword(_ req: Request) async throws -> ActionResult {
+    return .init(success: true)
   }
   
   func checkValid(email: String) -> Bool {
@@ -284,6 +271,61 @@ struct UserApiController {
       }
     } catch  {
       return false
+    }
+  }
+}
+
+enum MailerSendEmail {
+  struct Request: Content, Codable {
+    struct Address: Content, Codable {
+      let email: String
+      let name: String
+    }
+    let from: Address
+    let to: [Address]
+    
+    let subject: String
+    let text: String
+    let html: String
+  }
+  
+  struct Response: Content, Codable {
+    
+  }
+  
+  struct ValidationError: Codable, Swift.Error {
+    let message: String
+    let errors: [String: [String]]
+    
+    var localizedDescription: String {
+      message
+    }
+  }
+}
+
+extension Request {
+  func sendRegistrationEmail(query: MailerSendEmail.Request) async throws  {
+        
+    let url: URI = "https://api.mailersend.com/v1/email"
+    let apiKey = Environment.get("MAILERSEND_API_KEY")!
+    
+    let response = try await client.post(url) { req in
+        try req.query.encode(query)
+        req.headers.add(name: "Authorization", value: "Bearer \(apiKey)")
+    }
+        
+    do {
+      let validationError = try response.content.decode(MailerSendEmail.ValidationError.self)
+      
+      throw validationError
+    } catch { }
+    
+    if
+      response.status != .accepted &&
+      response.status != .ok
+    {
+      logger.error("error sending email \(response.status)")
+      throw Abort(.internalServerError)
     }
   }
 }

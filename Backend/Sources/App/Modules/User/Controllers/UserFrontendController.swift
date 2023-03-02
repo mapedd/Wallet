@@ -49,7 +49,14 @@ struct UserFrontendController {
   
   func registerAction(_ req: Request) async throws -> Response {
     let user = try await userApiController.register(req: req)
-    return req.redirect(to: "/")
+  
+    let template = UserInfoTemplate(
+      context: .init(
+        title: "Welcome \(user.fullName)",
+        message: "Please check your mailbox and confirm your email"
+      )
+    )
+    return req.templates.renderHtml(template)
   }
   
   func remindPasswordAction(_ req: Request) async throws -> Response {
@@ -61,4 +68,40 @@ struct UserFrontendController {
     req.session.unauthenticate(AuthenticatedUser.self)
     return req.redirect(to: "/")
   }
+  
+  func confirmPassword(req: Request) async throws  -> Response {
+    req.logger.notice("received email confirmation request")
+    let confirmEmail = try req.query.decode(ConfirmEmailToken.self)
+    req.logger.notice("will try to confirmation request with id \(confirmEmail.token)")
+    guard
+      let model = try await EmailConfirmationToken
+      .find(confirmEmail.token, on: req.db)
+    else {
+      throw Abort(.conflict)
+    }
+    
+    let user = try await model.$user.get(on: req.db)
+    
+    req.logger.notice("found confirmation token for user with id \(user.id!)!")
+    
+    let linkDead = UserInfoTemplate(context: .init(title: "Link invalid", message: "Link dead bro"))
+    guard
+      let tokenCreation = model.created,
+      !userApiController.dateProvider.emailConfirmationValid(date: tokenCreation)
+    else {
+      req.logger.notice("confirmation token expired")
+      return req.templates.renderHtml(linkDead)
+    }
+    
+    req.logger.notice("confirmation succeeded for user \(user.id!)")
+    user.emailConfirmed = userApiController.dateProvider.now
+    
+    try await user.save(on: req.db)
+    
+    return req.redirect(to: UserRouter.Route.signIn.href)
+  }
+}
+
+struct ConfirmEmailToken: Codable {
+  let token: UUID
 }
