@@ -24,6 +24,9 @@ struct UserRouter: RouteCollection {
     var pathComponent: PathComponent {
       return .constant(rawValue)
     }
+    var path: String {
+      "api\(href)"
+    }
   }
   
   var dateProvider: DateProvider

@@ -52,7 +52,7 @@ class AppTestCase: XCTestCase {
   
   func register(_ userLogin: UserLogin, _ app: Application) throws -> User.Account.Detail {
     var user: User.Account.Detail?
-    try app.test(.POST, "/api/register/", beforeRequest: { req in
+    try app.test(.POST, UserRouter.Route.register.path, beforeRequest: { req in
       try req.content.encode(userLogin)
     }, afterResponse: { res in
       XCTAssertContent(User.Account.Detail.self, res) { content in
@@ -106,8 +106,30 @@ class AppTestCase: XCTestCase {
     app: Application,
     login: UserLogin = .tomBob
   ) async throws -> User.Token.Detail {
+    primeForReceivingClientRequests(app)
     let _ = try register(login, app)
     return try authenticate(login, app)
+  }
+  
+  lazy var customClient: CustomClient = {
+    let client = CustomClient()
+    client.responseGenerator = { req in 
+      return ClientResponse(
+        status: .ok,
+        headers: HTTPHeaders(),
+        body: nil,
+        byteBufferAllocator: ByteBufferAllocator()
+      )
+    }
+    return client
+  }()
+  
+  // this mocks client on the application that can be used to do requestes to
+  // external resources
+  func primeForReceivingClientRequests(_ app: Application) {
+    let provider = Application.Clients.Provider.custom
+    app.storage[Application.CustomClientKey.self] = self.customClient
+    app.clients.use(provider)
   }
 }
 

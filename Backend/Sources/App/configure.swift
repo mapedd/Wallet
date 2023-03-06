@@ -18,6 +18,14 @@ extension Environment {
   var isComingSoon: Bool {
     Environment.get("COMING_SOON") != nil
   }
+  
+  var mailerSendApiKey: String {
+    if self == .testing {
+      return "TEST_API_KEY"
+    } else {
+      return Environment.get("MAILERSEND_API_KEY")!
+    }
+  }
 }
 
 public func configure(_ app: Application, dateProvider: DateProvider) throws {

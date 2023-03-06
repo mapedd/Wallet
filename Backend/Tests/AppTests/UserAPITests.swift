@@ -14,6 +14,8 @@ final class UserAPITests: AppTestCase {
   
   func testRegisterSignInSignOutCreatesAndThenRemovesTokenCreatesUser() async throws {
     let app = try createTestApp()
+    primeForReceivingClientRequests(app)
+    
     defer { app.shutdown() }
     
     // check db has no user
@@ -22,6 +24,11 @@ final class UserAPITests: AppTestCase {
     
     let userLogin = UserLogin(email: "tom@bob.com", password: "abc")
     let _ = try register(userLogin, app)
+    
+    
+    let email = try XCTUnwrap(customClient.requestsReceived.first)
+    XCTAssertEqual(email.url.host, "api.mailersend.com")
+    XCTAssertEqual(email.url.path, "/v1/email")
     
     // check db has the user
     let usersAfterRegister = try await UserAccountModel.query(on: app.db).filter(\.$email == "tom@bob.com").all()
@@ -43,7 +50,9 @@ final class UserAPITests: AppTestCase {
     let dateProvider = DateProvider(
       currentDate: { return date }
     )
+    
     let app = try createTestApp(dateProvider: dateProvider)
+    primeForReceivingClientRequests(app)
     defer { app.shutdown() }
     
     // check db has no user
@@ -69,5 +78,53 @@ final class UserAPITests: AppTestCase {
     let result = try signOut(token.token.value, app)
     
     XCTAssertTrue(result.success)
+  }
+}
+
+final class CustomClient: Client {
+  var eventLoop: EventLoop {
+    EmbeddedEventLoop()
+  }
+  var requestsReceived = [ClientRequest]()
+  var responseGenerator: (ClientRequest) -> ClientResponse = { _ in
+      .init()
+  }
+  
+  init() {
+    
+  }
+  
+  func send(_ request: ClientRequest) -> EventLoopFuture<ClientResponse> {
+    self.requestsReceived.append(request)
+    return self.eventLoop.makeSucceededFuture(responseGenerator(request))
+  }
+  
+  func delegating(to eventLoop: EventLoop) -> Client {
+    self
+  }
+}
+
+extension Application {
+  struct CustomClientKey: StorageKey {
+    typealias Value = CustomClient
+  }
+  
+  var customClient: CustomClient {
+    if let existing = self.storage[CustomClientKey.self] {
+      return existing
+    } else {
+      fatalError("custom client must be set here")
+      //      let new = CustomClient()
+      //      self.storage[CustomClientKey.self] = new
+      //      return new
+    }
+  }
+}
+
+extension Application.Clients.Provider {
+  static var custom: Self {
+    .init {
+      $0.clients.use { $0.customClient }
+    }
   }
 }

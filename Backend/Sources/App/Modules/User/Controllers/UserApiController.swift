@@ -246,7 +246,8 @@ struct UserApiController {
         """
     )
     
-    try await req.sendRegistrationEmail(query: query)
+    let apiKey = req.application.environment.mailerSendApiKey
+    try await req.sendRegistrationEmail(query: query, apiKey: apiKey)
     
     req.logger.notice("sent email confirmation from \(query.from.email) to \(query.to.first!.email)")
     
@@ -304,10 +305,12 @@ enum MailerSendEmail {
 }
 
 extension Request {
-  func sendRegistrationEmail(query: MailerSendEmail.Request) async throws  {
+  func sendRegistrationEmail(
+    query: MailerSendEmail.Request,
+    apiKey: String
+  ) async throws  {
         
     let url: URI = "https://api.mailersend.com/v1/email"
-    let apiKey = Environment.get("MAILERSEND_API_KEY")!
     
     let response = try await client.post(url) { req in
         try req.query.encode(query)
