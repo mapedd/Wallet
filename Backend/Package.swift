@@ -9,6 +9,7 @@ let package = Package(
     products: [
         .library(name: "AppApi", targets: ["AppApi"]),
         .library(name: "App", targets: ["App"]),
+        .library(name: "AppTestingHelpers", targets: ["AppTestingHelpers"]),
         .library(name: "LinuxHelpers", targets: ["LinuxHelpers"])
     ],
     dependencies: [
@@ -23,6 +24,9 @@ let package = Package(
     ],
     targets: [
         .target(name: "LinuxHelpers", dependencies: []),
+        .target(name: "AppTestingHelpers", dependencies: [
+          .product(name: "Vapor", package: "vapor")
+        ]),
         .target(name: "AppApi", dependencies: []),
         .target(name: "App", dependencies: [
             .product(name: "Vapor", package: "vapor"),
@@ -38,6 +42,7 @@ let package = Package(
         .executableTarget(name: "Run", dependencies: ["App"]),
         .testTarget(name: "AppTests", dependencies: [
             .target(name: "App"),
+            .target(name: "AppTestingHelpers"),
             .product(name: "XCTVapor", package: "vapor"),
             .product(name: "CustomDump", package: "swift-custom-dump"),
             .product(name: "Spec", package: "spec"),

@@ -12,6 +12,7 @@ import Vapor
 import App
 import XCTVapor
 import AppApi
+import AppTestingHelpers
 import ComposableArchitecture
 
 extension User.Account.Login {
@@ -52,6 +53,20 @@ class RegisterLoginTests: APIIntegrationTest {
       self.keychain = Keychain.preview
       self.app = try! Self.createTestApp()
       
+      let client = CustomClient()
+      client.responseGenerator = { req in
+        return ClientResponse(
+          status: .ok,
+          headers: HTTPHeaders(),
+          body: nil,
+          byteBufferAllocator: ByteBufferAllocator()
+        )
+      }
+      
+      let provider = Application.Clients.Provider.custom
+      app.storage[Application.CustomClientKey.self] = client
+      app.clients.use(provider)
+      
       let session = VaporTestSession(app: app)
       self.api = APIClient.live(
         keychain: keychain,
@@ -74,7 +89,7 @@ class RegisterLoginTests: APIIntegrationTest {
     
     func createUserAndSignIn() async throws {
       let user = User.Account.Login.sample
-      let response = try await api.register(.sample)
+      let _ = try await api.register(.sample)
       let login = try await api.signIn(user)
       if let login {
         keychain.saveToken(login.toLocalToken)

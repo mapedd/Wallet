@@ -144,8 +144,8 @@ public struct Main : ReducerProtocol {
   
   func deleting(_ record: MoneyRecord) -> EffectTask<Action> {
     var update = record.asUpdate
-    update.updated = dateProviderDate()
-    update.deleted = dateProviderDate()
+    update.updated = dateProvider.now
+    update.deleted = dateProvider.now
     
     return .task(
       operation: {[update] in 
@@ -170,7 +170,7 @@ public struct Main : ReducerProtocol {
       currencyCode: record.currencyCode,
       notes: record.notes,
       categoryIds: categoryIds,
-      updated: dateProviderDate()
+      updated: dateProvider.now
     )
     
     return .task(
@@ -234,7 +234,7 @@ public struct Main : ReducerProtocol {
             currencyCode: newRecord.currencyCode,
             notes: newRecord.notes,
             categoryIds: categories.map(\.id),
-            updated: dateProviderDate()
+            updated: dateProvider.now
           )
           
           return .task(
@@ -292,8 +292,8 @@ public struct Main : ReducerProtocol {
         
         let updates = records.map { recordState in
           var update = recordState.record.asUpdate
-          update.updated = dateProviderDate()
-          update.deleted = dateProviderDate()
+          update.updated = dateProvider.now
+          update.deleted = dateProvider.now
           return update
         }
         

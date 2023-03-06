@@ -54,7 +54,7 @@ actor AuthManager {
       throw AuthError.noTokenStored /// this means we need to login
     }
 
-    if token.isValid(dateProviderDate()) {
+    if token.isValid(dateProvider.now) {
       return token
     }
 

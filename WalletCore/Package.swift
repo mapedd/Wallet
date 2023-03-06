@@ -46,6 +46,7 @@ let package = Package(
         .testTarget(
             name: "WalletCoreIntegrationTests",
             dependencies: [
+              .product(name: "AppTestingHelpers", package: "AppApi"),
               "WalletCore",
               .product(name: "Vapor", package: "vapor"),
               .product(name: "XCTVapor", package: "vapor"),
