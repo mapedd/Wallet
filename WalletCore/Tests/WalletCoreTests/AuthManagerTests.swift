@@ -146,13 +146,15 @@ final class AuthManagerTests: XCTestCase {
     let task = Task {
       return try await harness.sut.validToken()
     }
-    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 30)
+    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 2)
     let task0 = Task {
       return try await harness.sut.validToken()
     }
+    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 2)
     let task1 = Task {
       return try await harness.sut.validToken()
     }
+    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 2)
     let task2 = Task {
       return try await harness.sut.validToken()
     }
