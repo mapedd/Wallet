@@ -185,6 +185,37 @@ struct UserApiController {
     return ActionResult(success: true)
   }
   
+  struct EmailConfirmationResend: Codable {
+    var email: String
+  }
+  
+  func resendEmailConfirmationEmail(req: Request) async throws -> ActionResult {
+    let query = try req.query.decode(EmailConfirmationResend.self)
+    let user = try await UserAccountModel
+      .query(on: req.db)
+      .filter(\.$email == query.email)
+      .first()
+    
+    guard let user else {
+      throw Abort(.notFound)
+    }
+    
+    let token = EmailConfirmationToken()
+    token.$user.id = user.id!
+    token.email = user.email
+    
+    do {
+      try await token.create(on: req.db)
+    } catch {
+      req.logger.error("error creating registration token \(error)")
+      throw Abort(.internalServerError)
+    }
+    
+    try await sendConfirmationEmail(req, email: user.email, token: token)
+    
+    return .init(success: true)
+  }
+  
   func register(req: Request) async throws -> User.Account.Detail {
     let login = try req.content.decode(User.Account.Login.self)
     
@@ -215,41 +246,7 @@ struct UserApiController {
       throw Abort(.internalServerError)
     }
     
-//    let domain = "portfelmapedd.online"
-    let domain = "localhost:8080"
-    let domainSender = "portfelmapedd.online"
-    let productName = "Wallet"
-    
-    
-    let registerLink = "http://www.\(domain)/\(UserRouter.Route.confirmPassword.pathComponent)?token=\(try! token.requireID().uuidString)"
-    
-    req.logger.notice("registered user, generating confirm link: \(registerLink)")
-    
-    let query = MailerSendEmail.Request(
-      from: .init(
-        email: "welcome@\(domainSender)",
-        name: "Tomek"
-      ),
-      to: [
-        .init(
-          email: login.email,
-          name: "New user"
-        )
-      ],
-      subject: "Welcome to \(productName)!",
-      text: "",
-      html:  """
-        <p>You've requested to register your account. <a
-        href="\(registerLink)">
-        Click here</a> to confirm your email.
-        It's valid for only 30 minutes</p>
-        """
-    )
-    
-    let apiKey = req.application.environment.mailerSendApiKey
-    try await req.sendRegistrationEmail(query: query, apiKey: apiKey)
-    
-    req.logger.notice("sent email confirmation from \(query.from.email) to \(query.to.first!.email)")
+    try await sendConfirmationEmail(req, email: login.email, token: token)
     
     return User.Account.Detail.init(
       id: user.id!,
@@ -272,6 +269,49 @@ struct UserApiController {
       }
     } catch  {
       return false
+    }
+  }
+  
+  private func sendConfirmationEmail(_ req: Request, email: String, token: EmailConfirmationToken) async throws {
+    
+//    let domain = "portfelmapedd.online"
+    let domain = "localhost:8080"
+    let domainSender = "portfelmapedd.online"
+    let productName = "Wallet"
+    let path = UserRouter.Route.confirmPassword.pathComponent
+    let tokenId = try token.requireID().uuidString
+    
+    let registerLink = "http://www.\(domain)/\(path)?token=\(tokenId)"
+    
+    req.logger.notice("registered user, generating confirm link: \(registerLink)")
+    
+    let query = MailerSendEmail.Request(
+      from: .init(
+        email: "welcome@\(domainSender)",
+        name: "Tomek"
+      ),
+      to: [
+        .init(
+          email: email,
+          name: "New user"
+        )
+      ],
+      subject: "Welcome to \(productName)!",
+      text: "",
+      html:  """
+        <p>You've requested to register your account. <a
+        href="\(registerLink)">
+        Click here</a> to confirm your email.
+        It's valid for only 30 minutes</p>
+        """
+    )
+    
+    if req.application.environment.emailsDisabled {
+      req.logger.notice("sending real emails disabled, email that would have been sent: \(query)")
+    } else {
+      let apiKey = req.application.environment.mailerSendApiKey
+      try await req.sendRegistrationEmail(query: query, apiKey: apiKey)
+      req.logger.notice("sent email confirmation from \(query.from.email) to \(query.to.first!.email)")
     }
   }
 }

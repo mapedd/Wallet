@@ -69,7 +69,7 @@ final class LoginFeatureTests: XCTestCase {
     await store.send(.logIn) {
       $0.loading = true
     }
-    await store.receive(.loggedIn(.sample), timeout: .seconds(1)) {
+    await store.receive(.loggedIn(.sample), timeout: 1) {
       $0.loading = false
     }
   }
@@ -87,7 +87,7 @@ final class LoginFeatureTests: XCTestCase {
     await store.send(.logIn) {
       $0.loading = true
     }
-    await store.receive(.loginFailed(.apiError(URLError(.cannotFindHost))), timeout: .seconds(1)) {
+    await store.receive(.loginFailed(.apiError(URLError(.cannotFindHost))), timeout: 1) {
       $0.loading = false
       $0.alert = .failed(.apiError(URLError(.cannotFindHost)))
     }

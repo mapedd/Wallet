@@ -29,6 +29,13 @@ public struct Content: ReducerProtocol {
   public enum State: Equatable {
     case loggedIn(Main.State)
     case loggedOut(Login.State)
+    
+    public var logOutCommandDisabled: Bool {
+      if case .loggedIn = self {
+        return false
+      }
+      return true
+    }
   }
   
   public enum Action {

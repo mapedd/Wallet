@@ -39,8 +39,8 @@ struct MainView : View {
       }
       .ignoresSafeArea(.all, edges: .all)
       .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
-      .onAppear{
-        viewStore.send(.mainViewAppeared)
+      .task {
+        viewStore.send(.task)
       }
     }
   }

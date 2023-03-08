@@ -18,7 +18,7 @@ public struct Main : ReducerProtocol {
   public init() {}
   
   public struct State: Equatable {
-    init(
+    public init(
       editorState: Editor.State = .init(currency: .usd),
       records: IdentifiedArrayOf<Record.State> = [],
       summaryState: Summary.State = .init(baseCurrencyCode: "USD"),

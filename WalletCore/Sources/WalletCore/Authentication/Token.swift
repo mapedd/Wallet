@@ -15,26 +15,37 @@ struct TokenProvider {
 
 
 public struct Token: Codable, Sendable {
+  
+  public init(
+    value: String,
+    validDate: Date,
+    refreshToken: String
+  ) {
+    self.value = value
+    self.validDate = validDate
+    self.refreshToken = refreshToken
+  }
+  
   public let value: String
   public let validDate: Date
   public let refreshToken: String
-
+  
   var encodable: Encodable {
     .init(token: self)
   }
-
+  
   func isValid(_ now: Date) -> Bool {
     validDate > now
   }
-
+  
   @objc(WalletToken) class Encodable: NSObject, NSCoding {
-
+    
     var token: Token?
-
+    
     init(token: Token) {
       self.token = token
     }
-
+    
     required init?(coder decoder: NSCoder) {
       guard
         let value = decoder.decodeObject(forKey: "value") as? String,
@@ -43,7 +54,7 @@ public struct Token: Codable, Sendable {
       else { return nil }
       token = Token(value: value, validDate: validDate, refreshToken: refreshToken)
     }
-
+    
     func encode(with encoder: NSCoder) {
       encoder.encode(token?.value, forKey: "value")
       encoder.encode(token?.validDate, forKey: "validDate")

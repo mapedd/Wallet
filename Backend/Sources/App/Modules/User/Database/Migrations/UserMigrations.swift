@@ -20,7 +20,8 @@ enum UserMigrations {
         .field(UserAccountModel.FieldKeys.v1.created, .string, .required)
         .field(UserAccountModel.FieldKeys.v1.updated, .string, .required)
         .field(UserAccountModel.FieldKeys.v1.deleted, .string)
-        .field(UserAccountModel.FieldKeys.v1.emailConfirmed, .string)
+//        .field(UserAccountModel.FieldKeys.v1.emailConfirmed, .string)
+        .field(UserAccountModel.FieldKeys.v1.emailConfirmed, .datetime)
         .unique(on: UserAccountModel.FieldKeys.v1.email)
         .create()
       

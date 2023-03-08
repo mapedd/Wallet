@@ -16,6 +16,7 @@ struct UserRouter: RouteCollection {
     case signOut = "sign-out"
     case register = "register"
     case confirmPassword = "confirmPassword"
+    case resend = "resend"
     
     var href : String {
       "/\(rawValue)"
@@ -78,13 +79,13 @@ struct UserRouter: RouteCollection {
     routes
       .grouped("api")
       .grouped(loginAuthenticator)
-      .post("sign-in", use: apiController.signInApi)
+      .post(Route.signIn.pathComponent, use: apiController.signInApi)
     
     
     routes
       .grouped("api")
       .grouped(tokenAuthenticator)
-      .get("sign-out", use: apiController.signOut)
+      .get(Route.signOut.pathComponent, use: apiController.signOut)
     
     routes
       .grouped("api")
@@ -97,7 +98,10 @@ struct UserRouter: RouteCollection {
     
     routes
       .grouped("api")
-      .post("register", use: apiController.register)
+      .post(Route.register.pathComponent, use: apiController.register)
+    
+    routes.grouped("api")
+      .get(Route.resend.pathComponent, use: apiController.resendEmailConfirmationEmail)
     
     routes
       .grouped("api")

@@ -64,7 +64,7 @@ private enum KeychainKey: DependencyKey {
 }
 
 extension DependencyValues {
-  var keychain: Keychain {
+  public var keychain: Keychain {
     get { self[KeychainKey.self] }
     set { self[KeychainKey.self] = newValue }
   }

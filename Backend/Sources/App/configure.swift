@@ -19,6 +19,10 @@ extension Environment {
     Environment.get("COMING_SOON") != nil
   }
   
+  var emailsDisabled: Bool {
+    Environment.get("DISABLE_EMAILS") != nil
+  }
+  
   var mailerSendApiKey: String {
     if self == .testing {
       return "TEST_API_KEY"

@@ -15,13 +15,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios tests
+### ios tests_app
 
 ```sh
-[bundle exec] fastlane ios tests
+[bundle exec] fastlane ios tests_app
 ```
 
 Builds and tests iOS app
+
+### ios tests_core
+
+```sh
+[bundle exec] fastlane ios tests_core
+```
+
+Builds and tests WalletCore
 
 ----
 
@@ -34,7 +42,15 @@ Builds and tests iOS app
 [bundle exec] fastlane mac tests_server
 ```
 
+Builds server and run unit tests
 
+### mac test_integration
+
+```sh
+[bundle exec] fastlane mac test_integration
+```
+
+bulds Core library and does integration tests app
 
 ### mac tests_mac_app
 
@@ -42,7 +58,7 @@ Builds and tests iOS app
 [bundle exec] fastlane mac tests_mac_app
 ```
 
-Builds and tests iOS app
+Builds and tests Mac app
 
 ----
 
