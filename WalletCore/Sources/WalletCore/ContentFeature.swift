@@ -42,7 +42,7 @@ public struct Content: ReducerProtocol {
     case loggedIn(Main.Action)
     case loggedOut(Login.Action)
     case successfullyLoggedOut
-    case viewLoaded
+    case task
   }
   
   @Dependency(\.apiClient) var apiClient
@@ -83,7 +83,7 @@ public struct Content: ReducerProtocol {
         keychain.saveToken(nil)
         state = .loggedOut(Login.State())
         return .none
-      case .viewLoaded:
+      case .task:
         if keychain.readToken() != nil {
           state = .loggedIn(Main.State())
         }

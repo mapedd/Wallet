@@ -27,7 +27,7 @@ struct MainView : View {
           )
         )
         .padding(20)
-
+        
         List {
           ForEachStore(
             self.store.scope(
@@ -53,19 +53,21 @@ struct MainView : View {
         EditButton()
       }
       .sheet(
-        isPresented: viewStore.binding(
-          get: \.showStatistics,
-          send: { $0 ? Main.Action.showStatistics : Main.Action.hideStatistics }
-        )
-      ) {
-        IfLetStore(
-          self.store.scope(
-            state: \.statistics,
-            action: Main.Action.statisticsAction
-          )
-        ) {
-          StatisticsView(store: $0)
+        store: self.store.scope(state: \.$statistics, action: Main.Action.statisticsAction)
+      ) { store in
+        NavigationStack {
+          StatisticsView(store: store)
+            .navigationTitle("Statistics")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+              ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                  viewStore.send(.statisticsAction(.dismiss))
+                }
+              }
+            }
         }
+        
       }
       .environment(
         \.editMode,

@@ -50,7 +50,7 @@ public struct Main : ReducerProtocol {
     public var summaryState: Summary.State
     public var title: String
     public var editMode: EditMode = .inactive
-    public var statistics: Statistics.State?
+    @PresentationState public var statistics: Statistics.State?
     public var categories: [MoneyRecord.Category]
     public var conversions: ConversionResult?
     
@@ -111,7 +111,7 @@ public struct Main : ReducerProtocol {
     case summaryAction(Summary.Action)
     case editModeChanged(State.EditMode)
     case delete(IndexSet)
-    case statisticsAction(Statistics.Action)
+    case statisticsAction(PresentationAction<Statistics.Action>)
     case detailsAction(Record.Action)
     case showStatistics
     case hideStatistics
@@ -415,7 +415,7 @@ public struct Main : ReducerProtocol {
     .forEach(\.records, action: /Action.recordAction(id:action:)) {
       Record()
     }
-    .ifLet(\.statistics, action: /Action.statisticsAction) {
+    .ifLet(\.$statistics, action: /Action.statisticsAction) {
       Statistics()
     }
     
