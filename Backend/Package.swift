@@ -10,7 +10,8 @@ let package = Package(
         .library(name: "AppApi", targets: ["AppApi"]),
         .library(name: "App", targets: ["App"]),
         .library(name: "AppTestingHelpers", targets: ["AppTestingHelpers"]),
-        .library(name: "LinuxHelpers", targets: ["LinuxHelpers"])
+        .library(name: "LinuxHelpers", targets: ["LinuxHelpers"]),
+        .library(name: "Utils", targets: ["Utils"])
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.7.0"),
@@ -24,6 +25,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "LinuxHelpers", dependencies: []),
+        .target(name: "Utils", dependencies: []),
         .target(name: "AppTestingHelpers", dependencies: [
           .product(name: "Vapor", package: "vapor")
         ]),
@@ -37,7 +39,8 @@ let package = Package(
             .product(name: "SwiftHtml", package: "swift-html"),
             .product(name: "SwiftSvg", package: "swift-html"),
             .target(name: "AppApi"),
-            .target(name: "LinuxHelpers")
+            .target(name: "LinuxHelpers"),
+            .target(name: "Utils")
         ]),
         .executableTarget(name: "Run", dependencies: ["App"]),
         .testTarget(name: "AppTests", dependencies: [

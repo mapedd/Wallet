@@ -52,13 +52,15 @@ public struct Login: ReducerProtocol {
     public init(
       username: String = "",
       password: String = "",
-      loading: Bool = false,
+      loggingIn: Bool = false,
+      registering: Bool = false,
       buttonsEnabled: Bool = false,
       alert: AlertState<Login.Action>? = nil
     ) {
       self.username = username
       self.password = password
-      self.loading = loading
+      self.loggingIn = loggingIn
+      self.registering = registering
       self.buttonsEnabled = buttonsEnabled
       self.alert = alert
       self.footerText = ""
@@ -66,10 +68,15 @@ public struct Login: ReducerProtocol {
     
     @BindingState public var username = ""
     @BindingState public var password = ""
-    public var loading = false
+    public var registering = false
+    public var loggingIn = false
     public var buttonsEnabled = false
-    public var alert: AlertState<Action>?
+    @PresentationState public var alert: AlertState<Action>?
     public var footerText: String
+    
+    public var textFieldsDisabled: Bool {
+      registering || loggingIn
+    }
   }
   
   public enum Action: BindableAction, Equatable {
@@ -92,92 +99,129 @@ public struct Login: ReducerProtocol {
   public var body: some ReducerProtocol<State, Action> {
     BindingReducer()
     Reduce { state, action in
-      if state.footerText.isEmpty {
-        let text: () -> String = {
-          let appVersion = infoDictionary[AppVersionKey] as! String
-          let build = infoDictionary[BuildNumberKey] as! String
-          return "Version \(appVersion)(\(build))\nServer \(apiClient.serverAddress)"
-        }
-        state.footerText = text()
-      }
+      
       switch action {
       case .emailResent:
+        state.alert = nil
         return .none
+        
       case .emailResentFailed:
+        state.alert = .problemResendingEmail
         return .none
+        
       case .task:
+        state.footerText = footer()
         return .none
+        
       case .sendEmailConfirmationTappedOnAlert:
-        let email = state.username
-        return .task(
-          operation: {
-            try await apiClient.resendEmailConfirmation(email)
-            return .emailResent
-          },
-          catch: { _ in
-            return .emailResentFailed
-          }
-        )
+        return triggerResendEmail(state)
+        
       case .alertCancelTapped:
         state.alert = nil
         return .none
+        
       case .binding(_):
-        state.buttonsEnabled = !state.username.isEmpty && !state.password.isEmpty
+        state.buttonsEnabled = buttonsEnabled(state)
         return .none
+        
       case .logIn:
-        state.loading = true
-        return .task(
-          operation: {[state] in
-            let login = User.Account.Login(
-              email: state.username,
-              password: state.password
-            )
-            let user = try await apiClient.signIn(login)
-            if let user {
-              return .loggedIn(user)
-            } else {
-              return .loginFailed(.apiError(Error.userNotFound))
-            }
-          },
-          catch: { error in
-            return .loginFailed(.apiError(error))
-          }
-        )
+        state.loggingIn = true
+        return triggerLoginEffect(state)
+        
       case .register:
-        state.loading = true
-        return .task(
-          operation: {[state] in
-            let login = User.Account.Login(
-              email: state.username,
-              password: state.password
-            )
-            let user = try await apiClient.register(login)
-            // we registered user, now we can log him in
-            if user != nil {
-              return .logIn
-            } else {
-              return .loginFailed(.apiError(Error.userNotFound))
-            }
-          },
-          catch: { error in
-            return .loginFailed(.apiError(error))
-          }
-        )
+        state.registering = true
+        return triggerRegisterEffect(state)
+        
       case .loggedIn:
-        state.loading = false
+        state.loggingIn = false
         // this should be handled on the higher level
         return .none
+        
       case .loginFailed(let reason):
-        state.loading = false
+        state.loggingIn = false
+        state.registering = false
         state.alert = .failed(reason)
         return .none
       }
     }
   }
   
+  func buttonsEnabled(_ state: State) -> Bool {
+    let empty = state.username.isEmpty || state.password.isEmpty
+    if empty {
+      return false
+    }
+    if state.registering {
+      return false
+    }
+    if state.loggingIn {
+      return false
+    }
+    return true
+  }
+  
+  func footer() -> String {
+    let appVersion = infoDictionary[AppVersionKey] as! String
+    let build = infoDictionary[BuildNumberKey] as! String
+    return "Version \(appVersion)(\(build))\nServer \(apiClient.serverAddress)"
+  }
+  
+  func triggerResendEmail(_ state: State) ->EffectTask<Action> {
+    .task(
+      operation: {
+        let _ = try await apiClient.resendEmailConfirmation(state.username)
+        return .emailResent
+      },
+      catch: { _ in
+        return .emailResentFailed
+      }
+    )
+  }
+  
+  func triggerRegisterEffect(_ state: State) -> EffectTask<Action> {
+    .task(
+      operation: {
+        let login = User.Account.Login(
+          email: state.username,
+          password: state.password
+        )
+        let user = try await apiClient.register(login)
+        // we registered user, now we can log him in
+        if user != nil {
+          return .logIn
+        } else {
+          return .loginFailed(.apiError(Error.userNotFound))
+        }
+      },
+      catch: { error in
+        return .loginFailed(.apiError(error))
+      }
+    )
+  }
+  
+  func triggerLoginEffect(_ state: State) -> EffectTask<Action> {
+    .task(
+      operation: {
+        let login = User.Account.Login(
+          email: state.username,
+          password: state.password
+        )
+        let user = try await apiClient.signIn(login)
+        if let user {
+          return .loggedIn(user)
+        } else {
+          return .loginFailed(.apiError(Error.userNotFound))
+        }
+      },
+      catch: { error in
+        return .loginFailed(.apiError(error))
+      }
+    )
+  }
+  
 }
 
-public extension AlertState {
+public extension AlertState<Login.Action> {
   static func failed(_ reason: Login.LoginFailureReason) -> AlertState<Login.Action> {
     switch reason {
     case .apiError(let error):
@@ -218,14 +262,14 @@ public extension AlertState {
         ) {
           TextState("No")
         }
-//        Button(
-//          action: .send(Login.Action.sendEmailConfirmationTappedOnAlert),
-//          label: {
-//            TextState("Yes")
-//          }
-//        )
+        ButtonState(
+          action: .send(.sendEmailConfirmationTappedOnAlert),
+          label: {
+            TextState("Yes")
+          }
+        )
       },
-      message: { .init("D you want to resend the confirmation email?") }
+      message: { .init("Dp you want to resend the confirmation email?") }
     )
   }
   
@@ -239,6 +283,19 @@ public extension AlertState {
           }
       },
       message: { .init("There's no user with this email/password")}
+    )
+  }
+  
+  static var problemResendingEmail: AlertState<Login.Action> {
+    .init(
+      title: { .init("Warning")},
+      actions: {
+        ButtonState(
+          role: .cancel) {
+            TextState("Ok")
+          }
+      },
+      message: { .init("Problem occured during re-sending confirmation email")}
     )
   }
 }

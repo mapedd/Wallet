@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Utils
 
 final class UserLoginForm: AbstractForm {
   

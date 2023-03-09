@@ -1,9 +1,6 @@
 //
-//  File.swift
+//  ArrayBuilder.swift
 //  
-//
-//  Created by Tibor Bodecs on 2022. 01. 01..
-//
 
 @resultBuilder
 public struct ArrayBuilder<Element> {

@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Utils
 
 struct BlogCategoryEditor: ModelEditorInterface {
     let model: BlogCategoryModel

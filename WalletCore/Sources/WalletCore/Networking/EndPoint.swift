@@ -7,6 +7,32 @@
 
 import Foundation
 import AppApi
+import Utils
+
+
+extension String {
+  func stringByAddingPercentEncodingForRFC3986() -> String? {
+    let unreserved = "-._~/?"
+    let allowed = NSMutableCharacterSet.alphanumeric()
+    allowed.addCharacters(in: unreserved)
+    return addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)
+  }
+}
+
+extension String {
+  
+  func adding(query items: [URLQueryItem]) -> String {
+    var components = URLComponents(string: self)
+    let safeItems = items.map {
+      URLQueryItem(
+        name: $0.name,
+        value: $0.value?.stringByAddingPercentEncodingForRFC3986()
+      )
+    }
+    components?.queryItems = safeItems
+    return components!.url!.absoluteString
+  }
+}
 
 
 enum Endpoint {
@@ -23,17 +49,24 @@ enum Endpoint {
       case .list:
         return "currency/list"
       case .conversions(let base, let currencies):
-          var components = URLComponents(string: "currency/conversions")
-          var queryItems = [
-            URLQueryItem(name: "baseCurrency", value: base)
-          ]
+        
+//        var items = [
+//          URLQueryItem(name: "baseCurrency", value: base)
+//        ]
+//        if !currencies.isEmpty {
+//          items.append(
+//            URLQueryItem(name: "currencies", value: currencies.joined(separator: ","))
+//          )
+//        }
+        
+        let items = Array {
+          URLQueryItem(name: "baseCurrency", value: base)
           if !currencies.isEmpty {
-              queryItems.append(
-                URLQueryItem(name: "currencies", value: currencies.joined(separator: ","))
-              )
+            URLQueryItem(name: "currencies", value: currencies.joined(separator: ","))
           }
-          components?.queryItems = queryItems
-          return components!.url!.absoluteString
+        }
+        
+        return "currency/conversions".adding(query: items)
       }
     }
   }
@@ -93,7 +126,7 @@ enum Endpoint {
     
     var isAuthenticated: Bool {
       switch self {
-        case .signIn, .register:
+      case .signIn, .register, .resendEmailConfirmation:
         return false
       default:
         return true
@@ -126,7 +159,8 @@ enum Endpoint {
       case .refreshToken:
         return "refresh-token/"
       case .resendEmailConfirmation(let email):
-        return "resend/email=\(email)"
+        let items = [URLQueryItem(name: "email", value: email)]
+        return "resend".adding(query: items)
       }
     }
   }
@@ -135,7 +169,7 @@ enum Endpoint {
   case record(Record)
   case currency(Currency)
   case category(Category)
-
+  
   var httpMethod: HTTPMethod {
     switch self {
     case .auth(let auth):
@@ -148,7 +182,7 @@ enum Endpoint {
       return category.httpMethod
     }
   }
-
+  
   var path: String {
     switch self {
     case .auth(let auth):
@@ -161,7 +195,7 @@ enum Endpoint {
       return category.path
     }
   }
-
+  
   var isAuthenticated: Bool {
     switch self {
     case .auth(let auth):

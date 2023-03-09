@@ -26,19 +26,32 @@ struct LoginView: View {
             text: viewStore.binding(\.$password)
           )
         }
+        .disabled(viewStore.textFieldsDisabled)
         
         Section {
-          Button("Log me in ") {
-            viewStore.send(.logIn)
+          HStack {
+            Button("Log me in ") {
+              viewStore.send(.logIn)
+            }
+            .disabled(!viewStore.buttonsEnabled)
+            Spacer()
+            if viewStore.loggingIn {
+              ProgressView()
+            }
           }
-          .disabled(!viewStore.buttonsEnabled)
         }
         
         Section {
-          Button("Register ") {
-            viewStore.send(.register)
+          HStack {
+            Button("Register ") {
+              viewStore.send(.register)
+            }
+            .disabled(!viewStore.buttonsEnabled)
+            Spacer()
+            if viewStore.registering {
+              ProgressView()
+            }
           }
-          .disabled(!viewStore.buttonsEnabled)
         }
         
         Section(content: {}, header: {
@@ -48,10 +61,7 @@ struct LoginView: View {
       .task {
         viewStore.send(.task)
       }
-      .alert(
-          self.store.scope(state: \.alert),
-          dismiss: .alertCancelTapped
-        )
+      .alert(self.store.scope(state: \.alert), dismiss: .alertCancelTapped)
     }
   }
 }

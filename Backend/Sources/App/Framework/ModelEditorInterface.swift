@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Utils
 
 public protocol ModelEditorInterface: FormComponent {
     associatedtype Model: DatabaseModelInterface

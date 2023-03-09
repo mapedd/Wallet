@@ -191,9 +191,12 @@ struct UserApiController {
   
   func resendEmailConfirmationEmail(req: Request) async throws -> ActionResult {
     let query = try req.query.decode(EmailConfirmationResend.self)
+    guard let email = query.email.removingPercentEncoding else {
+      throw Abort(.notFound)
+    }
     let user = try await UserAccountModel
       .query(on: req.db)
-      .filter(\.$email == query.email)
+      .filter(\.$email == email)
       .first()
     
     guard let user else {
