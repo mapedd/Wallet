@@ -12,6 +12,7 @@ import XCTestDynamicOverlay
 extension APIClient {
   static var test: APIClient {
     .init(
+      serverAddress: "",
       signIn: { _ in
         XCTFail("unimplemented")
         return nil
@@ -23,6 +24,10 @@ extension APIClient {
       register: {_ in
         XCTFail("unimplemented")
         return nil
+      },
+      resendEmailConfirmation: { _ in
+        XCTFail("unimplemented")
+        return .init(success: false)
       },
       updateRecord: { _ in
         XCTFail("unimplemented")

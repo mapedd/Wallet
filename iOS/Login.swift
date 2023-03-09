@@ -13,10 +13,8 @@ struct LoginView: View {
   var store: StoreOf<Login>
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      ScrollView {
-        VStack {
-          Spacer()
-          Text("Wallet")
+      Form {
+        Section {
           TextField("Email",
             text: viewStore.binding(\.$username)
           )
@@ -27,17 +25,28 @@ struct LoginView: View {
           SecureField("Password",
             text: viewStore.binding(\.$password)
           )
+        }
+        
+        Section {
           Button("Log me in ") {
             viewStore.send(.logIn)
           }
           .disabled(!viewStore.buttonsEnabled)
-          Spacer().frame(height: 100)
+        }
+        
+        Section {
           Button("Register ") {
             viewStore.send(.register)
           }
           .disabled(!viewStore.buttonsEnabled)
         }
-        .padding()
+        
+        Section(content: {}, header: {
+          Text(viewStore.footerText)
+        }) {}
+      }
+      .task {
+        viewStore.send(.task)
       }
       .alert(
           self.store.scope(state: \.alert),
@@ -49,11 +58,14 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
   static var previews: some View {
-    LoginView(
-      store: .init(
-        initialState: .init(),
-        reducer: Login()
+    NavigationStack {
+      LoginView(
+        store: .init(
+          initialState: .init(),
+          reducer: Login()
+        )
       )
-    )
+      .navigationTitle("Wallet")
+    }
   }
 }

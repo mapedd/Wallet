@@ -9,6 +9,17 @@ import Foundation
 import AppApi
 
 
+
+struct BackendError: Error, Codable {
+  var message: String
+  var details: [String]
+  
+  var readableDescription: String {
+    String(describing: self)
+  }
+}
+
+
 class URLClient {
   
   lazy var encoder: JSONEncoder = {
@@ -154,15 +165,6 @@ class URLClient {
       throw error
     }
     
-  }
-  
-  struct BackendError: Error, Codable {
-    var message: String
-    var details: [String]
-    
-    var readableDescription: String {
-      String(describing: self)
-    }
   }
   
   private func fetchData(

@@ -89,6 +89,7 @@ enum Endpoint {
     case signOut
     case register(User.Account.Login)
     case refreshToken(User.Token.Refresh)
+    case resendEmailConfirmation(String)
     
     var isAuthenticated: Bool {
       switch self {
@@ -109,6 +110,8 @@ enum Endpoint {
         return .POST(token)
       case .signOut:
         return .GET
+      case .resendEmailConfirmation:
+        return .GET
       }
     }
     
@@ -122,6 +125,8 @@ enum Endpoint {
         return "register/"
       case .refreshToken:
         return "refresh-token/"
+      case .resendEmailConfirmation(let email):
+        return "resend/email=\(email)"
       }
     }
   }

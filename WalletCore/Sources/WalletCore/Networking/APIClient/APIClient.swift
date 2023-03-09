@@ -10,9 +10,12 @@ import AppApi
 
 public struct APIClient {
   
+  public var serverAddress: String
+  
   public var signIn: (User.Account.Login) async throws -> User.Token.Detail?
   public var signOut: () async throws -> ActionResult
   public var register: (User.Account.Login) async throws -> User.Account.Detail?
+  public var resendEmailConfirmation: (String) async throws -> ActionResult
   public var updateRecord: (AppApi.Record.Update) async throws -> AppApi.Record.Detail?
   public var listRecords: () async throws -> [AppApi.Record.Detail]
   

@@ -65,6 +65,7 @@ extension APIClient {
     )
     
     return APIClient(
+      serverAddress: url.absoluteString,
       signIn: { login in
         try await urlClient.fetch(endpoint: Endpoint.auth(.signIn(login)))
       },
@@ -73,6 +74,9 @@ extension APIClient {
       },
       register: { login in
         try await urlClient.fetch(endpoint: Endpoint.auth(.register(login)))
+      },
+      resendEmailConfirmation: { email in
+        try await urlClient.fetch(endpoint: Endpoint.auth(.resendEmailConfirmation(email)))
       },
       updateRecord: { record in
         try await urlClient.fetch(endpoint: Endpoint.record(.updateRecord(record)))

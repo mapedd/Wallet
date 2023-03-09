@@ -10,8 +10,11 @@ import ComposableArchitecture
 import AppApi
 import SwiftUINavigation
 
-public struct Login: ReducerProtocol {
+let AppVersionKey = "CFBundleShortVersionString"
+let BuildNumberKey = "CFBundleVersion"
 
+public struct Login: ReducerProtocol {
+  
   public init() {}
   
   public enum LoginFailureReason: Hashable {
@@ -58,31 +61,63 @@ public struct Login: ReducerProtocol {
       self.loading = loading
       self.buttonsEnabled = buttonsEnabled
       self.alert = alert
+      self.footerText = ""
     }
-
+    
     @BindingState public var username = ""
     @BindingState public var password = ""
     public var loading = false
     public var buttonsEnabled = false
     public var alert: AlertState<Action>?
+    public var footerText: String
   }
   
   public enum Action: BindableAction, Equatable {
+    case task
     case binding(BindingAction<State>)
     case logIn
     case register
     case loggedIn(User.Token.Detail)
     case loginFailed(LoginFailureReason)
     case alertCancelTapped
+    case sendEmailConfirmationTappedOnAlert
+    case emailResent
+    case emailResentFailed
   }
   
   
   @Dependency(\.apiClient) var apiClient
+  @Dependency(\.infoDictionary) var infoDictionary
   
   public var body: some ReducerProtocol<State, Action> {
     BindingReducer()
     Reduce { state, action in
+      if state.footerText.isEmpty {
+        let text: () -> String = {
+          let appVersion = infoDictionary[AppVersionKey] as! String
+          let build = infoDictionary[BuildNumberKey] as! String
+          return "Version \(appVersion)(\(build))\nServer \(apiClient.serverAddress)"
+        }
+        state.footerText = text()
+      }
       switch action {
+      case .emailResent:
+        return .none
+      case .emailResentFailed:
+        return .none
+      case .task:
+        return .none
+      case .sendEmailConfirmationTappedOnAlert:
+        let email = state.username
+        return .task(
+          operation: {
+            try await apiClient.resendEmailConfirmation(email)
+            return .emailResent
+          },
+          catch: { _ in
+            return .emailResentFailed
+          }
+        )
       case .alertCancelTapped:
         state.alert = nil
         return .none
@@ -143,7 +178,7 @@ public struct Login: ReducerProtocol {
 }
 
 public extension AlertState {
-  static func failed(_ reason: Login.LoginFailureReason) -> AlertState {
+  static func failed(_ reason: Login.LoginFailureReason) -> AlertState<Login.Action> {
     switch reason {
     case .apiError(let error):
       if let error = error as? AuthError { // user not registered
@@ -151,12 +186,17 @@ public extension AlertState {
           return userNotRegistered
         }
       }
+      if let error = error as? BackendError {
+        if error.message == "user not verified email" {
+          return emailNotVerified
+        }
+      }
     }
-
+    
     return genericAlert(reason)
   }
-
-  static func genericAlert(_ reason: Login.LoginFailureReason) -> AlertState {
+  
+  static func genericAlert(_ reason: Login.LoginFailureReason) -> AlertState<Login.Action> {
     .init(
       title: { .init("Warning")},
       actions: {
@@ -168,8 +208,28 @@ public extension AlertState {
       message: { .init("Something went wrong...\(reason.description)") }
     )
   }
-
-  static var userNotRegistered : AlertState {
+  
+  static var emailNotVerified: AlertState<Login.Action> {
+    .init(
+      title: { .init("Email not verified")},
+      actions: {
+        ButtonState(
+          role: .cancel
+        ) {
+          TextState("No")
+        }
+//        Button(
+//          action: .send(Login.Action.sendEmailConfirmationTappedOnAlert),
+//          label: {
+//            TextState("Yes")
+//          }
+//        )
+      },
+      message: { .init("D you want to resend the confirmation email?") }
+    )
+  }
+  
+  static var userNotRegistered : AlertState<Login.Action> {
     .init(
       title: { .init("Hold on")},
       actions: {

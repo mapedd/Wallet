@@ -11,6 +11,7 @@ import AppApi
 extension APIClient {
   static var preview: APIClient {
     .init(
+      serverAddress: "preview",
       signIn: { _ in
         User.Token.Detail(
           id: .init(),
@@ -31,6 +32,9 @@ extension APIClient {
             id: UUID(),
             email: "email"
           )
+      },
+      resendEmailConfirmation: { _ in
+        .init(success: true)
       },
       updateRecord: {
         .init(
