@@ -22,7 +22,7 @@ final class ContentFeatureTests: XCTestCase {
     }
     
     XCTAssertEqual(store.state.logOutCommandDisabled, true)
-    await store.send(.viewLoaded)
+    await store.send(.task)
     XCTAssertEqual(store.state.logOutCommandDisabled, true)
   }
   
@@ -36,7 +36,7 @@ final class ContentFeatureTests: XCTestCase {
     }
     
     keychain.saveToken(Token(value: "value", validDate: Date(), refreshToken: "refresh"))
-    await store.send(.viewLoaded) {
+    await store.send(.task) {
       $0 = .loggedIn(Main.State())
     }
     XCTAssertEqual(store.state.logOutCommandDisabled, false)
