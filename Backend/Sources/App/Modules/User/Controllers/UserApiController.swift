@@ -331,6 +331,10 @@ enum MailerSendEmail {
     let subject: String
     let text: String
     let html: String
+    
+    static var defaultContentType: HTTPMediaType {
+      .json
+    }
   }
   
   struct Response: Content, Codable {
@@ -354,11 +358,13 @@ extension Request {
   ) async throws  {
         
     let url: URI = "https://api.mailersend.com/v1/email"
+    let headers: HTTPHeaders = ["Authorization" : "Bearer \(apiKey)"]
+    let response = try await client.post(url, headers: headers, content: query)
     
-    let response = try await client.post(url) { req in
-        try req.query.encode(query)
-        req.headers.add(name: "Authorization", value: "Bearer \(apiKey)")
-    }
+//    let response = try await client.post(url) { req in
+//        try req.content.encode(query)
+//        req.headers.add(name: "Authorization", value: "Bearer \(apiKey)")
+//    }
         
     do {
       let validationError = try response.content.decode(MailerSendEmail.ValidationError.self)
