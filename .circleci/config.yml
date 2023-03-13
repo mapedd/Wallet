@@ -1,78 +1,30 @@
 # .circleci/config.yml
 version: 2.1
 jobs:
-  build-and-test_ios:
+  build-and-test_all:
     macos:
       xcode: 14.2.0
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: ios tests
     steps:
       - run: brew install vapor
       - checkout
       - run: bundle install
       - run:
           name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
-
-  build-and-test_mac:
-    macos:
-      xcode: 14.2.0
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: mac tests_mac_app
-    steps:
-      - run: brew install vapor
-      - checkout
-      - run: bundle install
+          command: bundle exec fastlane ios tests_app
       - run:
           name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
-          
-  build-and-test_server:
-    macos:
-      xcode: 14.2.0
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: mac tests_server
-    steps:
-      - run: brew install vapor
-      - checkout
-      - run: bundle install
+          command: bundle exec fastlane ios tests_core
       - run:
           name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
-
-  adhoc:
-    macos:
-      xcode: 14.2.1
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: adhoc
-    steps:
-      - checkout
-      - run: bundle install
+          command: bundle exec fastlane mac tests_server
       - run:
           name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
+          command: bundle exec fastlane mac test_integration
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane mac tests_mac_app
 
 workflows:
   build-test:
     jobs:
-      - build-and-test_ios
-      - build-and-test_mac
-      - build-and-test_server
+      - build-and-test_all

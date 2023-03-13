@@ -69,7 +69,7 @@ final class RecordAPITests: AppTestCase {
   
   func testCreatingRecords() async throws { 
     let app = try createTestApp()
-    primeForReceivingClientRequests(app)
+    
     defer {
       app.shutdown()
     }

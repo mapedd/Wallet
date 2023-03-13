@@ -57,6 +57,7 @@ enum UserMigrations {
       let email = "root@localhost.com"
       let password = "ChangeMe1"
       let user = UserAccountModel(email: email, password: try Bcrypt.hash(password))
+      user.emailConfirmed = Date()
       try await user.create(on: db)
     }
     

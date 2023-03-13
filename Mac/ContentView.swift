@@ -33,7 +33,7 @@ struct ContentView: View {
           }
         }
         .onAppear{
-          viewStore.send(.viewLoaded)
+          viewStore.send(.task)
         }
       }
     }

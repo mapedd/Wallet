@@ -25,8 +25,7 @@ let package = Package(
     ),
     .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
     .package(url: "https://github.com/vapor/vapor", from: "4.54.0"),
-    .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
-    .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.5.3"),
+    .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0")
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -55,7 +54,6 @@ let package = Package(
       dependencies: [
         .product(name: "AppTestingHelpers", package: "AppApi"),
         "WalletCore",
-        "SwiftSoup",
         .product(name: "Vapor", package: "vapor"),
         .product(name: "XCTVapor", package: "vapor"),
         .product(name: "App", package: "AppApi")

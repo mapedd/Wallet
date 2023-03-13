@@ -9,12 +9,13 @@
 import XCTVapor
 import FluentKit
 import XCTest
+import AppTestingHelpers
 
 final class UserAPITests: AppTestCase {
   
   func testRegisterSignInSignOutCreatesAndThenRemovesTokenCreatesUser() async throws {
     let app = try createTestApp()
-    primeForReceivingClientRequests(app)
+    
     
     defer { app.shutdown() }
     
@@ -26,9 +27,11 @@ final class UserAPITests: AppTestCase {
     let _ = try register(userLogin, app)
     
     
-    let email = try XCTUnwrap(customClient.requestsReceived.first)
+    let email = try XCTUnwrap(app.customClient.requestsReceived.first)
     XCTAssertEqual(email.url.host, "api.mailersend.com")
     XCTAssertEqual(email.url.path, "/v1/email")
+    
+    try await app.confirm(email: "tom@bob.com")
     
     // check db has the user
     let usersAfterRegister = try await UserAccountModel.query(on: app.db).filter(\.$email == "tom@bob.com").all()
@@ -52,7 +55,7 @@ final class UserAPITests: AppTestCase {
     )
     
     let app = try createTestApp(dateProvider: dateProvider)
-    primeForReceivingClientRequests(app)
+    
     defer { app.shutdown() }
     
     // check db has no user
@@ -61,6 +64,8 @@ final class UserAPITests: AppTestCase {
     
     let userLogin = UserLogin(email: "tom@bob.com", password: "abc")
     let _ = try register(userLogin, app)
+    
+    try await app.confirm(email: "tom@bob.com")
     
     // check db has the user
     let usersAfterRegister = try await UserAccountModel.query(on: app.db).filter(\.$email == "tom@bob.com").all()

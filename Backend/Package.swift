@@ -21,13 +21,15 @@ let package = Package(
         .package(url: "https://github.com/binarybirds/liquid", from: "1.3.0"),
         .package(url: "https://github.com/binarybirds/liquid-local-driver", from: "1.3.0"),
         .package(url: "https://github.com/binarybirds/swift-html", from: "1.2.0"),
-        .package(url: "https://github.com/binarybirds/spec", from: "1.2.0")
+        .package(url: "https://github.com/binarybirds/spec", from: "1.2.0"),
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.5.3"),
     ],
     targets: [
         .target(name: "LinuxHelpers", dependencies: []),
         .target(name: "Utils", dependencies: []),
         .target(name: "AppTestingHelpers", dependencies: [
-          .product(name: "Vapor", package: "vapor")
+          .product(name: "Vapor", package: "vapor"),
+          "SwiftSoup"
         ]),
         .target(name: "AppApi", dependencies: []),
         .target(name: "App", dependencies: [

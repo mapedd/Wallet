@@ -19,7 +19,7 @@ platform :ios do
 
   before_all do
     setup_circle_ci
-    unlock_keychain
+#    unlock_keychain
   end
 
   desc "Builds and tests iOS app"
@@ -44,7 +44,7 @@ platform :mac do
 
   before_all do
     setup_circle_ci
-    unlock_keychain
+    #unlock_keychain
   end
 
   desc "Builds server and run unit tests"

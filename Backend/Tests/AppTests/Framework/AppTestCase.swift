@@ -21,7 +21,7 @@ class AppTestCase: XCTestCase {
   
   func createTestApp(dateProvider: DateProvider = .init(currentDate: { Date() })) throws -> Application {
     let app = Application(.testing)
-    
+    app.prepareCustomClient()
     do {
       try configure(app, dateProvider: dateProvider)
       try app.autoMigrate().wait()
@@ -107,30 +107,10 @@ class AppTestCase: XCTestCase {
     app: Application,
     login: UserLogin = .tomBob
   ) async throws -> User.Token.Detail {
-    primeForReceivingClientRequests(app)
+    app.prepareCustomClient()
     let _ = try register(login, app)
+    try await app.confirm(email: login.email)
     return try authenticate(login, app)
-  }
-  
-  lazy var customClient: CustomClient = {
-    let client = CustomClient()
-    client.responseGenerator = { req in 
-      return ClientResponse(
-        status: .ok,
-        headers: HTTPHeaders(),
-        body: nil,
-        byteBufferAllocator: ByteBufferAllocator()
-      )
-    }
-    return client
-  }()
-  
-  // this mocks client on the application that can be used to do requestes to
-  // external resources
-  func primeForReceivingClientRequests(_ app: Application) {
-    let provider = Application.Clients.Provider.custom
-    app.storage[Application.CustomClientKey.self] = self.customClient
-    app.clients.use(provider)
   }
 }
 
