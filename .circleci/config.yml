@@ -23,6 +23,9 @@ jobs:
       - run:
           name: Fastlane
           command: bundle exec fastlane mac tests_mac_app
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane mac tests_mac_core
 
 workflows:
   build-test:
