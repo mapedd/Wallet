@@ -135,7 +135,7 @@ final class AuthManagerTests: XCTestCase {
     harness.authNetwork = .init(
       refreshToken: { refreshToken in 
         harness.storedRefreshTokens.append(refreshToken)
-        try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 30)
+        try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 50)
         return Harness.refreshedToken(
           date: Date(),
           counter: harness.storedRefreshTokens.count
@@ -146,15 +146,15 @@ final class AuthManagerTests: XCTestCase {
     let task = Task {
       return try await harness.sut.validToken()
     }
-    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 2)
+    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 10)
     let task0 = Task {
       return try await harness.sut.validToken()
     }
-    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 2)
+    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 10)
     let task1 = Task {
       return try await harness.sut.validToken()
     }
-    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 2)
+    try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 10)
     let task2 = Task {
       return try await harness.sut.validToken()
     }
