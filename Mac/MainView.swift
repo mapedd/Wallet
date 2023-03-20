@@ -16,7 +16,7 @@ struct MainView : View {
   var screen = NSScreen.main?.visibleFrame
 
   var body: some View {
-    WithViewStore(self.store) { viewStore in
+    WithViewStore(self.store, observe: { $0.records }) { viewStore in
       VStack {
         EditorView(
           store: self.store.scope(
@@ -24,21 +24,14 @@ struct MainView : View {
             action: Main.Action.editorAction
           )
         )
-        .padding(40)
         List {
-          ForEachStore(
-            self.store.scope(
-              state: \.records,
-              action: Main.Action.recordAction(id:action:)
-            )
-          ) {
-            RecordView(store: $0)
+          ForEach(viewStore.state) { record in
+            RecordView(record: record)
           }
         }
-        .frame(minWidth: 250)
       }
-      .ignoresSafeArea(.all, edges: .all)
-      .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
+      .padding()
+      .frame(minWidth: 250)
       .task {
         viewStore.send(.task)
       }

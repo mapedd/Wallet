@@ -11,6 +11,7 @@ import SwiftUI
 import ComposableArchitecture
 import AppApi
 
+typealias RecordDetailsViewStore = ViewStore<RecordDetails.State, RecordDetails.Action>
 
 struct RecordDetailsView: View {
   var store: StoreOf<RecordDetails>
@@ -18,29 +19,27 @@ struct RecordDetailsView: View {
   var body: some View {
     WithViewStore(
       self.store,
-      observe: \.renderableState,
-      send: RecordDetails.Action.view
+      observe: { $0 }
     ) { viewStore in
       Form {
         type(viewStore)
         title(viewStore)
         amount(viewStore)
         currency(viewStore)
-        deleteSection(viewStore)
       }
       .onAppear{
-        viewStore.send(.didAppear)
+        viewStore.send(.task)
       }
       .navigationTitle(
-        Text(viewStore.date.formatted())
+        Text(viewStore.record.date.formatted())
       )
     }
   }
 
-  func type(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+  func type(_ viewStore: RecordDetailsViewStore) -> some View {
     Picker(
       "Type",
-      selection: viewStore.binding(\.$recordType)
+      selection: viewStore.binding(\.$record.type)
     ) {
       Text("Expense")
         .tag(MoneyRecord.RecordType.expense)
@@ -53,31 +52,31 @@ struct RecordDetailsView: View {
     .pickerStyle(.segmented)
   }
 
-  func title(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+  func title(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       TextField(
         "Title",
-        text: viewStore.binding(\.$title),
+        text: viewStore.binding(\.$record.title),
         prompt: Text("Title")
       )
-      TextEditor(text: viewStore.binding(\.$notes))
+      TextEditor(text: viewStore.binding(\.$record.notes))
     }
   }
 
-  func amount(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+  func amount(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       TextField(
         "Amount",
-        text: viewStore.binding(\.$amount)
+        text: .constant("123")
       )
     }
   }
 
-  func currency(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+  func currency(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       Picker(
         "Currency",
-        selection: viewStore.binding(\.$currencyCode)
+        selection: viewStore.binding(\.$record.currencyCode)
       ) {
         ForEach(Currency.List.examples) { currency in
           Text(currency.symbol)
@@ -85,21 +84,6 @@ struct RecordDetailsView: View {
         }
       }
       .pickerStyle(.menu)
-    }
-  }
-
-
-  func deleteSection(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
-    Section {
-      HStack {
-        Button("Delete record") {
-          viewStore.send(.deleteRecordTapped)
-        }
-        Spacer()
-        Button("OK") {
-          viewStore.send(.hideDetails)
-        }
-      }
     }
   }
 }

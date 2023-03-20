@@ -56,8 +56,8 @@ struct LoginView: View {
       }
       .alert(self.store.scope(state: \.alert), dismiss: .alertCancelTapped)
       .padding()
-      .ignoresSafeArea(.all, edges: .all)
-      .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
+//      .ignoresSafeArea(.all, edges: .all)
+//      .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
     }
   }
 }

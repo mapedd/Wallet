@@ -12,32 +12,29 @@ import WalletCore
 struct ContentView: View {
   var store: StoreOf<Content>
   var body: some View {
-    NavigationView {
-      WithViewStore(self.store, observe: { $0 }) { viewStore in
-        SwitchStore(self.store) {
-          CaseLet(
-            state: /Content.State.loggedIn,
-            action: Content.Action.loggedIn
-          ) { store in
-            MainView(
+    WithViewStore(self.store, observe: { $0 }) { viewStore in
+      SwitchStore(self.store) {
+        CaseLet(
+          state: /Content.State.loggedIn,
+          action: Content.Action.loggedIn
+        ) { store in
+          MainView(
+            store: store
+          )
+        }
+        CaseLet(
+          state: /Content.State.loggedOut,
+          action: Content.Action.loggedOut
+        ) { store in
+            LoginView(
               store: store
             )
-          }
-          CaseLet(
-            state: /Content.State.loggedOut,
-            action: Content.Action.loggedOut
-          ) { store in
-              LoginView(
-                store: store
-              )
-          }
-        }
-        .onAppear{
-          viewStore.send(.task)
         }
       }
+      .onAppear{
+        viewStore.send(.task)
+      }
     }
-    
   }
 }
 

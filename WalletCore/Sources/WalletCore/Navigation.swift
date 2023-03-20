@@ -189,6 +189,7 @@ public extension View {
     }
   }
 
+  @available(macOS, unavailable)
   func fullScreenCover<ChildState: Identifiable, ChildAction>(
     store: Store<ChildState?, PresentationAction<ChildAction>>,
     @ViewBuilder child: @escaping (Store<ChildState, ChildAction>) -> some View
@@ -282,14 +283,22 @@ extension View {
 }
 
 @available(*, deprecated)
-struct NavigationLinkStore<ChildState: Identifiable, ChildAction, Destination: View, Label: View>: View {
+public struct NavigationLinkStore<ChildState: Identifiable, ChildAction, Destination: View, Label: View>: View {
+  public  init(store: Store<ChildState?, PresentationAction<ChildAction>>, id: ChildState.ID? = nil, action: @escaping () -> Void, destination: @escaping (Store<ChildState, ChildAction>) -> Destination, label: Label) {
+    self.store = store
+    self.id = id
+    self.action = action
+    self.destination = destination
+    self.label = label
+  }
+  
   let store: Store<ChildState?, PresentationAction<ChildAction>>
   let id: ChildState.ID?
   let action: () -> Void
   @ViewBuilder let destination: (Store<ChildState, ChildAction>) -> Destination
   @ViewBuilder let label: Label
 
-  var body: some View {
+  public var body: some View {
 //    NavigationLink(
 //      tag: <#T##V#>,
 //      selection: <#T##SwiftUI.Binding<V?>#>,
