@@ -81,7 +81,7 @@ public struct Editor: ReducerProtocol {
   
   
   
-  public enum Action:BindableAction {
+  public enum Action:BindableAction, Equatable {
     case binding(BindingAction<State>)
     case changeRecordType(MoneyRecord.RecordType)
     case addButtonTapped

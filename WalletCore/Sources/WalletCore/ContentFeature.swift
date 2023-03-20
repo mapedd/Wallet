@@ -23,7 +23,7 @@ public extension User.Token.Detail {
 }
 
 public struct Content: ReducerProtocol {
-
+  
   public init() {}
   
   public enum State: Equatable {
@@ -46,6 +46,7 @@ public struct Content: ReducerProtocol {
   }
   
   @Dependency(\.apiClient) var apiClient
+  @Dependency(\.logger) var logger
   @Dependency(\.keychain) var keychain
   
   public var body: some ReducerProtocol<State,Action> {
@@ -57,42 +58,69 @@ public struct Content: ReducerProtocol {
     }
     Reduce { state, action in
       switch action {
-      case .loggedOut(.loggedIn(let token)):
-        keychain.saveToken(token.toLocalToken)
-        state = .loggedIn(Main.State())
-      case .loggedIn(.logOut):
-        //        state.main.loading = true// show loading indicator
-        guard let _ = keychain.readToken() else {
-          state = .loggedOut(Login.State())
-          return .none
+      case .loggedOut(let loggedOutAction):
+        if case .loggedIn(let token) = loggedOutAction {
+          keychain.saveToken(token.toLocalToken)
+          state = .loggedIn(Main.State())
         }
+        return .none
         
-        return .task(
-          operation: {
-            
-            let result = try await apiClient.signOut()
-            debugPrint("result \(result)")
-            return .successfullyLoggedOut
-          }, catch: { error in
-            // we need to log out even if it failed to not be stuck here forever
-            
-            return .successfullyLoggedOut
-          }
-        )
+      case .loggedIn(let loggedInAction):
+        if loggedInAction == .logOut {
+          return logOut(&state)
+        }
+        return .none
+        
       case .successfullyLoggedOut:
         keychain.saveToken(nil)
         state = .loggedOut(Login.State())
         return .none
       case .task:
-        if keychain.readToken() != nil {
-          state = .loggedIn(Main.State())
-        }
-        return .none
-      default:
-        return .none
+        return taskEffect(&state)
       }
-      return .none
     }
   }
+  
+  private func taskEffect(_ state: inout State) -> EffectTask<Action> {
+    
+    switch state {
+    case .loggedOut:
+      if keychain.readToken() != nil  {
+        logger.notice("main view appeared, has stored credentials")
+        state = .loggedIn(
+          Main.State(
+            records: []
+          )
+        )
+      } else {
+        logger.notice("main view appeared, has no stored credentials, need log in ")
+      }
+      return .none
+    case .loggedIn:
+      logger.notice("main view appeared, already logged in ")
+      return .none
+      
+    }
+  }
+  
+  private func logOut(_ state: inout State) -> EffectTask<Action> {
+    
+    guard let _ = keychain.readToken() else {
+      state = .loggedOut(Login.State())
+      return .none
+    }
+    
+    return .task(
+      operation: {
+        
+        let result = try await apiClient.signOut()
+        debugPrint("result \(result)")
+        return .successfullyLoggedOut
+      }, catch: { error in
+        // we need to log out even if it failed to not be stuck here forever
+        
+        return .successfullyLoggedOut
+      }
+    )
+  }
 }
-

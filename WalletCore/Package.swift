@@ -21,7 +21,8 @@ let package = Package(
     .package(
       url: "https://github.com/pointfreeco/swift-composable-architecture",
 //      branch: "prerelease/1.0"
-      branch: "navigation-beta"
+//      branch: "navigation-beta"
+      revision: "bcf5683aecdba339d309848c50b7f33fed887709"
     ),
     .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
     .package(url: "https://github.com/vapor/vapor", from: "4.54.0"),

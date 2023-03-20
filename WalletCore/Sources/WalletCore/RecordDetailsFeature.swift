@@ -13,136 +13,57 @@ public struct RecordDetails: ReducerProtocol {
   
   public init() {}
 
-  public struct State: Equatable {
+  public struct State: Equatable, Identifiable {
     
     public init(
       record: MoneyRecord,
-      availableCategories: [MoneyRecord.Category] = []
+      availableCategories: [MoneyRecord.Category] = [],
+      alert: AlertState<Action.Alert>? = nil
     ) {
       self.record = record
       self.availableCategories = availableCategories
+      self.alert = alert
     }
 
-    
-    public var record: MoneyRecord
+    public var id: UUID {
+      record.id
+    }
+    @BindingState public var record: MoneyRecord
     public var availableCategories: [MoneyRecord.Category] = []
-
-    public struct RenderableState: Hashable {
-      public init(
-        amount: String,
-        title: String,
-        notes: String,
-        currencyCode: Currency.Code,
-        assignedCategories: [MoneyRecord.Category],
-        recordType: MoneyRecord.RecordType,
-        date: Date,
-        availableCategories: [MoneyRecord.Category]
-      ) {
-        self.amount = amount
-        self.title = title
-        self.notes = notes
-        self.currencyCode = currencyCode
-        self.assignedCategories = assignedCategories
-        self.recordType = recordType
-        self.date = date
-        self.availableCategories = availableCategories
-      }
-
-      @BindingState public var amount: String
-      @BindingState public var title: String
-      @BindingState public var notes: String
-      @BindingState public var currencyCode: Currency.Code
-      @BindingState public var assignedCategories: [MoneyRecord.Category]
-      @BindingState public var recordType: MoneyRecord.RecordType
-      @BindingState public var date: Date
-      public var availableCategories: [MoneyRecord.Category]
+    public var alert: AlertState<Action.Alert>?
+    
+    
+    public var formattedAmount: String {
+      record.amount.formatted()
     }
-
-    public var renderableState: RenderableState {
-      set {
-        self.record.amount = Decimal(string: newValue.amount) ?? .zero
-        self.record.title = newValue.title
-        self.record.notes = newValue.notes
-        self.record.currencyCode = newValue.currencyCode
-        self.record.type = newValue.recordType
-        self.record.date = newValue.date
-        self.record.categories = newValue.assignedCategories
-        self.availableCategories = newValue.availableCategories
-      }
-      get {
-        .init(
-          amount: record.amount.formatted(currency: record.currencyCode),
-          title: record.title,
-          notes: record.notes,
-          currencyCode: record.currencyCode,
-          assignedCategories: record.categories,
-          recordType: record.type,
-          date: record.date,
-          availableCategories: availableCategories
-        )
-      }
-    }
-
-    public static let preview = State(
-      record: .init(
-        id: .init(),
-        date: .init(),
-        title: "Shopping",
-        notes: "Sample notes",
-        type: .expense,
-        amount: Decimal(123),
-        currencyCode: "USD",
-        categories: []
-      )
-    )
   }
   
   
-  public enum Action: BindableAction {
-    case didAppear
+  public enum Action: BindableAction, Equatable{
+    case task
     case loadedCategories([MoneyRecord.Category])
-    case loadingCategoriesFailed(Swift.Error)
-    case changeType(MoneyRecord.RecordType)
+    case loadingCategoriesFailed(String)
     case deleteRecordTapped
     case binding(BindingAction<State>)
     case categoryTapped(MoneyRecord.Category)
-    case hideDetails
-
-    public static func view(_ viewAction: RenderableAction) -> Self {
-      switch viewAction {
-      case .didAppear:
-        return .didAppear
-      case let .binding(action):
-        return .binding(action.pullback(\.renderableState))
-
-      case .deleteRecordTapped:
-        return .deleteRecordTapped
-      case .categoryTapped(let category):
-        return .categoryTapped(category)
-      case .hideDetails:
-        return .hideDetails
-      }
+    case setAmount(String)
+    case alert(PresentationAction<Alert>)
+    
+    public enum Alert: Equatable {
+      case deleteConfirm
     }
-
-
-    public enum RenderableAction: BindableAction {
-      case didAppear
-      case binding(BindingAction<State.RenderableState>)
-      case deleteRecordTapped
-      case categoryTapped(MoneyRecord.Category)
-      case hideDetails
-    }
-
+    
   }
   
   @Dependency(\.apiClient) var apiClient
+  @Dependency(\.dismiss) var dismiss
   
   public var body: some ReducerProtocol<State, Action> {
     BindingReducer()
 
-    Reduce { state, action in
+    Reduce<State, Action> { state, action in
       switch action {
-      case .didAppear:
+      case .task:
          return  .task(
             operation: {
               let categories = try await apiClient.listCategories()
@@ -150,7 +71,7 @@ public struct RecordDetails: ReducerProtocol {
               return .loadedCategories(localCategeries)
             },
             catch: { error in
-              return .loadingCategoriesFailed(error)
+              return .loadingCategoriesFailed(error.localizedDescription)
             }
           )
       case .loadedCategories(let localCategories):
@@ -169,9 +90,34 @@ public struct RecordDetails: ReducerProtocol {
           state.record.categories.append(category)
         }
         return .none
-      default:
+      case .loadingCategoriesFailed(_):
+        return .none
+      case .deleteRecordTapped:
+        state.alert = .delete(record: state.record)
+        return .none
+      case .binding:
+        return .none
+      case .setAmount(let amount):
+        state.record.amount =  Decimal(string: amount) ?? .zero
+        return .none
+      case .alert:
         return .none
       }
+    }
+    .ifLet(\.alert, action: /Action.alert)
+  }
+}
+
+extension AlertState where Action == RecordDetails.Action.Alert {
+  static func delete(record: MoneyRecord) -> Self {
+    AlertState {
+      TextState(#"Delete "\#(record.title)""#)
+    } actions: {
+      ButtonState(role: .destructive, action: .send(.deleteConfirm, animation: .default)) {
+        TextState("Delete")
+      }
+    } message: {
+      TextState("Are you sure you want to delete this item?")
     }
   }
 }

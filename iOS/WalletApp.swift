@@ -18,6 +18,7 @@ struct WalletApp: App {
           store: .init(
             initialState: .loggedOut(.init()),
             reducer: Content()
+//              ._printChanges()
           )
         )
       }

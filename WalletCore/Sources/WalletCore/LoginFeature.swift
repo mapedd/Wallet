@@ -71,7 +71,7 @@ public struct Login: ReducerProtocol {
     public var registering = false
     public var loggingIn = false
     public var buttonsEnabled = false
-    @PresentationState public var alert: AlertState<Action>?
+    public var alert: AlertState<Action>?
     public var footerText: String
     
     public var textFieldsDisabled: Bool {

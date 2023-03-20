@@ -1,5 +1,5 @@
 //
-//  RecordDetails.swift
+//  RecordDetailsView.swift
 //  Wallet
 //
 //  Created by Tomasz Kuzma on 10/09/2022.
@@ -10,14 +10,15 @@ import ComposableArchitecture
 import AppApi
 import WalletCore
 
+typealias RecordDetailsViewStore = ViewStore<RecordDetails.State, RecordDetails.Action>
+
 struct RecordDetailsView: View {
   var store: StoreOf<RecordDetails>
 
   var body: some View {
     WithViewStore(
       self.store,
-      observe: \.renderableState,
-      send: RecordDetails.Action.view
+      observe: { $0 }
     ) { viewStore in
       Form {
         type(viewStore)
@@ -27,21 +28,25 @@ struct RecordDetailsView: View {
         category(viewStore)
         deleteSection(viewStore)
       }
-      .onAppear{
-        viewStore.send(.didAppear)
+      .task{
+        viewStore.send(.task)
       }
       .navigationTitle(
-        Text(viewStore.date.formatted())
+        Text(viewStore.record.date.formatted())
       )
       .navigationBarTitleDisplayMode(.inline)
       .navigationViewStyle(.stack)
+      .alert(
+        store: self.store.scope(state: \.alert, action: RecordDetails.Action.alert)
+      )
     }
   }
   
-  func type(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+  func type(_ viewStore: RecordDetailsViewStore) -> some View {
     Picker(
       "Type",
-      selection: viewStore.binding(\.$recordType)
+      selection: viewStore.binding(\.$record.type)
+//      selection: viewStore.binding(\.$item.name)
     ) {
       Text("Expense")
         .tag(MoneyRecord.RecordType.expense)
@@ -53,26 +58,33 @@ struct RecordDetailsView: View {
     }
     .pickerStyle(.segmented)
   }
-  
-  func title(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+
+  func title(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       LabeledContent("Title") {
         TextField(
           "Title",
-          text: viewStore.binding(\.$title),
+          text: viewStore.binding(\.$record.title),
           prompt: Text("Title")
         )
       }
-      TextEditor(text: viewStore.binding(\.$notes))
+      TextEditor(text: viewStore.binding(\.$record.notes))
     }
   }
-  
-  func amount(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+
+  func amount(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       LabeledContent {
         TextField(
           "Amount",
-          text: viewStore.binding(\.$amount)
+          text: viewStore.binding(
+            get: {
+              $0.formattedAmount
+            },
+            send: {
+              .setAmount($0)
+            }
+          )
         )
       } label: {
         Text("Amount")
@@ -81,11 +93,11 @@ struct RecordDetailsView: View {
     }
   }
 
-  func currency(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+  func currency(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       Picker(
         "Currency",
-        selection: viewStore.binding(\.$currencyCode)
+        selection: viewStore.binding(\.$record.currencyCode)
       ) {
         ForEach(Currency.List.examples) { currency in
           Text(currency.symbol)
@@ -95,23 +107,23 @@ struct RecordDetailsView: View {
       .pickerStyle(.menu)
     }
   }
-  
-  
-  
-  func category(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+
+
+
+  func category(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       MultiPicker(
         label: "Categories",
         options: viewStore.availableCategories,
-        pickedValues: viewStore.assignedCategories,
+        pickedValues: viewStore.record.categories,
         itemTapped: { category in
           viewStore.send(.categoryTapped(category))
         }
       )
     }
   }
-  
-  func deleteSection(_ viewStore: ViewStore<RecordDetails.State.RenderableState, RecordDetails.Action.RenderableAction>) -> some View {
+
+  func deleteSection(_ viewStore: RecordDetailsViewStore) -> some View {
     Section {
       Button("Delete record") {
         viewStore.send(.deleteRecordTapped)

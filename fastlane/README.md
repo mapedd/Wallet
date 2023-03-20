@@ -60,6 +60,14 @@ bulds Core library and does integration tests app
 
 Builds and tests Mac app
 
+### mac tests_mac_core
+
+```sh
+[bundle exec] fastlane mac tests_mac_core
+```
+
+Builds and tests WalletCore
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
