@@ -80,10 +80,26 @@ struct MainView : View {
           )
         )
       }
+      .fullScreenCover(
+        store: self.store.scope(state: \.settings, action: Main.Action.settings)
+      ) { store in
+        NavigationView {
+          SettingsView(store: store)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+              ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                  viewStore.send(.settings(.dismiss))
+                }
+              }
+            }
+        }
+      }
       .sheet(
         store: self.store.scope(state: \.statistics, action: Main.Action.statisticsAction)
       ) { store in
-        NavigationStack {
+        NavigationView {
           StatisticsView(store: store)
             .navigationTitle("Statistics")
             .navigationBarTitleDisplayMode(.inline)
@@ -95,13 +111,24 @@ struct MainView : View {
               }
             }
         }
-
+        
       }
       .toolbar {
-        Button("Log out") {
-          viewStore.send(.logOutButtonTapped)
+        
+        ToolbarItem(
+          placement: .navigationBarLeading
+        ) {
+          Button {
+            viewStore.send(.settingsButtonTapped)
+          } label: {
+            Image(systemName: "gearshape")
+          }
         }
-        EditButton()
+        
+
+        ToolbarItem {
+          EditButton()
+        }
       }
       .environment(
         \.editMode,
@@ -155,15 +182,8 @@ struct NavigationLinkStore<ChildState: Identifiable, ChildAction, Destination: V
   let action: () -> Void
   @ViewBuilder let destination: (Store<ChildState, ChildAction>) -> Destination
   @ViewBuilder let label: Label
-
+  
   var body: some View {
-//    NavigationLink(
-//      tag: <#T##V#>,
-//      selection: <#T##SwiftUI.Binding<V?>#>,
-//      destination: <#T##() -> Destination#>,
-//      label: <#T##() -> Label#>
-//    )
-
     WithViewStore(self.store, observe: { $0?.id == self.id }) { viewStore in
       NavigationLink(
         isActive: Binding(
@@ -205,11 +225,13 @@ func returningLastNonNilValue<A, B>(
 
 struct MainView_Previews: PreviewProvider {
   static var previews: some View {
-    MainView(
-      store: .init(
-        initialState: .preview,
-        reducer: Main()
+    NavigationView {
+      MainView(
+        store: .init(
+          initialState: .preview,
+          reducer: Main()
+        )
       )
-    )
+    }
   }
 }

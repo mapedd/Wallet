@@ -29,6 +29,7 @@ public struct Main : ReducerProtocol {
       statistics: Statistics.State? = nil,
       categories: [MoneyRecord.Category] = [],
       editedRecord: RecordDetails.State? = nil,
+      settings: Settings.State? = nil,
       loading: Bool = false
     ) {
       self.editorState = editorState
@@ -39,6 +40,7 @@ public struct Main : ReducerProtocol {
       self.statistics = statistics
       self.categories = categories
       self.editedRecord = editedRecord
+      self.settings = settings
       self.loading = loading
       recalculateTotal()
     }
@@ -59,6 +61,7 @@ public struct Main : ReducerProtocol {
     public var categories: [MoneyRecord.Category]
     public var conversions: ConversionResult?
     public var editedRecord: RecordDetails.State?
+    public var settings: Settings.State?
     public var loading: Bool
     public var initialLoadDone = false
     
@@ -125,10 +128,11 @@ public struct Main : ReducerProtocol {
     case editModeChanged(State.EditMode)
     case delete(IndexSet)
     case statisticsAction(PresentationAction<Statistics.Action>)
+    case settings(PresentationAction<Settings.Action>)
     case showStatistics
     case hideStatistics
     case logOut
-    case logOutButtonTapped
+    case settingsButtonTapped
     case task
     case refresh
     
@@ -335,8 +339,12 @@ public struct Main : ReducerProtocol {
           }
         }
         
-      case .logOutButtonTapped:
-        return EffectTask(value: .logOut)
+      case .settingsButtonTapped:
+        state.settings = Settings.State(user: .init(email: "email", id: .init()))
+        return .none
+        
+      case .settings(.presented(.delegate(.logOutRequested))):
+        return Effect(value: .logOut)
         
       case .task:
 
@@ -488,10 +496,15 @@ public struct Main : ReducerProtocol {
         return .none
       case .updateFailed(_):
         return .none
+      case .settings:
+        return .none
       }
     }
     .ifLet(\.editedRecord, action: /Action.editRecord) {
       RecordDetails()
+    }
+    .ifLet(\.settings, action: /Action.settings) {
+      Settings()
     }
     .ifLet(\.statistics, action: /Action.statisticsAction) {
       Statistics()

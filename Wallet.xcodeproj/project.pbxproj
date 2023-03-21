@@ -23,6 +23,7 @@
 		04515E2029929A690022404B /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04515E1F29929A690022404B /* RecordView.swift */; };
 		04515E2229929DF60022404B /* RecordDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04515E2129929DF60022404B /* RecordDetailsView.swift */; };
 		0457C0E42978A7A8007ED1FD /* MultiPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0457C0E32978A7A7007ED1FD /* MultiPicker.swift */; };
+		0474B6A829C9D9A10078ED34 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474B6A729C9D9A10078ED34 /* SettingsView.swift */; };
 		048ACB3F299959830067F772 /* WalletiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048ACB3E299959830067F772 /* WalletiOSTests.swift */; };
 		04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9F28D79CFF00C327A4 /* MainView.swift */; };
 		04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */; };
@@ -75,6 +76,7 @@
 		04515E2129929DF60022404B /* RecordDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailsView.swift; sourceTree = "<group>"; };
 		04560432298EE8C6005031A8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0457C0E32978A7A7007ED1FD /* MultiPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPicker.swift; sourceTree = "<group>"; };
+		0474B6A729C9D9A10078ED34 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		048ACB3C299959830067F772 /* WalletiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		048ACB3E299959830067F772 /* WalletiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletiOSTests.swift; sourceTree = "<group>"; };
 		0498B58529965DC2004C2613 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				04CCED9228C28E8D00C68DB8 /* EditorView.swift */,
 				04CCED9528C2AD6C00C68DB8 /* RecordView.swift */,
 				04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */,
+				0474B6A729C9D9A10078ED34 /* SettingsView.swift */,
 				04CCED5528C2879800C68DB8 /* Assets.xcassets */,
 			);
 			path = iOS;
@@ -464,6 +467,7 @@
 				04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */,
 				043BAFD528CCF9C800A5D2CE /* RecordDetailsView.swift in Sources */,
 				04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */,
+				0474B6A829C9D9A10078ED34 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
