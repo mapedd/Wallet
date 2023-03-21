@@ -16,6 +16,8 @@ enum LocalError : Error {
 }
 
 public struct Main : ReducerProtocol {
+  
+  let logger = Logger(label: "com.mapedd.wallet.main")
 
   public init() {}
   
@@ -204,7 +206,6 @@ public struct Main : ReducerProtocol {
   
   @Dependency(\.apiClient) var apiClient
   @Dependency(\.dateProvider) var dateProvider
-  @Dependency(\.logger) var logger
   
   public var body: some ReducerProtocol<State, Action> {
     Scope(state: \.editorState, action: /Action.editorAction) {

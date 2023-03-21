@@ -10,6 +10,7 @@ import SwiftUI
 import ComposableArchitecture
 import IdentifiedCollections
 import SwiftUINavigation
+import Logging
 import AppApi
 
 public extension User.Token.Detail {
@@ -23,6 +24,8 @@ public extension User.Token.Detail {
 }
 
 public struct Content: ReducerProtocol {
+  
+  let logger = Logger(label: "com.mapedd.wallet.content")
   
   public init() {}
   
@@ -46,7 +49,6 @@ public struct Content: ReducerProtocol {
   }
   
   @Dependency(\.apiClient) var apiClient
-  @Dependency(\.logger) var logger
   @Dependency(\.keychain) var keychain
   
   public var body: some ReducerProtocol<State,Action> {
@@ -76,12 +78,12 @@ public struct Content: ReducerProtocol {
         state = .loggedOut(Login.State())
         return .none
       case .task:
-        return taskEffect(&state)
+        return taskEffect(&state, logger: logger)
       }
     }
   }
   
-  private func taskEffect(_ state: inout State) -> EffectTask<Action> {
+  private func taskEffect(_ state: inout State, logger: Logger) -> EffectTask<Action> {
     
     switch state {
     case .loggedOut:

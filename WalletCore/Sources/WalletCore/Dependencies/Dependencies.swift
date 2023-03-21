@@ -10,17 +10,6 @@ import ComposableArchitecture
 import Logging
 
 
-private enum LoggerKey: DependencyKey {
-  static let liveValue = Logger(label: "com.mapedd.wallet")
-}
-
-extension DependencyValues {
-  public var logger: Logger {
-    get { self[LoggerKey.self] }
-    set { self[LoggerKey.self] = newValue }
-  }
-}
-
 private enum APIClientKey: DependencyKey {
   static let liveValue = APIClient.live
   static let previewValue = APIClient.preview
