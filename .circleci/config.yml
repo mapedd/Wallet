@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-and-test_all:
     macos:
-      xcode: 14.2.0
+      xcode: 14.1.0
     steps:
       - run: brew install vapor
       - checkout
@@ -12,7 +12,7 @@ jobs:
           name: Fastlane iOS test application
           command: bundle exec fastlane ios tests_app
       - run:
-          name: Fastlane iOS test WallerCore
+          name: Fastlane iOS test WalletCore
           command: bundle exec fastlane ios tests_core
       - run:
           name: Fastlane macOS test server
@@ -24,7 +24,7 @@ jobs:
           name: Fastlane mac test application
           command: bundle exec fastlane mac tests_mac_app
       - run:
-          name: Fastlane mac test WallerCore
+          name: Fastlane mac test WalletCore
           command: bundle exec fastlane mac tests_mac_core
 
 workflows:
