@@ -9,22 +9,22 @@ jobs:
       - checkout
       - run: bundle install
       - run:
-          name: Fastlane
+          name: Fastlane iOS test application
           command: bundle exec fastlane ios tests_app
       - run:
-          name: Fastlane
+          name: Fastlane iOS test WallerCore
           command: bundle exec fastlane ios tests_core
       - run:
-          name: Fastlane
+          name: Fastlane macOS test server
           command: bundle exec fastlane mac tests_server
       - run:
-          name: Fastlane
+          name: Fastlane macOS test integration
           command: bundle exec fastlane mac test_integration
       - run:
-          name: Fastlane
+          name: Fastlane mac test application
           command: bundle exec fastlane mac tests_mac_app
       - run:
-          name: Fastlane
+          name: Fastlane mac test WallerCore
           command: bundle exec fastlane mac tests_mac_core
 
 workflows:
