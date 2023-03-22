@@ -10,6 +10,7 @@ import ComposableArchitecture
 import CustomDump
 import Logging
 import AppApi
+import WalletCoreDataModel
 
 enum LocalError : Error {
   case cannotCreateRecord

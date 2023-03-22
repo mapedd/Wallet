@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import AppApi
+import WalletCoreDataModel
 
 public extension Currency.List {
   static var examples: [Currency.List] {

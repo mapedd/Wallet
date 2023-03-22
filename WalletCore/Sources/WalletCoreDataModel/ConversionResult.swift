@@ -8,6 +8,10 @@
 import Foundation
 
 public struct ConversionResult: Hashable, Codable {
+  public init(data: [String : Float]) {
+    self.data = data
+  }
+  
   public var data: [String:Float]
 }
 

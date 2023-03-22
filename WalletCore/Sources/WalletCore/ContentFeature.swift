@@ -6,12 +6,13 @@
 //
 
 
-import SwiftUI
-import ComposableArchitecture
-import IdentifiedCollections
+
 import SwiftUINavigation
+import IdentifiedCollections
 import Logging
 import AppApi
+import ComposableArchitecture
+import WalletCoreDataModel
 
 public extension User.Token.Detail {
   var toLocalToken: Token {

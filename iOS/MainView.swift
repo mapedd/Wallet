@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import WalletCore
+import WalletCoreDataModel
 
 extension Main.State {
   var iOSEditMode : SwiftUI.EditMode {

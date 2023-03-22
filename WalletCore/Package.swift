@@ -10,6 +10,13 @@ let package = Package(
     .library(
       name: "WalletCore",
       targets: ["WalletCore"]),
+    .library(
+      name: "WalletCoreDataModel",
+      targets: ["WalletCoreDataModel"]),
+    .executable(
+      name: "WalletCoreCLI",
+      targets: ["WalletCoreCLI"]
+    )
   ],
   dependencies: [
     .package(name: "AppApi", path: "../Backend"),
@@ -20,21 +27,35 @@ let package = Package(
     ),
     .package(
       url: "https://github.com/pointfreeco/swift-composable-architecture",
-//      branch: "prerelease/1.0"
-//      branch: "navigation-beta"
+      //      branch: "prerelease/1.0"
+      //      branch: "navigation-beta"
       revision: "bcf5683aecdba339d309848c50b7f33fed887709"
     ),
     .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
     .package(url: "https://github.com/vapor/vapor", from: "4.54.0"),
-    .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0")
+    .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
   ],
   targets: [
-    // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-    // Targets can depend on other targets in this package, and on products in packages this package depends on.
+    .executableTarget(
+      name: "WalletCoreCLI",
+      dependencies: [
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "WalletCoreDataModel",
+      ]
+    ),
+    .target(
+      name: "WalletCoreDataModel",
+      dependencies: [
+        "AppApi",
+        .product(name: "LinuxHelpers", package: "AppApi")
+      ]
+    ),
     .target(
       name: "WalletCore",
       dependencies: [
         "AppApi",
+        "WalletCoreDataModel",
         .product(name: "LinuxHelpers", package: "AppApi"),
         .product(name: "Utils", package: "AppApi"),
         .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),

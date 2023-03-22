@@ -15,11 +15,13 @@ struct SettingsView : View {
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       Form {
-//        Section(header: Text("Notifications settings")) {
-//          Toggle(isOn: $settings.isNotificationEnabled) {
-//            Text("Notification:")
-//          }
-//        }
+        Section(header: Text("Import & Export")) {
+          Button(action: {
+            viewStore.send(.importFromFileRowTapped)
+          }) {
+            Text("Import from file (*.csv)")
+          }
+        }
         
         if viewStore.isLoggedIn {
           Section(header: Text(viewStore.headerCopy)) {

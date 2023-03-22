@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import AppApi
+import WalletCoreDataModel
 
 extension MoneyRecord {
   func apply(filter: Statistics.State.Filter) -> Bool {
