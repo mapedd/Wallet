@@ -22,6 +22,9 @@ public extension String {
 }
 
 public struct DataImporter {
+  public struct Processor {
+    public static let millenium = Processor()
+  }
   public struct Transaction: CustomStringConvertible {
     public var description: String {
       "amount \(amounts), date: \(dates)"
@@ -102,7 +105,10 @@ public struct DataImporter {
       }
       
     }
-    public static func parseCSV(_ csvString: String) throws ->  [Transaction] {
+    public static func parseCSV(
+      processor: Processor,
+      csvString: String
+    ) throws ->  [Transaction] {
       var transactions = [Transaction]()
       
       let lines = csvString.components(separatedBy: .newlines)

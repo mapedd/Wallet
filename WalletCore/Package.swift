@@ -14,7 +14,7 @@ let package = Package(
       name: "WalletCoreDataModel",
       targets: ["WalletCoreDataModel"]),
     .executable(
-      name: "WalletCoreCLI",
+      name: "walletcli",
       targets: ["WalletCoreCLI"]
     )
   ],

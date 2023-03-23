@@ -56,6 +56,10 @@
             argument = "/Users/mapedd/Desktop/history.csv"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/mapedd/Desktop/output.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
