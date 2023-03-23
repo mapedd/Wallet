@@ -17,7 +17,15 @@ struct Interact: ParsableCommand {
   )
   
   struct Authenticate: ParsableCommand {
+    static var configuration = CommandConfiguration(
+      commandName: "auth",
+      abstract: "login, authenticate or signout with the wallet api",
+      subcommands: [Login.self],
+      defaultSubcommand: Read.self
+    )
     
+    struct Login: AsyncParsableCommand {
+    }
   }
   struct Create: ParsableCommand {
     

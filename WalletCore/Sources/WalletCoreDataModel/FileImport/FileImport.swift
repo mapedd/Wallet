@@ -22,8 +22,136 @@ public extension String {
 }
 
 public struct DataImporter {
+  enum Error: Swift.Error {
+    case notEnoughLines(minimum: Int)
+    case notEnoughFields(minimum: Int)
+    case wrongDateFormat(key: String, current: String, expected: String)
+    
+    var localizedDescription: String {
+      switch self {
+      case .wrongDateFormat(key: let key, current: let current, expected: let expected):
+        return "Wrong date format for \(key), expected: \(expected), got: \(current)"
+      case .notEnoughLines(let min):
+        return "File should have at least \(min) lines"
+      case .notEnoughFields(let min):
+        return "Each line should have at least \(min) fields"
+      }
+    }
+    
+  }
   public struct Processor {
-    public static let millenium = Processor()
+    
+    public static var millenium: Processor {
+      
+      
+      let df = DateFormatter()
+      //2023-03-20
+      df.dateFormat = "yyyy-MM-dd"
+      print("string \(df.string(from: Date()))")
+      
+      return Processor(
+        linesValidation: { lines in
+          guard lines.count > 1 else {
+            print("not enough lines")
+            throw Error.notEnoughLines(minimum: 2)
+          }
+        },
+        fieldSeparater: ",",
+        fieldsValidation: { fields, _ in
+          guard fields.count == 11 else {
+            throw Error.notEnoughFields(minimum: 11)
+          }
+        },
+        fieldPreprocessor: {
+          $0.unwrapping(from: "\"")
+        },
+        lineTransformer: { fields, i in
+          
+          
+          let accountNumber = fields[0].trimmingCharacters(in: .whitespacesAndNewlines)
+          
+          let tDateString = fields[1].trimmingCharacters(in: .whitespacesAndNewlines)
+          
+          guard let transactionDate = df.date(from: tDateString) else {
+            throw Error.wrongDateFormat(key: "transactionDate", current: tDateString, expected: df.dateFormat)
+          }
+          
+          let sDateString = fields[2].trimmingCharacters(in: .whitespacesAndNewlines)
+          guard let settlementDate = df.date(from: sDateString) else {
+            throw Error.wrongDateFormat(key: "settlementDate", current: sDateString, expected: df.dateFormat)
+          }
+          
+          let type: (_ fields: [String]) -> RecordType = { line in
+            if fields[7].count == 0 {
+              return .expense
+            } else {
+              return .income
+            }
+          }
+          
+          print("index \(i)")
+          for (j,field) in fields.enumerated() {
+            print("   \(j) \(field)")
+          }
+          
+          let transaction = Transaction(
+            account: .init(number: accountNumber),
+            dates: .init(
+              transaction: transactionDate,
+              settlement: settlementDate
+            ),
+            type: type(fields),
+            party: .init(
+              name: fields[5]
+            ),
+            details: .init(
+              description: fields[6]
+            ),
+            amounts: .init(
+              debited: Double(fields[7]),
+              credited: Double(fields[8]),
+              balance: Double(fields[9]) ?? .zero
+            ),
+            currency: .init(code: fields[10])
+          )
+          
+          return transaction
+        }
+      )
+    }
+    
+    public static var revolut: Processor {
+      return Processor(
+        linesValidation: { lines in
+          
+        },
+        fieldSeparater: ",",
+        fieldsValidation: { fields, i in
+          
+        },
+        fieldPreprocessor: { $0 },
+        lineTransformer: { fields, i in
+          return Transaction(
+            account: .init(number: ""),
+            dates: .init(
+              transaction: Date(),
+              settlement: Date()
+            ),
+            type: .expense,
+            party: .init(name: ""),
+            details: .init(description: ""),
+            amounts: .init(debited: 1, credited: 1, balance: 1),
+            currency: .init(code: "PLN")
+          )
+        }
+      )
+    }
+    
+    public let linesValidation: (_ lines: [String]) throws -> Void
+    public let fieldSeparater: String
+    public let fieldsValidation: (_ fields: [String], _ lineIndex: Int) throws -> Void
+    public let fieldPreprocessor: (_ field: String) -> String
+    public let lineTransformer: (_ fields:[String], _ lineIndex: Int) throws -> Transaction
   }
   public struct Transaction: CustomStringConvertible {
     public var description: String {
@@ -91,20 +219,7 @@ public struct DataImporter {
     }
   }
   public struct CSV {
-    enum Error: Swift.Error {
-      case notEnoughLines
-      case wrongDateFormat(key: String, current: String, expected: String)
-      
-      var localizedDescription: String {
-        switch self {
-        case .wrongDateFormat(key: let key, current: let current, expected: let expected):
-          return "Wrong date format for \(key), expected: \(expected), got: \(current)"
-        case .notEnoughLines:
-          return "File shuld have at least 2 lines"
-        }
-      }
-      
-    }
+    
     public static func parseCSV(
       processor: Processor,
       csvString: String
@@ -113,75 +228,14 @@ public struct DataImporter {
       
       let lines = csvString.components(separatedBy: .newlines)
       
-      
-      guard lines.count > 1 else {
-        print("not enough lines")
-        throw Error.notEnoughLines
-      }
-      
-      let df = DateFormatter()
-      //2023-03-20
-      df.dateFormat = "yyyy-MM-dd"
-      print("string \(df.string(from: Date()))")
+      try processor.linesValidation(lines)
       
       // Parse each line of the CSV file and create a Transaction struct
       for (i,line) in lines.dropFirst().enumerated() {
-        let fields = line.components(separatedBy: ",").map { string in
-          string.unwrapping(from: "\"")
-        }
-        
-        guard fields.count == 11 else {
-          continue
-        }
-        
-        let accountNumber = fields[0].trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let tDateString = fields[1].trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        guard let transactionDate = df.date(from: tDateString) else {
-          throw Error.wrongDateFormat(key: "transactionDate", current: tDateString, expected: df.dateFormat)
-        }
-        
-        let sDateString = fields[2].trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let settlementDate = df.date(from: sDateString) else {
-          throw Error.wrongDateFormat(key: "settlementDate", current: sDateString, expected: df.dateFormat)
-        }
-        
-        let type: (_ fields: [String]) -> RecordType = { line in
-          if fields[7].count == 0 {
-            return .expense
-          } else {
-            return .income
-          }
-        }
-        
-        print("index \(i)")
-        for (j,field) in fields.enumerated() {
-          print("   \(j) \(field)")
-        }
-        
-        let transaction = Transaction(
-          account: .init(number: accountNumber),
-          dates: .init(
-            transaction: transactionDate,
-            settlement: settlementDate
-          ),
-          type: type(fields),
-          party: .init(
-            name: fields[5]
-          ),
-          details: .init(
-            description: fields[6]
-          ),
-          amounts: .init(
-            debited: Double(fields[7]),
-            credited: Double(fields[8]),
-            balance: Double(fields[9]) ?? .zero
-          ),
-          currency: .init(code: fields[10])
-        )
+        let fields = line.components(separatedBy: processor.fieldSeparater)
+        try processor.fieldsValidation(fields, i)
+        let transaction = try processor.lineTransformer(fields, i)
         transactions.append(transaction)
-        
       }
       
       return transactions

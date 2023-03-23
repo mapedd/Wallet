@@ -10,7 +10,7 @@ import ArgumentParser
 import AppApi
 import WalletCoreDataModel
 
-fileprivate extension AppApi.Record.Detail {
+extension AppApi.Record.Detail {
   init(_ transaction: DataImporter.Transaction) {
     self.init(
       id: .init(),
