@@ -68,6 +68,14 @@ Builds and tests Mac app
 
 Builds and tests WalletCore
 
+### mac tests_mac_walletcli
+
+```sh
+[bundle exec] fastlane mac tests_mac_walletcli
+```
+
+Builds and tests WalletCLI
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

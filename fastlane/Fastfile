@@ -70,5 +70,10 @@ platform :mac do
   lane :tests_mac_core do
     sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreTests\" test")
   end
+  
+  desc "Builds and tests WalletCLI"
+  lane :tests_mac_walletcli do
+    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreCLI\" build")
+  end
 
 end

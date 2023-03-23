@@ -10,7 +10,7 @@ import ArgumentParser
 import AppApi
 import WalletCoreDataModel
 
-extension AppApi.Record.Detail {
+fileprivate extension AppApi.Record.Detail {
   init(_ transaction: DataImporter.Transaction) {
     self.init(
       id: .init(),
@@ -50,32 +50,4 @@ extension Import {
     }
   }
 
-}
-
-extension Array where Element == AppApi.Record.Detail {
-  
-  func convertToJSONString() throws -> String {
-    let encoder = JSONEncoder()
-    encoder.dateEncodingStrategy = .iso8601
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-    let outputData = try encoder.encode(self)
-    if let jsonString = String(data: outputData, encoding: .utf8) {
-      return jsonString
-    }
-    
-    throw ValidationError("Cannot convert transactions to records JSON format")
-  }
-}
-
-extension ParsableCommand {
-  
-  func stringFromFile(at path: String) throws -> String {
-    let expandedInputFilePath = path.expandingTildeInPath
-    let string = try String(contentsOfFile: expandedInputFilePath, encoding: .utf8)
-    return string
-  }
-  
-  func export(jsonString: String, to outputFile: String) throws {
-    try jsonString.write(toFile: outputFile, atomically: true, encoding: .utf8)
-  }
 }
