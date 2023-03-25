@@ -22,7 +22,9 @@ extension APIClient {
     session: URLSessionProtocol
   ) -> APIClient {
     
-    let url = URL(string: "http://localhost:8080/api/")!
+    let url = URL(string: "http://www.portfelmapedd.online/api/")!
+//    let url = URL(string: "http://192.168.1.7:8080/api/")!
+//    let url = URL(string: "http://localhost:8080/api/")!
     
     let authURLClient = URLClient(
       baseURL: url,

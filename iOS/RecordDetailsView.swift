@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import AppApi
 import WalletCore
+import WalletCoreDataModel
 
 typealias RecordDetailsViewStore = ViewStore<RecordDetails.State, RecordDetails.Action>
 

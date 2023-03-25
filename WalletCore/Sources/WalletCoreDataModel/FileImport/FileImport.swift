@@ -196,18 +196,22 @@ public struct DataImporter {
         },
         fieldPreprocessor: { $0 },
         lineTransformer: { fields, i in
+          let amount = Double(fields[5]) ?? .zero
+          
+          let type: RecordType = amount > .zero ? .expense : .income
+          
           return Transaction(
             account: .init(number: fields[1]),
             dates: .init(
               transaction: df.date(from: fields[2])!,
               settlement: df.date(from: fields[3])!
             ),
-            type: .expense,
+            type: type,
             party: .init(name: ""),
             details: .init(description: fields[4]),
             amounts: .init(
-              debited: 1,
-              credited: 1,
+              debited: type == .expense ? amount : nil,
+              credited: type == .income ? amount : nil,
               balance: Double(fields[9]) ?? .zero
             ),
             currency: .init(code: fields[7])

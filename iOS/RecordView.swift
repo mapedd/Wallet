@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import WalletCore
+import WalletCoreDataModel
 
 struct RecordView: View {
   var record: MoneyRecord

@@ -8,6 +8,8 @@
 import SwiftUI
 import WalletCore
 import ComposableArchitecture
+import UIKit
+
 
 struct SettingsView : View {
   let store: StoreOf<Settings>
@@ -34,6 +36,15 @@ struct SettingsView : View {
         }
       }
       .navigationBarTitle(Text("Settings"))
+    }
+    .sheet(
+      store: self.store.scope(state: \.picker, action: Settings.Action.picker)
+    ) { store in
+      NavigationView {
+        DocumentPickerView(store: store)
+          
+      }
+      
     }
     .alert(store: self.store.scope(state: \.alert, action: Settings.Action.alert))
   }
