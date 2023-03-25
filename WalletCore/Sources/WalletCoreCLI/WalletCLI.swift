@@ -15,7 +15,9 @@ struct WalletCLI: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "walletcli",
     abstract: "A utility for working with wallet app.",
-    subcommands: [Import.self, Interact.self],
-    defaultSubcommand: Import.self
+    version: "0.0.1",
+//    subcommands: [Import.self, Interact.self]
+    subcommands: [Import.self]
   )
+  
 }

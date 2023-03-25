@@ -335,6 +335,15 @@
         }
       },
       {
+        "package": "swift-parsing",
+        "repositoryURL": "https://github.com/pointfreeco/swift-parsing",
+        "state": {
+          "branch": null,
+          "revision": "4bb9192468c1a8be57f46b7d6fd4f561c88b2195",
+          "version": "0.11.0"
+        }
+      },
+      {
         "package": "SwiftKeychainWrapper",
         "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
         "state": {

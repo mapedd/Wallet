@@ -14,7 +14,7 @@ let package = Package(
       name: "WalletCoreDataModel",
       targets: ["WalletCoreDataModel"]),
     .executable(
-      name: "walletcli",
+      name: "WalletCoreCLI",
       targets: ["WalletCoreCLI"]
     )
   ],
@@ -35,6 +35,7 @@ let package = Package(
     .package(url: "https://github.com/vapor/vapor", from: "4.54.0"),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
+    .package(url: "https://github.com/pointfreeco/swift-parsing", from: "0.7.0")
   ],
   targets: [
     .executableTarget(
@@ -48,6 +49,7 @@ let package = Package(
       name: "WalletCoreDataModel",
       dependencies: [
         "AppApi",
+        .product(name: "Parsing", package: "swift-parsing"),
         .product(name: "LinuxHelpers", package: "AppApi")
       ]
     ),

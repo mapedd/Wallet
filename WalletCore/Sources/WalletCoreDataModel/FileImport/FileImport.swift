@@ -7,6 +7,7 @@
 
 import Foundation
 import AppApi
+import Parsing
 
 public extension String {
   func unwrapping(from suffixAndPrefix: String) -> String {
@@ -24,7 +25,7 @@ public extension String {
 public struct DataImporter {
   enum Error: Swift.Error {
     case notEnoughLines(minimum: Int)
-    case notEnoughFields(minimum: Int)
+    case invalidNumberOfFields(expected: Int, got: Int, at: Int)
     case wrongDateFormat(key: String, current: String, expected: String)
     
     var localizedDescription: String {
@@ -33,15 +34,49 @@ public struct DataImporter {
         return "Wrong date format for \(key), expected: \(expected), got: \(current)"
       case .notEnoughLines(let min):
         return "File should have at least \(min) lines"
-      case .notEnoughFields(let min):
-        return "Each line should have at least \(min) fields"
+      case .invalidNumberOfFields(let value, let actual, let index):
+        return "Each line should have exactly \(value) fields, but line \(index) has \(actual) fields"
       }
     }
     
   }
   public struct Processor {
     
+    private static var csvParser: AnyParser<Substring.UTF8View,[[String]]> {
+      
+      let plainField = Prefix { $0 != .init(ascii: ",") && $0 != .init(ascii: "\n") }
+
+        let quotedField = ParsePrint {
+          "\"".utf8
+          Prefix { $0 != .init(ascii: "\"") }
+          "\"".utf8
+        }
+
+        let field = OneOf {
+          quotedField
+          plainField
+        }
+        .map(.string)
+
+        let line = Many {
+          field
+        } separator: {
+          ",".utf8
+        }
+
+        let csv = Many {
+          line
+        } separator: {
+          "\n".utf8
+        } terminator: {
+          End()
+        }
+      
+      return csv.eraseToAnyParser()
+    }
+    
     public static var millenium: Processor {
+      
       
       
       let df = DateFormatter()
@@ -49,17 +84,25 @@ public struct DataImporter {
       df.dateFormat = "yyyy-MM-dd"
       print("string \(df.string(from: Date()))")
       
+      let csv = Self.csvParser
+      
       return Processor(
+        parseStructure: { string in
+          try csv.parse(string)
+        },
         linesValidation: { lines in
           guard lines.count > 1 else {
-            print("not enough lines")
             throw Error.notEnoughLines(minimum: 2)
           }
         },
+        lineSeparator: "\n\n",
+        skipLine: { line in
+          return line.isEmpty
+        },
         fieldSeparater: ",",
-        fieldsValidation: { fields, _ in
+        fieldsValidation: { fields, i in
           guard fields.count == 11 else {
-            throw Error.notEnoughFields(minimum: 11)
+            throw Error.invalidNumberOfFields(expected: 11, got: fields.count, at: i)
           }
         },
         fieldPreprocessor: {
@@ -121,38 +164,68 @@ public struct DataImporter {
     }
     
     public static var revolut: Processor {
+      //  "Type,Product,Started Date,Completed Date,Description,Amount,Fee,Currency,State,Balance"
+      //   TOPUP,Current,2020-03-02 15:24:16,2020-03-02 15:24:49,Top-Up by *3933,1000.00,0.00,PLN,COMPLETED,1000.72
+      
+      
+      let df = DateFormatter()
+      //2023-03-20
+      df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+      print("string \(df.string(from: Date()))")
+      
+      let csv = Self.csvParser
+      
       return Processor(
+        parseStructure: { input in
+          try csv.parse(input)
+        },
         linesValidation: { lines in
-          
+          guard lines.count > 1 else {
+            throw Error.notEnoughLines(minimum: 2)
+          }
+        },
+        lineSeparator: "\n",
+        skipLine: { line in
+          return line == [""]
         },
         fieldSeparater: ",",
         fieldsValidation: { fields, i in
-          
+          guard fields.count == 10 else {
+            throw Error.invalidNumberOfFields(expected: 10, got: fields.count, at: i)
+          }
         },
         fieldPreprocessor: { $0 },
         lineTransformer: { fields, i in
           return Transaction(
-            account: .init(number: ""),
+            account: .init(number: fields[1]),
             dates: .init(
-              transaction: Date(),
-              settlement: Date()
+              transaction: df.date(from: fields[2])!,
+              settlement: df.date(from: fields[3])!
             ),
             type: .expense,
             party: .init(name: ""),
-            details: .init(description: ""),
-            amounts: .init(debited: 1, credited: 1, balance: 1),
-            currency: .init(code: "PLN")
+            details: .init(description: fields[4]),
+            amounts: .init(
+              debited: 1,
+              credited: 1,
+              balance: Double(fields[9]) ?? .zero
+            ),
+            currency: .init(code: fields[7])
           )
         }
       )
     }
     
-    public let linesValidation: (_ lines: [String]) throws -> Void
+    public let parseStructure: (String) throws -> [[String]]
+    public let linesValidation: (_ lines: [[String]]) throws -> Void
+    public let lineSeparator: String
+    public let skipLine: (_ line: [String]) -> Bool
     public let fieldSeparater: String
     public let fieldsValidation: (_ fields: [String], _ lineIndex: Int) throws -> Void
     public let fieldPreprocessor: (_ field: String) -> String
     public let lineTransformer: (_ fields:[String], _ lineIndex: Int) throws -> Transaction
   }
+  
   public struct Transaction: CustomStringConvertible {
     public var description: String {
       "amount \(amounts), date: \(dates)"
@@ -226,26 +299,26 @@ public struct DataImporter {
     ) throws ->  [Transaction] {
       var transactions = [Transaction]()
       
-      let lines = csvString.components(separatedBy: .newlines)
+      let lines = try processor.parseStructure(csvString)
       
       try processor.linesValidation(lines)
       
-      // Parse each line of the CSV file and create a Transaction struct
       for (i,line) in lines.dropFirst().enumerated() {
-        let fields = line.components(separatedBy: processor.fieldSeparater)
-        try processor.fieldsValidation(fields, i)
-        let transaction = try processor.lineTransformer(fields, i)
+        if processor.skipLine(line) {
+          continue
+        }
+        
+        let processedFields = line.map {
+          processor.fieldPreprocessor($0)
+        }
+        try processor.fieldsValidation(processedFields, i)
+        let transaction = try processor.lineTransformer(processedFields, i)
         transactions.append(transaction)
       }
+    
       
       return transactions
       
     }
   }
 }
-//
-//let path = Bundle.main.path(forResource: "history", ofType: "csv")!
-//let data = try String(contentsOfFile: path, encoding: .utf8)
-//let transactions = try DataImporter.CSV().parseCSV(data)
-//
-//print("transactions \(transactions.map(\.description).joined(separator: "\n"))")

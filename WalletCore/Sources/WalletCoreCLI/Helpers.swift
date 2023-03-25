@@ -37,3 +37,8 @@ extension ParsableCommand {
   }
 }
 
+extension String {
+  var expandingTildeInPath: String {
+      return self.replacingOccurrences(of: "~", with: FileManager.default.homeDirectoryForCurrentUser.path)
+  }
+}

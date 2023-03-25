@@ -10,29 +10,73 @@ import ArgumentParser
 import AppApi
 import WalletCoreDataModel
 
+extension DataImporter.CSV {
+  enum Format: String, ExpressibleByArgument, CaseIterable {
+    case millenium
+    case revolut
+  }
+}
+
+extension AppApi.Record.Detail {
+  init(_ transaction: DataImporter.Transaction) {
+    self.init(
+      id: .init(),
+      title: transaction.details.description,
+      amount: transaction.currentAmount,
+      type: transaction.type,
+      currencyCode: transaction.currency.code,
+      created: transaction.dates.transaction,
+      updated: transaction.dates.settlement
+    )
+  }
+}
+
 
 struct Import: ParsableCommand {
   
   static var configuration = CommandConfiguration(
     commandName: "import",
-    abstract: "A utility for transforming bank csv into JSON understood by Wallet Core.",
-    subcommands: [Millenium.self]
+    abstract: "A utility for transforming bank csv into JSON understood by Wallet Core."
   )
   
   
-  struct Options: ParsableArguments {
-    
-    @Argument(help: "The csv file name to import and export as internal JSON format")
-    var inputFile: String
-    
-    @Argument(help: "The file name to export output in the internal JSON format")
-    var outputFile: String?
+  @Argument(help: "The csv file name to import and export as internal JSON format")
+  var inputFile: String
+
+  @Argument(help: "The file name to export output in the internal JSON format")
+  var outputFile: String?
+//
+  @Option(help: "The kind of average to provide.")
+  var format: DataImporter.CSV.Format = .millenium
+  
+  func processor(from format: DataImporter.CSV.Format) -> DataImporter.Processor {
+    switch format {
+    case .millenium:
+      return .millenium
+    case .revolut:
+      return .revolut
+    }
   }
   
-}
+  mutating func run() throws {
+    print(ProcessInfo().arguments)
+    print("run import \(format)")
+    let csvString = try stringFromFile(at: inputFile)
+    let transactions = try DataImporter.CSV.parseCSV(
+      processor: processor(from:format),
+      csvString: csvString
+    )
+    let records = transactions.map { transaction in
+      AppApi.Record.Detail(transaction)
+    }
 
-extension String {
-  var expandingTildeInPath: String {
-      return self.replacingOccurrences(of: "~", with: FileManager.default.homeDirectoryForCurrentUser.path)
+    let jsonString = try records.convertToJSONString()
+
+    print("JSON output \(jsonString)")
+
+    if let outputFile {
+      try export(jsonString: jsonString, to: outputFile)
+    }
   }
+  
 }
