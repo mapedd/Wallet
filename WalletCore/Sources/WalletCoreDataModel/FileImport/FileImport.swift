@@ -9,6 +9,22 @@ import Foundation
 import AppApi
 import Parsing
 
+
+public extension AppApi.Record.Detail {
+  init(transaction: DataImporter.Transaction) {
+    self.init(
+      id: .init(),
+      title: transaction.details.description,
+      amount: transaction.currentAmount,
+      type: transaction.type,
+      currencyCode: transaction.currency.code,
+      created: transaction.dates.transaction,
+      updated: transaction.dates.settlement
+    )
+  }
+}
+
+
 public extension String {
   func unwrapping(from suffixAndPrefix: String) -> String {
     var string = self
@@ -220,6 +236,8 @@ public struct DataImporter {
       )
     }
     
+    public static var automatic: Processor  = .revolut
+    
     public let parseStructure: (String) throws -> [[String]]
     public let linesValidation: (_ lines: [[String]]) throws -> Void
     public let lineSeparator: String
@@ -296,6 +314,18 @@ public struct DataImporter {
     }
   }
   public struct CSV {
+    
+    public static func parseToRecord(csvString: String) throws -> [AppApi.Record.Detail] {
+      
+      let transactions = try DataImporter.CSV.parseCSV(
+        processor: .automatic,
+        csvString: csvString
+      )
+      let records = transactions.map { transaction in
+        AppApi.Record.Detail(transaction: transaction)
+      }
+      return records
+    }
     
     public static func parseCSV(
       processor: Processor,

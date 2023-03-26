@@ -12,20 +12,18 @@ import UniformTypeIdentifiers
 
 struct DocumentPickerView: UIViewControllerRepresentable {
   func makeCoordinator() -> Coordinator {
-    Coordinator(viewStore: viewStore)
+    Coordinator(pickerView: self)
   }
   
   let store: StoreOf<DocumentPicker>
-  
-  @StateObject var viewStore: ViewStoreOf<DocumentPicker>
+  let viewStore: ViewStoreOf<DocumentPicker>
   
   init(store: StoreOf<DocumentPicker>) {
     self.store = store
-    let viewStore = ViewStore(self.store, observe: { $0 })
-    self._viewStore = StateObject(wrappedValue: viewStore)
+    self.viewStore = ViewStore(store, observe: { $0 })
+//    self._viewStore = StateObject(wrappedValue: viewStore)
     
   }
-  
   
   func makeUIViewController(context: Self.Context) -> UIDocumentPickerViewController {
     
@@ -41,12 +39,14 @@ struct DocumentPickerView: UIViewControllerRepresentable {
   
   class Coordinator: NSObject, UIDocumentPickerDelegate {
     let viewStore: ViewStoreOf<DocumentPicker>
-    init(viewStore: ViewStoreOf<DocumentPicker>) {
-      self.viewStore = viewStore
+    let pickerView: DocumentPickerView
+    init(pickerView: DocumentPickerView) {
+      self.pickerView = pickerView
+      self.viewStore = pickerView.viewStore
       super.init()
     }
-    private func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt urls: [URL]) {
-      print(urls)
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+      self.viewStore.send(.selected(urls))
     }
   }
 }

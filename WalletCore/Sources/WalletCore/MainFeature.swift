@@ -205,6 +205,53 @@ public struct Main : ReducerProtocol {
     )
   }
   
+  
+  func moneyRecord(from editorState: Editor.State) -> MoneyRecord {
+    var categories: [MoneyRecord.Category] = []
+    if let newCategory = editorState.category {
+      categories.append(newCategory)
+    }
+    let newRecord = MoneyRecord(
+      id: .init(),
+      date: .init(),
+      title: editorState.text,
+      notes: "",
+      type: editorState.recordType,
+      amount: Decimal(string: editorState.amount) ?? Decimal.zero,
+      currencyCode: editorState.currency.code,
+      categories: categories
+    )
+    return newRecord
+  }
+  
+  func creating(newRecord: MoneyRecord) -> EffectTask<Action> {
+   
+    let update = AppApi.Record.Update(
+      id: newRecord.id,
+      title: newRecord.title,
+      amount: newRecord.amount,
+      type: newRecord.apiRecordType,
+      currencyCode: newRecord.currencyCode,
+      notes: newRecord.notes,
+      categoryIds: newRecord.categories.map(\.id),
+      updated: dateProvider.now
+    )
+    
+    return .task(
+      operation: {
+        if let record = try await apiClient.updateRecord(update) {
+          return .recordCreated(record)
+        }
+        else {
+          return .recordCreateFailed(LocalError.cannotCreateRecord.localizedDescription)
+        }
+      },
+      catch: { error in
+        return .recordCreateFailed(error.localizedDescription)
+      }
+    )
+  }
+  
   @Dependency(\.apiClient) var apiClient
   @Dependency(\.dateProvider) var dateProvider
   
@@ -231,20 +278,8 @@ public struct Main : ReducerProtocol {
       case let .editorAction(editorAction):
         switch editorAction {
         case .addButtonTapped:
-          var categories: [MoneyRecord.Category] = []
-          if let newCategory = state.editorState.category {
-            categories.append(newCategory)
-          }
-          let newRecord = MoneyRecord(
-            id: .init(),
-            date: .init(),
-            title: state.editorState.text,
-            notes: "",
-            type: state.editorState.recordType,
-            amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
-            currencyCode: state.editorState.currency.code,
-            categories: categories
-          )
+          
+          let newRecord = moneyRecord(from: state.editorState)
           
           state.records.append(newRecord)
           state.recalculateTotal()
@@ -253,30 +288,7 @@ public struct Main : ReducerProtocol {
             categories: state.editorState.categories
           )
           
-          let update = AppApi.Record.Update(
-            id: newRecord.id,
-            title: newRecord.title,
-            amount: newRecord.amount,
-            type: newRecord.apiRecordType,
-            currencyCode: newRecord.currencyCode,
-            notes: newRecord.notes,
-            categoryIds: categories.map(\.id),
-            updated: dateProvider.now
-          )
-          
-          return .task(
-            operation: {
-              if let record = try await apiClient.updateRecord(update) {
-                return .recordCreated(record)
-              }
-              else {
-                return .recordCreateFailed(LocalError.cannotCreateRecord.localizedDescription)
-              }
-            },
-            catch: { error in
-              return .recordCreateFailed(error.localizedDescription)
-            }
-          )
+          return creating(newRecord: newRecord)
           
         default:
           return .none
@@ -498,6 +510,14 @@ public struct Main : ReducerProtocol {
         return .none
       case .updateFailed(_):
         return .none
+      case .settings(.presented(.delegate(.attemptImport(let records)))):
+        let moneyRecords = records.map { $0.asMoneyRecord }
+        state.records.append(contentsOf: moneyRecords )
+        let updates = moneyRecords.map {
+          creating(newRecord: $0)
+        }
+        return .merge(updates)
+        
       case .settings:
         return .none
       }

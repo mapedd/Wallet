@@ -8,6 +8,8 @@
 import Foundation
 import ComposableArchitecture
 import WalletCoreDataModel
+import AppApi
+import Logging
 
 public struct UserModel: Hashable, Identifiable {
   public init(email: String, id: UUID) {
@@ -32,6 +34,7 @@ public struct Settings: ReducerProtocol {
     }
     
     public var user: UserModel
+    public var showProgress = false
     public var picker: DocumentPicker.State?
     public var alert: AlertState<Action.Alert>? = nil
     
@@ -46,6 +49,8 @@ public struct Settings: ReducerProtocol {
     
   }
   
+  let logger = Logger(label: "com.mapedd.wallet.settings")
+  
   public enum Action: Equatable {
     case logOutButtonTapped
     case deleteAccountRowTapped
@@ -53,6 +58,8 @@ public struct Settings: ReducerProtocol {
     case picker(PresentationAction<DocumentPicker.Action>)
     case alert(PresentationAction<Alert>)
     case delegate(Delegate)
+    case parsingFailed
+    
     public enum Alert: Equatable {
       case logoutAlertConfirmed
       case deleteAccountAlertConfirmed
@@ -60,6 +67,7 @@ public struct Settings: ReducerProtocol {
     public enum Delegate: Equatable {
       case logOutRequested
       case deleteAcountRequested
+      case attemptImport([AppApi.Record.Detail])
     }
   }
   
@@ -84,15 +92,36 @@ public struct Settings: ReducerProtocol {
       return Effect(value: .delegate(.logOutRequested))
     case .delegate:
       return .none
-    case .picker:
-      return .none
+    case .picker(.presented(.selected(let urls))):
+      return .task(
+        operation: {
+          guard let firstURL = urls.first else {
+            return .parsingFailed
+          }
+          let csvString = try String(contentsOf: firstURL, encoding: .utf8)
+          let records = try DataImporter.CSV.parseToRecord(csvString: csvString)
+          return .delegate(.attemptImport(records))
+        },
+        catch: { error in
+          logger.error("import failed \(error)")
+          return .parsingFailed
+        }
+      )
     case .alert(.dismiss):
+      state.alert = nil
       return .none
     case .importFromFileRowTapped:
       state.picker = DocumentPicker.State()
       return .none
     case .alert(.presented(.deleteAccountAlertConfirmed)):
       return Effect(value: .delegate(.deleteAcountRequested))
+        
+    case .parsingFailed:
+      state.showProgress = false
+      // need show some alert here
+      return .none
+    case .picker:
+      return .none
     }
   }
 }

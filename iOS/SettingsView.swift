@@ -40,11 +40,7 @@ struct SettingsView : View {
     .sheet(
       store: self.store.scope(state: \.picker, action: Settings.Action.picker)
     ) { store in
-      NavigationView {
-        DocumentPickerView(store: store)
-          
-      }
-      
+      DocumentPickerView(store: store)
     }
     .alert(store: self.store.scope(state: \.alert, action: Settings.Action.alert))
   }

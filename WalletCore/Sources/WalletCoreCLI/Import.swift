@@ -17,21 +17,6 @@ extension DataImporter.CSV {
   }
 }
 
-extension AppApi.Record.Detail {
-  init(_ transaction: DataImporter.Transaction) {
-    self.init(
-      id: .init(),
-      title: transaction.details.description,
-      amount: transaction.currentAmount,
-      type: transaction.type,
-      currencyCode: transaction.currency.code,
-      created: transaction.dates.transaction,
-      updated: transaction.dates.settlement
-    )
-  }
-}
-
-
 struct Import: ParsableCommand {
   
   static var configuration = CommandConfiguration(
@@ -67,7 +52,7 @@ struct Import: ParsableCommand {
       csvString: csvString
     )
     let records = transactions.map { transaction in
-      AppApi.Record.Detail(transaction)
+      AppApi.Record.Detail(transaction:transaction)
     }
 
     let jsonString = try records.convertToJSONString()
