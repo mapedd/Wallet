@@ -17,7 +17,7 @@
 		042A3C6128DC7A2900772365 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5528DC780400772365 /* EditorView.swift */; };
 		043BAFD528CCF9C800A5D2CE /* RecordDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043BAFD428CCF9C800A5D2CE /* RecordDetailsView.swift */; };
 		0446E396294BC85000B62C95 /* AppApi in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E395294BC85000B62C95 /* AppApi */; };
-		0446E39E2951E19E00B62C95 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* Login.swift */; };
+		0446E39E2951E19E00B62C95 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* LoginView.swift */; };
 		0450C6CD2992C58D0074A6C7 /* WalletCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0450C6CC2992C58D0074A6C7 /* WalletCore */; };
 		0450C6CF2992CEAE0074A6C7 /* WalletCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0450C6CE2992CEAE0074A6C7 /* WalletCore */; };
 		04515E2029929A690022404B /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04515E1F29929A690022404B /* RecordView.swift */; };
@@ -72,7 +72,7 @@
 		042A3C5428DC780300772365 /* WalletApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		042A3C5528DC780400772365 /* EditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		043BAFD428CCF9C800A5D2CE /* RecordDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailsView.swift; sourceTree = "<group>"; };
-		0446E39D2951E19E00B62C95 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		0446E39D2951E19E00B62C95 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		04515E1F29929A690022404B /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		04515E2129929DF60022404B /* RecordDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailsView.swift; sourceTree = "<group>"; };
 		04560432298EE8C6005031A8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 			children = (
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
-				0446E39D2951E19E00B62C95 /* Login.swift */,
+				0446E39D2951E19E00B62C95 /* LoginView.swift */,
 				04AB3E9F28D79CFF00C327A4 /* MainView.swift */,
 				04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */,
 				043BAFD428CCF9C800A5D2CE /* RecordDetailsView.swift */,
@@ -467,7 +467,7 @@
 				0421FC2D28C697A600487827 /* SummaryView.swift in Sources */,
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
-				0446E39E2951E19E00B62C95 /* Login.swift in Sources */,
+				0446E39E2951E19E00B62C95 /* LoginView.swift in Sources */,
 				04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */,
 				04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */,
 				043BAFD528CCF9C800A5D2CE /* RecordDetailsView.swift in Sources */,

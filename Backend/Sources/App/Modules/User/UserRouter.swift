@@ -15,7 +15,8 @@ struct UserRouter: RouteCollection {
     case deleteAccount = "delete-account"
     case signOut = "sign-out"
     case register = "register"
-    case confirmPassword = "confirmPassword"
+    case confirmPassword = "confirm-password"
+    case confirmDeleteAccount = "confirm-account-delete"
     case resend = "resend"
     
     var href : String {
@@ -68,6 +69,9 @@ struct UserRouter: RouteCollection {
     routes
       .get(Route.confirmPassword.pathComponent, use: frontendController.confirmPassword)
     
+    routes
+      .get(Route.confirmDeleteAccount.pathComponent, use: frontendController.confirmAccountDeletion)
+    
   }
   
   func bootAPI(_ routes: RoutesBuilder) throws {
@@ -110,6 +114,11 @@ struct UserRouter: RouteCollection {
     routes
       .grouped("api")
       .get("users", use: apiController.listAll)
+    
+    routes
+      .grouped("api")
+      .get(Route.deleteAccount.pathComponent, use: apiController.requestAccountDeletion)
+    
     
     
 //    routes

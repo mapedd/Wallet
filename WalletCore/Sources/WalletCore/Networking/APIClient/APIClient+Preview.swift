@@ -36,6 +36,9 @@ extension APIClient {
       resendEmailConfirmation: { _ in
         .init(success: true)
       },
+      deleteAccount: {
+        .init(success: true)
+      },
       updateRecord: {
         .init(
           id: $0.id,

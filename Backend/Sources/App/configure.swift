@@ -23,11 +23,11 @@ extension Environment {
     Environment.get("DISABLE_EMAILS") != nil
   }
   
-  var mailerSendApiKey: String {
+  var mailerSendApiKey: String? {
     if self == .testing {
       return "TEST_API_KEY"
     } else {
-      return Environment.get("MAILERSEND_API_KEY")!
+      return Environment.get("MAILERSEND_API_KEY")
     }
   }
 }

@@ -46,6 +46,7 @@ public struct Content: ReducerProtocol {
     case loggedIn(Main.Action)
     case loggedOut(Login.Action)
     case successfullyLoggedOut
+    case successfullyDeletedAccount
     case task
   }
   
@@ -61,6 +62,7 @@ public struct Content: ReducerProtocol {
     }
     Reduce { state, action in
       switch action {
+      
       case .loggedOut(let loggedOutAction):
         if case .loggedIn(let token) = loggedOutAction {
           keychain.saveToken(token.toLocalToken)
@@ -69,8 +71,11 @@ public struct Content: ReducerProtocol {
         return .none
         
       case .loggedIn(let loggedInAction):
-        if loggedInAction == .logOut {
+        if loggedInAction == .delegate(.logOut) {
           return logOut(&state)
+        }
+        else if loggedInAction == .delegate(.deleteAccount) {
+          return deleteAccount(&state)
         }
         return .none
         
@@ -78,7 +83,12 @@ public struct Content: ReducerProtocol {
         keychain.saveToken(nil)
         state = .loggedOut(Login.State())
         return .none
+      case .successfullyDeletedAccount:
+        keychain.saveToken(nil)
+        state = .loggedOut(Login.State(alert: .deleted))
+        return .none
       case .task:
+//        return .none
         return taskEffect(&state, logger: logger)
       }
     }
@@ -106,7 +116,7 @@ public struct Content: ReducerProtocol {
     }
   }
   
-  private func logOut(_ state: inout State) -> EffectTask<Action> {
+  private func logOut(_ state: inout State) -> Effect<Action> {
     
     guard let _ = keychain.readToken() else {
       state = .loggedOut(Login.State())
@@ -123,6 +133,26 @@ public struct Content: ReducerProtocol {
         // we need to log out even if it failed to not be stuck here forever
         
         return .successfullyLoggedOut
+      }
+    )
+  }
+  
+  private func deleteAccount(_ state: inout State) -> Effect<Action> {
+    guard let _ = keychain.readToken() else {
+      state = .loggedOut(Login.State())
+      return .none
+    }
+    
+    return .task(
+      operation: {
+        
+        let result = try await apiClient.deleteAccount()
+        debugPrint("result \(result)")
+        return .successfullyDeletedAccount
+      }, catch: { error in
+        // we need to log out even if it failed to not be stuck here forever
+        
+        return .successfullyDeletedAccount
       }
     )
   }

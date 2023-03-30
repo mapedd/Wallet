@@ -37,6 +37,7 @@ extension Application {
   // extract the deeplink and call that in
   public func confirm(email address: String) async throws {
     let req = try XCTUnwrap(customClient.requestsReceived.first)
+    customClient.requestsReceived.removeFirst()
     
     var sendEmail: HTML?
     do {

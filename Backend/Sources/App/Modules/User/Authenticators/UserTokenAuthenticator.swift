@@ -25,6 +25,14 @@ public struct DateProvider {
     currentDate()
   }
   
+  public func deleteAccountConfirmationValid(date: Date) -> Bool {
+    if date + .minutes(30) > now {
+      return false
+    } else {
+      return true
+    }
+  }
+  
   public func emailConfirmationValid(date: Date) -> Bool {
     if date + .minutes(30) > now {
       return false

@@ -134,7 +134,7 @@ public struct Main : ReducerProtocol {
     case settings(PresentationAction<Settings.Action>)
     case showStatistics
     case hideStatistics
-    case logOut
+    
     case settingsButtonTapped
     case task
     case refresh
@@ -161,6 +161,13 @@ public struct Main : ReducerProtocol {
     case updateFailed(String)
     
     case didTapRecord(id: MoneyRecord.ID)
+    
+    case delegate(Delegate)
+    
+    public enum Delegate: Equatable {
+      case logOut
+      case deleteAccount
+    }
   }
   
   func deleting(_ record: MoneyRecord) -> EffectTask<Action> {
@@ -358,8 +365,9 @@ public struct Main : ReducerProtocol {
         return .none
         
       case .settings(.presented(.delegate(.logOutRequested))):
-        return Effect(value: .logOut)
-        
+        return Effect(value: .delegate(.logOut))
+      case .settings(.presented(.delegate(.deleteAcountRequested))):
+        return Effect(value: .delegate(.deleteAccount))
       case .task:
 
         if state.initialLoadDone  {
@@ -489,7 +497,7 @@ public struct Main : ReducerProtocol {
         return .none
       case .statisticsAction(_):
         return .none
-      case .logOut:
+      case .delegate:
         return .none
       case .loadingRecordsFailed(_):
         state.loading = false

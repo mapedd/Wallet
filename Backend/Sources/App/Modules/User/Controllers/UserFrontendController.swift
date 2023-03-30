@@ -71,7 +71,8 @@ struct UserFrontendController {
   
   func confirmPassword(req: Request) async throws  -> Response {
     req.logger.notice("received email confirmation request")
-    let confirmEmail = try req.query.decode(ConfirmEmailToken.self)
+    let confirmEmail = try req.query.decode(ConfirmationTokenPayload
+      .self)
     req.logger.notice("will try to confirmation request with id \(confirmEmail.token)")
     guard
       let model = try await EmailConfirmationToken
@@ -100,8 +101,40 @@ struct UserFrontendController {
     
     return req.redirect(to: UserRouter.Route.signIn.href)
   }
+  
+  func confirmAccountDeletion(req: Request)  async throws -> Response {
+    req.logger.notice("received delete account confirmation request")
+    let confirmDelete = try req.query.decode(ConfirmationTokenPayload.self)
+    req.logger.notice("will try to confirmation request with id \(confirmDelete.token)")
+    guard
+      let model = try await DeleteAccountToken
+      .find(confirmDelete.token, on: req.db)
+    else {
+      throw Abort(.conflict)
+    }
+    
+    let user = try await model.$user.get(on: req.db)
+    
+    req.logger.notice("found account deletion token for user with id \(user.id!)!")
+    
+    let linkDead = UserInfoTemplate(context: .init(title: "Link invalid", message: "Link dead bro"))
+    guard
+      let tokenCreation = model.created,
+      !userApiController.dateProvider.deleteAccountConfirmationValid(date: tokenCreation)
+    else {
+      req.logger.notice("confirmation token expired")
+      return req.templates.renderHtml(linkDead)
+    }
+    
+    req.logger.notice("delete account succeeded for user \(user.id!)")
+    user.deleted = userApiController.dateProvider.now
+    
+    try await user.save(on: req.db)
+    
+    return req.redirect(to: "/")
+  }
 }
 
-struct ConfirmEmailToken: Codable {
+struct ConfirmationTokenPayload: Codable {
   let token: UUID
 }

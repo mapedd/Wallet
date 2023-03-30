@@ -185,6 +185,27 @@ struct UserApiController {
     return ActionResult(success: true)
   }
   
+  func requestAccountDeletion(req: Request) async throws -> ActionResult {
+    
+    guard let user = req.auth.get(AuthenticatedUser.self) else {
+      throw Abort(.unauthorized)
+    }
+    
+    let token = DeleteAccountToken()
+    token.$user.id = user.id
+    
+    do {
+      try await token.create(on: req.db)
+    } catch {
+      req.logger.error("error creating registration token \(error)")
+      throw Abort(.internalServerError)
+    }
+    
+    try await sendAccountDeletionEmail(req, email: user.email, token: token)
+    
+    return ActionResult(success: true)
+  }
+  
   struct EmailConfirmationResend: Codable {
     var email: String
   }
@@ -199,7 +220,7 @@ struct UserApiController {
       .filter(\.$email == email)
       .first()
     
-    guard let user else {
+     guard let user else {
       throw Abort(.notFound)
     }
     
@@ -275,47 +296,30 @@ struct UserApiController {
     }
   }
   
-  private func sendConfirmationEmail(_ req: Request, email: String, token: EmailConfirmationToken) async throws {
+  private func sendAccountDeletionEmail(_ req: Request, email: String, token: DeleteAccountToken) async throws {
     
-//    let domain = "portfelmapedd.online"
-    let domain = "localhost:8080"
-    let domainSender = "portfelmapedd.online"
-    let productName = "Wallet"
-    let path = UserRouter.Route.confirmPassword.pathComponent
     let tokenId = try token.requireID().uuidString
     
-    let registerLink = "http://www.\(domain)/\(path)?token=\(tokenId)"
-    
-    req.logger.notice("registered user, generating confirm link: \(registerLink)")
-    
-    let query = MailerSendEmail.Request(
-      from: .init(
-        email: "welcome@\(domainSender)",
-        name: "Tomek"
-      ),
-      to: [
-        .init(
-          email: email,
-          name: "New user"
-        )
-      ],
-      subject: "Welcome to \(productName)!",
-      text: "",
-      html:  """
-        <p>You've requested to register your account. <a
-        href="\(registerLink)">
-        Click here</a> to confirm your email.
-        It's valid for only 30 minutes</p>
-        """
+    let query = Email.deleteAccountRequest(
+      tokenId: tokenId,
+      email: email,
+      logger: req.logger
     )
     
-    if req.application.environment.emailsDisabled {
-      req.logger.notice("sending real emails disabled, email that would have been sent: \(query)")
-    } else {
-      let apiKey = req.application.environment.mailerSendApiKey
-      try await req.sendRegistrationEmail(query: query, apiKey: apiKey)
-      req.logger.notice("sent email confirmation from \(query.from.email) to \(query.to.first!.email)")
-    }
+    try await req.sendEmail(query: query)
+  }
+  
+  private func sendConfirmationEmail(_ req: Request, email: String, token: EmailConfirmationToken) async throws {
+    
+    let tokenId = try token.requireID().uuidString
+    
+    let query = Email.emailConfirmationRequest(
+      tokenId: tokenId,
+      email: email,
+      logger: req.logger
+    )
+    
+    try await req.sendEmail(query: query)
   }
 }
 
@@ -352,19 +356,42 @@ enum MailerSendEmail {
 }
 
 extension Request {
-  func sendRegistrationEmail(
-    query: MailerSendEmail.Request,
-    apiKey: String
+  
+  var apiKey: String? {
+    application.environment.mailerSendApiKey
+  }
+  
+  var sendEmail: URI {
+    "https://api.mailersend.com/v1/email"
+  }
+  
+  var autentiacted: HTTPHeaders {
+    guard let apiKey else {
+      logger.error("no MailerSend API Key")
+      return [:]
+    }
+    return ["Authorization" : "Bearer \(apiKey)"]
+  }
+  
+  func sendEmail(
+    query: MailerSendEmail.Request
   ) async throws  {
-        
-    let url: URI = "https://api.mailersend.com/v1/email"
-    let headers: HTTPHeaders = ["Authorization" : "Bearer \(apiKey)"]
-    let response = try await client.post(url, headers: headers, content: query)
     
-//    let response = try await client.post(url) { req in
-//        try req.content.encode(query)
-//        req.headers.add(name: "Authorization", value: "Bearer \(apiKey)")
-//    }
+    guard  !application.environment.emailsDisabled else {
+      logger.notice("sending real emails disabled, email that would have been sent: \(query)")
+      return
+    }
+    
+    guard !autentiacted.isEmpty else {
+      throw Abort(.internalServerError)
+    }
+       
+        
+    let response = try await client.post(
+      sendEmail,
+      headers: autentiacted,
+      content: query
+    )
         
     do {
       let validationError = try response.content.decode(MailerSendEmail.ValidationError.self)
@@ -379,5 +406,7 @@ extension Request {
       logger.error("error sending email \(response.status)")
       throw Abort(.internalServerError)
     }
+      
+    logger.notice("sent email with subject \"\(query.subject)\" from \(query.from.email) to \(query.to.first!.email)")
   }
 }

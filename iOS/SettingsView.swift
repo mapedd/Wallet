@@ -32,7 +32,14 @@ struct SettingsView : View {
             }) {
               Text("Log out")
             }
+            
+            Button(action: {
+              viewStore.send(.deleteAccountRowTapped)
+            }) {
+              Text("Delete account")
+            }
           }
+          
         }
       }
       .navigationBarTitle(Text("Settings"))
@@ -48,17 +55,18 @@ struct SettingsView : View {
 
 struct SettingsView_Previews: PreviewProvider {
   static var previews: some View {
-    SettingsView(
-      store: .init(
-        initialState: .init(
-          user: UserModel(
-            email: "email@email.com",
-            id: .init()
-          )
-        ),
-        reducer: Settings()
+    NavigationView {
+      SettingsView(
+        store: .init(
+          initialState: .init(
+            user: UserModel(
+              email: "email@email.com",
+              id: .init()
+            )
+          ),
+          reducer: Settings()
+        )
       )
-    )
-    .padding(40)
+    }
   }
 }

@@ -20,7 +20,6 @@ enum UserMigrations {
         .field(UserAccountModel.FieldKeys.v1.created, .string, .required)
         .field(UserAccountModel.FieldKeys.v1.updated, .string, .required)
         .field(UserAccountModel.FieldKeys.v1.deleted, .string)
-//        .field(UserAccountModel.FieldKeys.v1.emailConfirmed, .string)
         .field(UserAccountModel.FieldKeys.v1.emailConfirmed, .datetime)
         .unique(on: UserAccountModel.FieldKeys.v1.email)
         .create()
@@ -28,6 +27,13 @@ enum UserMigrations {
       try await db.schema(EmailConfirmationToken.schema)
         .id()
         .field(EmailConfirmationToken.FieldKeys.v1.email, .string, .required)
+        .field(EmailConfirmationToken.FieldKeys.v1.created, .string, .required)
+        .field(EmailConfirmationToken.FieldKeys.v1.userId, .uuid, .required)
+        .foreignKey(EmailConfirmationToken.FieldKeys.v1.userId, references: UserAccountModel.schema, .id)
+        .create()
+      
+      try await db.schema(DeleteAccountToken.schema)
+        .id()
         .field(EmailConfirmationToken.FieldKeys.v1.created, .string, .required)
         .field(EmailConfirmationToken.FieldKeys.v1.userId, .uuid, .required)
         .foreignKey(EmailConfirmationToken.FieldKeys.v1.userId, references: UserAccountModel.schema, .id)
@@ -48,6 +54,7 @@ enum UserMigrations {
       try await db.schema(UserTokenModel.schema).delete()
       try await db.schema(UserAccountModel.schema).delete()
       try await db.schema(EmailConfirmationToken.schema).delete()
+      try await db.schema(DeleteAccountToken.schema).delete()
     }
   }
   

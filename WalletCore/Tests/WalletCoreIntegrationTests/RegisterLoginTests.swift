@@ -137,6 +137,29 @@ class RegisterLoginTests: APIIntegrationTest {
 //    }
   }
   
+  func testRegisterSignInDeleteAccount() async throws {
+    let harness = Harness()
+    let user = User.Account.Login.sample
+    let response = try await harness.api.register(.sample)
+    
+    XCTAssertEqual(response?.email, user.email)
+    
+    try await harness.app.confirm(email: user.email)
+    
+    let login = try await harness.api.signIn(user)
+    
+    let loginValue = try XCTUnwrap(login)
+    harness.keychain.saveToken(loginValue.toLocalToken)
+    
+    XCTAssertEqual(login?.user.email, user.email)
+    
+    let result = try await harness.api.deleteAccount()
+    
+    XCTAssertTrue(result.success)
+    
+    try await harness.app.confirm(email: user.email)
+  }
+  
   func testRegisterSignInSignOut() async throws {
     let harness = Harness()
     let user = User.Account.Login.sample

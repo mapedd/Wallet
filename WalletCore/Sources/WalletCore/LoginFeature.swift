@@ -49,13 +49,17 @@ public struct Login: ReducerProtocol {
   }
   
   public struct State: Equatable {
+    public static var `default`: Self {
+      State()
+    }
+    
     public init(
       username: String = "",
       password: String = "",
       loggingIn: Bool = false,
       registering: Bool = false,
       buttonsEnabled: Bool = false,
-      alert: AlertState<Login.Action>? = nil
+      alert: AlertState<Login.Action.Alert>? = nil
     ) {
       self.username = username
       self.password = password
@@ -71,7 +75,7 @@ public struct Login: ReducerProtocol {
     public var registering = false
     public var loggingIn = false
     public var buttonsEnabled = false
-    public var alert: AlertState<Action>?
+    public var alert: AlertState<Action.Alert>?
     public var footerText: String
     
     public var textFieldsDisabled: Bool {
@@ -86,10 +90,15 @@ public struct Login: ReducerProtocol {
     case register
     case loggedIn(User.Token.Detail)
     case loginFailed(LoginFailureReason)
-    case alertCancelTapped
-    case sendEmailConfirmationTappedOnAlert
+    case passwordSubmitted
+    
+    case alert(PresentationAction<Alert>)
     case emailResent
     case emailResentFailed
+    
+    public enum Alert: Equatable {
+      case sendEmailConfirmationTapped
+    }
   }
   
   
@@ -101,8 +110,14 @@ public struct Login: ReducerProtocol {
     Reduce { state, action in
       
       switch action {
+      case .passwordSubmitted:
+        guard !state.username.isEmpty, !state.password.isEmpty else {
+          return .none
+        }
+        return Effect(value: .logIn)
       case .emailResent:
         state.alert = nil
+        state.loggingIn = false
         return .none
         
       case .emailResentFailed:
@@ -110,15 +125,13 @@ public struct Login: ReducerProtocol {
         return .none
         
       case .task:
+        state.buttonsEnabled = !state.username.isEmpty && !state.password.isEmpty
         state.footerText = footer()
         return .none
         
-      case .sendEmailConfirmationTappedOnAlert:
+      case .alert(.presented(.sendEmailConfirmationTapped)):
+        state.loggingIn = false
         return triggerResendEmail(state)
-        
-      case .alertCancelTapped:
-        state.alert = nil
-        return .none
         
       case .binding(_):
         state.buttonsEnabled = buttonsEnabled(state)
@@ -141,6 +154,9 @@ public struct Login: ReducerProtocol {
         state.loggingIn = false
         state.registering = false
         state.alert = .failed(reason)
+        return .none
+      case .alert(.dismiss):
+        state.alert = nil
         return .none
       }
     }
@@ -221,8 +237,14 @@ public struct Login: ReducerProtocol {
   
 }
 
-public extension AlertState<Login.Action> {
-  static func failed(_ reason: Login.LoginFailureReason) -> AlertState<Login.Action> {
+public extension AlertState<Login.Action.Alert> {
+  static var deleted: Self {
+    .init {
+      TextState("You were logged out you should receive delete confirmation email. Once you click a link inside, your account and all your data, will be deleted")
+    }
+  }
+  
+  static func failed(_ reason: Login.LoginFailureReason) -> Self {
     switch reason {
     case .apiError(let error):
       if let error = error as? AuthError { // user not registered
@@ -234,13 +256,16 @@ public extension AlertState<Login.Action> {
         if error.message == "user not verified email" {
           return emailNotVerified
         }
+        if error.message == "user with this email already exists" {
+          return userAlreadyTaken
+        }
       }
     }
     
     return genericAlert(reason)
   }
   
-  static func genericAlert(_ reason: Login.LoginFailureReason) -> AlertState<Login.Action> {
+  static func genericAlert(_ reason: Login.LoginFailureReason) -> Self {
     .init(
       title: { .init("Warning")},
       actions: {
@@ -253,7 +278,20 @@ public extension AlertState<Login.Action> {
     )
   }
   
-  static var emailNotVerified: AlertState<Login.Action> {
+  static var userAlreadyTaken: Self {
+    .init(
+      title: { .init("Warning")},
+      actions: {
+        ButtonState(
+          role: .cancel) {
+            TextState("Ok")
+          }
+      },
+      message: { .init("User with this email is already registered") }
+    )
+  }
+  
+  static var emailNotVerified: Self {
     .init(
       title: { .init("Email not verified")},
       actions: {
@@ -263,7 +301,7 @@ public extension AlertState<Login.Action> {
           TextState("No")
         }
         ButtonState(
-          action: .send(.sendEmailConfirmationTappedOnAlert),
+          action: .send(.sendEmailConfirmationTapped),
           label: {
             TextState("Yes")
           }
@@ -273,7 +311,7 @@ public extension AlertState<Login.Action> {
     )
   }
   
-  static var userNotRegistered : AlertState<Login.Action> {
+  static var userNotRegistered : Self {
     .init(
       title: { .init("Hold on")},
       actions: {
@@ -286,7 +324,7 @@ public extension AlertState<Login.Action> {
     )
   }
   
-  static var problemResendingEmail: AlertState<Login.Action> {
+  static var problemResendingEmail: Self {
     .init(
       title: { .init("Warning")},
       actions: {

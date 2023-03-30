@@ -123,6 +123,7 @@ enum Endpoint {
     case register(User.Account.Login)
     case refreshToken(User.Token.Refresh)
     case resendEmailConfirmation(String)
+    case deleteAccount
     
     var isAuthenticated: Bool {
       switch self {
@@ -145,6 +146,8 @@ enum Endpoint {
         return .GET
       case .resendEmailConfirmation:
         return .GET
+      case .deleteAccount:
+        return .GET
       }
     }
     
@@ -161,6 +164,8 @@ enum Endpoint {
       case .resendEmailConfirmation(let email):
         let items = [URLQueryItem(name: "email", value: email)]
         return "resend".adding(query: items)
+      case .deleteAccount:
+        return "delete-account"
       }
     }
   }

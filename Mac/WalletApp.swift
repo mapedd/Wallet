@@ -22,7 +22,7 @@ struct WalletApp: App {
   init() {
     store = .init(
       initialState: .loggedOut(.init()),
-      reducer: Content()._printChanges()
+      reducer: Content()
     )
     let viewStore = ViewStore(self.store, observe: { $0 })
     self._viewStore = StateObject(wrappedValue: viewStore)

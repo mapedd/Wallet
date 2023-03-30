@@ -25,6 +25,10 @@ struct LoginView: View {
           SecureField("Password",
             text: viewStore.binding(\.$password)
           )
+          .submitLabel(.go)
+          .onSubmit {
+            viewStore.send(.passwordSubmitted)
+          }
         }
         .disabled(viewStore.textFieldsDisabled)
         
@@ -61,7 +65,7 @@ struct LoginView: View {
       .task {
         viewStore.send(.task)
       }
-      .alert(self.store.scope(state: \.alert), dismiss: .alertCancelTapped)
+      .alert(store: self.store.scope(state: \.alert, action: Login.Action.alert))
     }
   }
 }

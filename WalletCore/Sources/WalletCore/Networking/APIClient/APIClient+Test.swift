@@ -29,6 +29,10 @@ extension APIClient {
         XCTFail("unimplemented")
         return .init(success: false)
       },
+      deleteAccount: {
+        XCTFail("unimplemented")
+        return .init(success: false)
+      },
       updateRecord: { _ in
         XCTFail("unimplemented")
         return nil

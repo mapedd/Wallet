@@ -59,6 +59,7 @@ public struct Settings: ReducerProtocol {
     case alert(PresentationAction<Alert>)
     case delegate(Delegate)
     case parsingFailed
+    case changePassword
     
     public enum Alert: Equatable {
       case logoutAlertConfirmed
@@ -80,6 +81,8 @@ public struct Settings: ReducerProtocol {
     }
   }
   
+  @Dependency(\.dismiss) var dismiss
+  
   private func settingsReducer(into state: inout State, action: Action) -> Effect<Action> {
     switch action {
     case .logOutButtonTapped:
@@ -87,6 +90,8 @@ public struct Settings: ReducerProtocol {
       return .none
     case .deleteAccountRowTapped:
       state.alert = .deleteAccount
+      return .none
+    case .changePassword: 
       return .none
     case .alert(.presented(.logoutAlertConfirmed)):
       return Effect(value: .delegate(.logOutRequested))
@@ -114,6 +119,7 @@ public struct Settings: ReducerProtocol {
       state.picker = DocumentPicker.State()
       return .none
     case .alert(.presented(.deleteAccountAlertConfirmed)):
+      state.alert = nil
       return Effect(value: .delegate(.deleteAcountRequested))
         
     case .parsingFailed:
@@ -143,8 +149,6 @@ extension AlertState where Action == Settings.Action.Alert {
   static var deleteAccount: Self {
     AlertState {
       TextState("DANGER ZONE")
-        .bold()
-        .foregroundColor(.red)
     } actions: {
       ButtonState(role: .destructive, action: .send(.deleteAccountAlertConfirmed, animation: .default)) {
         TextState("Yes")
