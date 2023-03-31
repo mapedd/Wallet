@@ -27,7 +27,7 @@ extension Environment {
     if self == .testing {
       return "TEST_API_KEY"
     } else {
-      return Environment.get("MAILERSEND_API_KEY")
+      return Secrets.mailerSendApiKey
     }
   }
 }

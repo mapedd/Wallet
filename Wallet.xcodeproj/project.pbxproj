@@ -88,6 +88,7 @@
 		049CDBB1298D3CC000ED3FC0 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		04AB3E9F28D79CFF00C327A4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoneyRecord+UI.swift"; sourceTree = "<group>"; };
+		04B96A4329D5E01000BD32E8 /* swift-secrets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swift-secrets"; sourceTree = "<group>"; };
 		04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewMultiPlatform.swift; sourceTree = "<group>"; };
 		04C505172991AED6008A6FE1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		04C5051A2991AEF2008A6FE1 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -226,6 +227,7 @@
 		04CCED4D28C2879600C68DB8 = {
 			isa = PBXGroup;
 			children = (
+				04B96A4329D5E01000BD32E8 /* swift-secrets */,
 				047A194329CF32E8003B51C9 /* Wallet--iOS--Info.plist */,
 				0498B58529965DC2004C2613 /* Scripts */,
 				04DD65EE2992BA4700D227BD /* WalletCore */,
