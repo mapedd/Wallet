@@ -1,7 +1,7 @@
 ## User settings
 */xcuserdata/
 xcuserdata/
-Wallet.xcodeproj/xcuserdata/*
+**/xcuserdata/**
 
 
 
@@ -33,3 +33,5 @@ Wallet.xcodeproj/xcuserdata/*
 
 Fastlane/test_output/
 Fastlane/report.xml
+
+**/_LocalSecrets.swift

@@ -82,7 +82,6 @@
 		047A194329CF32E8003B51C9 /* Wallet--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Wallet--iOS--Info.plist"; sourceTree = "<group>"; };
 		048ACB3C299959830067F772 /* WalletiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		048ACB3E299959830067F772 /* WalletiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletiOSTests.swift; sourceTree = "<group>"; };
-		0498B58529965DC2004C2613 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = "<group>"; };
 		049CDBAB298D3CBB00ED3FC0 /* config.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = config.yml; path = .circleci/config.yml; sourceTree = "<group>"; };
 		049CDBB0298D3CC000ED3FC0 /* Appfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Appfile; sourceTree = "<group>"; };
 		049CDBB1298D3CC000ED3FC0 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
@@ -229,7 +228,6 @@
 			children = (
 				04B96A4329D5E01000BD32E8 /* swift-secrets */,
 				047A194329CF32E8003B51C9 /* Wallet--iOS--Info.plist */,
-				0498B58529965DC2004C2613 /* Scripts */,
 				04DD65EE2992BA4700D227BD /* WalletCore */,
 				04560432298EE8C6005031A8 /* README.md */,
 				049CDBAC298D3CC000ED3FC0 /* fastlane */,
