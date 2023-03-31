@@ -75,5 +75,10 @@ platform :mac do
   lane :tests_mac_walletcli do
     sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreCLI\" build")
   end
+  
+    desc "Builds and swift-secrets package"
+  lane :tests_mac_swift_secrets do
+    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"swift-secrets\" build")
+  end
 
 end

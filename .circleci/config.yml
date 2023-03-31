@@ -28,7 +28,10 @@ jobs:
           command: bundle exec fastlane mac tests_mac_core
       - run:
           name: Fastlane mac build WaleltCLI
-          command bundle exect fastlane mac tests_mac_walletcli
+          command bundle exec fastlane mac tests_mac_walletcli
+      - run:
+          name: Fastlane mac build swift-secrets package
+          command bundle exec fastlane mac tests_mac_swift_secrets
 
 workflows:
   build-test:
