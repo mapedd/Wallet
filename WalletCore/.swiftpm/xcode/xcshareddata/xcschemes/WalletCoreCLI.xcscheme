@@ -62,7 +62,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "import --format revolut"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "import"
@@ -74,10 +74,14 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/mapedd/Desktop/revolut.csv"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/mapedd/Desktop/output.json"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "interact --username mapedd@gmail.com"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

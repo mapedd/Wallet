@@ -31,7 +31,8 @@ let package = Package(
       //      branch: "navigation-beta"
       revision: "bcf5683aecdba339d309848c50b7f33fed887709"
     ),
-    .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
+//    .package(url: "https://github.com/jrendel/SwiftKeychainWrapper", from: "4.0.0"),
+    .package(url: "https://github.com/kishikawakatsumi/KeychainAccess.git", from: "4.2.2"),
     .package(url: "https://github.com/vapor/vapor", from: "4.54.0"),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
@@ -43,6 +44,8 @@ let package = Package(
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         "WalletCoreDataModel",
+        "WalletCore",
+        "AppApi"
       ]
     ),
     .target(
@@ -63,7 +66,8 @@ let package = Package(
         .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
         .product(name: "SwiftUINavigation", package: "swiftui-navigation"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-        .product(name: "SwiftKeychainWrapper", package: "SwiftKeychainWrapper"),
+//        .product(name: "SwiftKeychainWrapper", package: "SwiftKeychainWrapper"),
+        .product(name: "KeychainAccess", package: "KeychainAccess"),
         .product(name: "Logging", package: "swift-log"),
       ]
     ),

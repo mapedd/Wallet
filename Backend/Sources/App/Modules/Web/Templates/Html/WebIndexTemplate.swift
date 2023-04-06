@@ -105,6 +105,9 @@ public struct WebIndexTemplate: TemplateRepresentable {
               .href("#")
               .onClick("javascript:about();")
             
+            A("Calendar")
+              .href("/calendar/")
+            
             if req.auth.has(AuthenticatedUser.self) {
               A("Records")
                 .href("/records/")

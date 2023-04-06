@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftKeychainWrapper
+import KeychainAccess
 
 public struct Keychain {
 
@@ -20,27 +20,52 @@ public struct Keychain {
   public func removeAll() {
     saveToken(nil)
 	}
-
-  public static var live: Keychain {
-		let wrapper = KeychainWrapper.standard
-
-		return Keychain(
+  
+  public static func live(name: String?) -> Keychain {
+    
+    let wrapper: KeychainAccess.Keychain
+    
+    if let name {
+      wrapper = KeychainAccess.Keychain(service: name)
+    } else {
+      wrapper = KeychainAccess.Keychain()
+    }
+    
+    let encoder = PropertyListEncoder()
+    let decoder = PropertyListDecoder()
+    
+    
+    return Keychain(
       saveToken: { token in
         if let token {
-          wrapper.set(token.encodable, forKey: Key.token.rawValue)
+          do {
+            let data = try encoder.encode(token)
+            wrapper[data: Key.token.rawValue] = data
+          } catch {
+            
+          }
         } else {
-          wrapper.remove(forKey: KeychainWrapper.Key(rawValue: Key.token.rawValue))
+          wrapper[data: Key.token.rawValue] = nil
         }
       },
       readToken: {
         guard
-          let encodable = wrapper.object(forKey: Key.token.rawValue) as? Token.Encodable
+          let data = wrapper[data: Key.token.rawValue]
         else {
           return nil
         }
-        return encodable.token
+        
+        do {
+          return try decoder.decode(Token.self, from: data)
+        } catch {
+          return nil
+        }
       }
-		)
+    )
+  }
+
+  public static var live: Keychain {
+    return live(name: nil)
 	}
 	
   public static var loggedIn: Keychain {

@@ -11,13 +11,13 @@ import AppApi
 import WalletCoreDataModel
 
 @main
-struct WalletCLI: ParsableCommand {
+struct WalletCLI: AsyncParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "walletcli",
     abstract: "A utility for working with wallet app.",
     version: "0.0.1",
-//    subcommands: [Import.self, Interact.self]
-    subcommands: [Import.self]
+    subcommands: [Import.self, Interact.self]
+//    subcommands: [Import.self]
   )
   
 }

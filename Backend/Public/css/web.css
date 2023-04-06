@@ -1,3 +1,21 @@
 #blog h2 {
     margin: 0.5rem 0;
 }
+
+.current-month {
+  
+}
+
+td.other-month {
+  background: gray; 
+  color: red;
+}
+
+
+#previous {
+    float: left;
+}
+
+#next {
+    float: right;
+}

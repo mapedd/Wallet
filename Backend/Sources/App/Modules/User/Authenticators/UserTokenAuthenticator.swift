@@ -15,11 +15,15 @@ extension TimeInterval {
 }
 
 public struct DateProvider {
+  
   public init(
+    calendar: Calendar = .autoupdatingCurrent,
     currentDate: @escaping () -> Date
   ) {
+    self.calendar = calendar
     self.currentDate = currentDate
   }
+  public var calendar: Calendar
   public var currentDate: () -> Date
   public var now: Date {
     currentDate()
@@ -42,6 +46,11 @@ public struct DateProvider {
   }
   public var tokenExpiryDate: Date {
     now.addingTimeInterval(60)
+  }
+  
+  public var currentMonth: (month: Int, year: Int) {
+    let comps = calendar.dateComponents([.month, .year], from: now)
+    return (month: comps.month ?? 0, year: comps.year ?? 0)
   }
 }
 
