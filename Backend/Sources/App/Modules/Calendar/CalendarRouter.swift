@@ -21,5 +21,6 @@ struct CalendarRouter: RouteCollection {
   
   func boot(routes: RoutesBuilder) throws {
     routes.get("calendar", use: frontendController.monthlyCalendarView)
+    routes.get("week", use: frontendController.weeklyCalendarView)
   }
 }

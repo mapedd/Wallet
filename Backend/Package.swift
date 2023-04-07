@@ -23,6 +23,7 @@ let package = Package(
     .package(url: "https://github.com/binarybirds/swift-html", from: "1.2.0"),
     .package(url: "https://github.com/binarybirds/spec", from: "1.2.0"),
     .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.5.3"),
+    .package(url: "https://github.com/Dean151/uuid-shortener.git", from: "1.0.0"),
     .package(name: "swift-secrets", path: "../swift-secrets")
   ],
   targets: [
@@ -43,8 +44,9 @@ let package = Package(
         .product(name: "LiquidLocalDriver", package: "liquid-local-driver"),
         .product(name: "SwiftHtml", package: "swift-html"),
         .product(name: "SwiftSvg", package: "swift-html"),
+        .product(name: "UUIDShortener", package: "uuid-shortener"),
         .target(name: "AppApi"),
-        .target(name: "LinuxHelpers"),
+        .target(name: "LinuxHelpers"), 
         .target(name: "Utils"),
       ],
       exclude: [
