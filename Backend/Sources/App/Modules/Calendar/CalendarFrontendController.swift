@@ -9,15 +9,16 @@ import Foundation
 import Vapor
 
 extension Calendar {
-    static let iso8601 = Calendar(identifier: .iso8601)
-    static let iso8601UTC: Calendar = {
-        var calendar = Calendar(identifier: .iso8601)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
-        return calendar
-    }()
+  static let iso8601 = Calendar(identifier: .iso8601)
+  static let iso8601UTC: Calendar = {
+    var calendar = Calendar(identifier: .iso8601)
+    calendar.timeZone = TimeZone(identifier: "UTC")!
+    calendar.firstWeekday = DayOfWeek.mon.rawValue
+    return calendar
+  }()
   
   func startOfWeek(from date: Date) -> Date {
-      self.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
+    self.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
   }
 }
 
@@ -27,7 +28,7 @@ struct CalendarFrontendController {
   init(dateProvider: DateProvider) {
     self.dateProvider = dateProvider
   }
-
+  
   
   private func calendarRequest(from request: Request) -> MonthCalendarRequest {
     if let request = try? request.query.decode(MonthCalendarRequest.self) {
@@ -58,23 +59,29 @@ struct CalendarFrontendController {
   func events(at date: Date) async throws -> [WeekCalendarContext.DayData.Event] {
     [
       .init(
-      title: "Washing",
-      notes: "notes",
-      id: UUID(),
-      date: date,
-      weekday: dateProvider.calendar.dayOfWeek(from: date),
-      duration: 60 * 60
+        title: "Washing",
+        notes: "notes",
+        id: UUID(),
+        date: date,
+        weekday: dateProvider.calendar.dayOfWeek(from: date),
+        duration: 60 * 60
       )
     ]
   }
-  
+  //
+//  var customCalendar = Calendar(identifier: .gregorian)
+//  customCalendar.firstWeekday = 2
   
   func dayData(from req: Request) async throws -> [WeekCalendarContext.DayData] {
     let now = dateProvider.now
-    let weeksStart = Calendar.iso8601.startOfDay(for: now)
+    let weeksStart = Calendar.iso8601.startOfWeek(from: now)
     
-    return try await Array(stride(from: 0, to: 6, by: 1)).asyncMap { (offset :Int)  in
-      let date = dateProvider.calendar.date(byAdding: .day, value: offset, to: weeksStart)!
+    
+    let weeksDays = Array(stride(from: 0, to: 7, by: 1)).map { offset in
+      dateProvider.calendar.date(byAdding: .day, value: offset, to: weeksStart)!
+    }
+    
+    return try await weeksDays.asyncMap { date  in
       return WeekCalendarContext.DayData(
         date: date,
         status: .opened,
