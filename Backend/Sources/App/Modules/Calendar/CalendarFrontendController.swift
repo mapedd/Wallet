@@ -88,6 +88,8 @@ struct CalendarFrontendController {
     let dateStart = dateProvider.calendar.date(from: comps)!
     let weeksStart = Calendar.iso8601.startOfWeek(from: dateStart)
     
+    
+    
     let weeksDays = Array(stride(from: 0, to: 7, by: 1)).map { offset in
       dateProvider.calendar.date(byAdding: .day, value: offset, to: weeksStart)!
     }
@@ -95,6 +97,7 @@ struct CalendarFrontendController {
     return try await weeksDays.asyncMap { date  in
       return WeekCalendarContext.DayData(
         date: date,
+        dayOfWeek: dateProvider.calendar.dayOfWeek(from: date),
         status: .opened,
         openingHour: 6,
         closingHour: 22,

@@ -7,8 +7,9 @@
 
 import Foundation
 import UUIDShortener
+import Vapor
 
-enum DayOfWeek: Int{
+enum DayOfWeek: Int, CaseIterable {
   case sun = 1
   case mon = 2
   case tue = 3
@@ -69,6 +70,50 @@ struct WeekCalendarContext {
   let nextWeekURI: String
   let prevWeekURI: String
   
+  private func date(for day: DayOfWeek) throws -> Date {
+    let dayData = dayData.first { $0.dayOfWeek == day }
+    guard
+      let dayData
+    else {
+      throw Abort(.internalServerError)
+    }
+    
+    return dayData.date
+  }
+  
+  private func comps(day: DayOfWeek, time: Time) -> DateComponents {
+    guard let date = try? date(for: day) else {
+      return DateComponents()
+    }
+    
+    let cal = Calendar.current
+    var comps = cal.dateComponents([.year, .month, .day], from: date)
+    comps.hour = time.hour
+    comps.minute = time.minute
+    comps.second = time.second
+    
+    return comps
+  }
+  
+  func href(
+    for day: DayOfWeek,
+    timeOfDay: TimeOfDay
+  ) -> String {
+    let dateComps = comps(day: day, time: timeOfDay.time)
+    var comps = URLComponents()
+    comps.path = "time"
+    let items: [URLQueryItem] = [
+      URLQueryItem(name: "year", value: "\(dateComps.year ?? 0)"),
+      URLQueryItem(name: "month", value: "\(dateComps.month ?? 0)"),
+      URLQueryItem(name: "day", value: "\(dateComps.day ?? 0)"),
+      URLQueryItem(name: "hour", value: "\(dateComps.hour ?? 0)"),
+      URLQueryItem(name: "minute", value: "\(dateComps.minute ?? 0)"),
+      URLQueryItem(name: "second", value: "\(dateComps.second ?? 0)")
+    ]
+    comps.queryItems = items
+    return comps.url!.absoluteString
+  }
+  
   init(
     dateProvider: DateProvider,
     dayData: [DayData], // 7 of them, sorted from earliest to latest,
@@ -101,6 +146,7 @@ struct WeekCalendarContext {
     }
     
     var date: Date
+    var dayOfWeek: DayOfWeek
     var status: Status
     var openingHour: Int // 0 - 24
     var closingHour: Int // openingHour - 24
@@ -160,10 +206,12 @@ struct WeekCalendarContext {
       var comps  = cal.dateComponents([.year, .month, .day], from: dateProvider.now)
       comps.hour = i
       comps.minute = 0
+      comps.second = 0
       let date = cal.date(from: comps)
       
       return .init(
         copy: df.string(from: date!),
+        time: Time(hour: i, minute: 0, second: 0),
         class: "time h\(String(format: "%02d", i))"
       )
     }
@@ -186,7 +234,14 @@ struct WeekCalendarContext {
   
   struct TimeOfDay {
     let copy: String
+    let time: Time
     let `class`: String
+  }
+  
+  struct Time {
+    let hour: Int
+    let minute: Int
+    let second: Int
   }
   
   var hours: String {

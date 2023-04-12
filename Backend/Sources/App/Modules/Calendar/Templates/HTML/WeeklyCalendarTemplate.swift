@@ -63,12 +63,22 @@ struct WeeklyCalendarTemplate: TemplateRepresentable {
                 }
               }
               Tbody {
-                for hours in context.timesOfDay {
+                for timeOfDay in context.timesOfDay {
                   Tr {
-                    Td(hours.copy)
+                    Td(timeOfDay.copy)
                       .class("headcol")
-                    for i in 0...6 {
-                      Td("\(i)")
+                    for day in DayOfWeek.allCases {
+                      Td {
+                        A("Press me")
+                          .style("display:inline-block; width: 100%; height: 100%;color:transparent;")
+//                          .class("calendar-cell")
+                          .href(
+                            context.href(
+                              for: day,
+                              timeOfDay: timeOfDay
+                            )
+                          )
+                      }
                     }
                   }
                   .class("weekly-calendar-row")
