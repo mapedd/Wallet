@@ -26,11 +26,33 @@ struct WeeklyCalendarTemplate: TemplateRepresentable {
   }
   
   @TagBuilder
+  func calendarHeader(ctx: WeekCalendarContext) -> Tag {
+    Div {
+      H3(context.headerCopy)
+        .id("monthAndYear")
+      
+      Div {
+        A("<")
+          .href("/week\(context.prevWeekURI)")
+          .id("previous")
+        
+        A(">")
+          .href("/week\(context.nextWeekURI)")
+          .id("next")
+      }
+      .class("button-container-calendar")
+    }
+  }
+  
+  @TagBuilder
   func render(_ req: Request) -> Tag {
     WebIndexTemplate(indexTemplate(req)) {
       Div {
         Div {
           Div {
+            
+            calendarHeader(ctx: context)
+            
             Table {
               Thead {
                 Td("")

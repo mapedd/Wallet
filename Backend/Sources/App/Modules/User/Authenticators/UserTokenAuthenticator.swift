@@ -52,6 +52,16 @@ public struct DateProvider {
     let comps = calendar.dateComponents([.month, .year], from: now)
     return (month: comps.month ?? 0, year: comps.year ?? 0)
   }
+  
+  public var currentWeeksBegining: (day: Int, month: Int, year: Int) {
+    let weekBegining = calendar.startOfWeek(from: now)
+    let comps = calendar.dateComponents([.month, .year, .day], from: weekBegining)
+    return (
+      day: comps.day ?? 0,
+      month: comps.month ?? 0,
+      year: comps.year ?? 0
+    )
+  }
 }
 
 struct UserTokenAuthenticator: AsyncBearerAuthenticator {

@@ -65,13 +65,22 @@ struct WeekCalendarContext {
   
   let dayData: [DayData]
   let dateProvider: DateProvider
+  let headerCopy: String
+  let nextWeekURI: String
+  let prevWeekURI: String
   
   init(
     dateProvider: DateProvider,
-    dayData: [DayData] // 7 of them, sorted from earliest to latest
+    dayData: [DayData], // 7 of them, sorted from earliest to latest,
+    headerCopy: String,
+    nextWeekURI: String,
+    prevWeekURI: String
   ) {
     self.dayData = dayData
     self.dateProvider = dateProvider
+    self.nextWeekURI = nextWeekURI
+    self.prevWeekURI = prevWeekURI
+    self.headerCopy = headerCopy
   }
   
   struct DayData {
@@ -99,8 +108,6 @@ struct WeekCalendarContext {
     var events: [Event]
   }
   
-//  let nextWeekURI: String
-//  let prevWeekURI: String
   
   struct Day {
     let copy: String

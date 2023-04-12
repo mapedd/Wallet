@@ -8,15 +8,17 @@
 import Foundation
 import Vapor
 
+enum Direction : String, Content {
+  case next
+  case prev
+}
+
+
 struct MonthCalendarRequest : Content {
   let month: Int
   let year: Int
   let direction:  Direction
   
-  enum Direction : String, Content {
-    case next
-    case prev
-  }
   
   var uri: String {
     var comps = URLComponents()
