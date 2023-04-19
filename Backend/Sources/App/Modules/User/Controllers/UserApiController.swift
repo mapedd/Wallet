@@ -48,7 +48,7 @@ struct UserApiController {
   
   func signInApi(req: Request) async throws -> User.Token.Detail {
     guard let user = req.auth.get(AuthenticatedUser.self) else {
-      throw Abort(.unauthorized)
+      throw Abort(.notFound)
     }
     
     let token = UserTokenModel(
@@ -181,6 +181,65 @@ struct UserApiController {
     return ActionResult(success: true)
   }
   
+  func remindPassword(req: Request) async throws -> ActionResult {
+    return ActionResult(success: true)
+  }
+  
+  func requestAccountDeletion(req: Request) async throws -> ActionResult {
+    
+    guard let user = req.auth.get(AuthenticatedUser.self) else {
+      throw Abort(.unauthorized)
+    }
+    
+    let token = DeleteAccountToken()
+    token.$user.id = user.id
+    
+    do {
+      try await token.create(on: req.db)
+    } catch {
+      req.logger.error("error creating registration token \(error)")
+      throw Abort(.internalServerError)
+    }
+    
+    try await sendAccountDeletionEmail(req, email: user.email, token: token)
+    
+    return ActionResult(success: true)
+  }
+  
+  struct EmailConfirmationResend: Codable {
+    var email: String
+  }
+  
+  func resendEmailConfirmationEmail(req: Request) async throws -> ActionResult {
+    let query = try req.query.decode(EmailConfirmationResend.self)
+    guard let email = query.email.removingPercentEncoding else {
+      throw Abort(.notFound)
+    }
+    let user = try await UserAccountModel
+      .query(on: req.db)
+      .filter(\.$email == email)
+      .first()
+    
+     guard let user else {
+      throw Abort(.notFound)
+    }
+    
+    let token = EmailConfirmationToken()
+    token.$user.id = user.id!
+    token.email = user.email
+    
+    do {
+      try await token.create(on: req.db)
+    } catch {
+      req.logger.error("error creating registration token \(error)")
+      throw Abort(.internalServerError)
+    }
+    
+    try await sendConfirmationEmail(req, email: user.email, token: token)
+    
+    return .init(success: true)
+  }
+  
   func register(req: Request) async throws -> User.Account.Detail {
     let login = try req.content.decode(User.Account.Login.self)
     
@@ -192,6 +251,7 @@ struct UserApiController {
       email: login.email,
       password: try Bcrypt.hash(login.password)
     )
+    
     do {
       try await user.create(on: req.db)
     } catch {
@@ -199,10 +259,27 @@ struct UserApiController {
       throw Abort(.conflict,reason: "user with this email already exists")
     }
     
+    let token = EmailConfirmationToken()
+    token.$user.id = user.id!
+    token.email = login.email
+    
+    do {
+      try await token.create(on: req.db)
+    } catch {
+      req.logger.error("error creating registration token \(error)")
+      throw Abort(.internalServerError)
+    }
+    
+    try await sendConfirmationEmail(req, email: login.email, token: token)
+    
     return User.Account.Detail.init(
       id: user.id!,
       email: user.email
     )
+  }
+  
+  func resetPassword(_ req: Request) async throws -> ActionResult {
+    return .init(success: true)
   }
   
   func checkValid(email: String) -> Bool {
@@ -217,5 +294,119 @@ struct UserApiController {
     } catch  {
       return false
     }
+  }
+  
+  private func sendAccountDeletionEmail(_ req: Request, email: String, token: DeleteAccountToken) async throws {
+    
+    let tokenId = try token.requireID().uuidString
+    
+    let query = Email.deleteAccountRequest(
+      tokenId: tokenId,
+      email: email,
+      logger: req.logger
+    )
+    
+    try await req.sendEmail(query: query)
+  }
+  
+  private func sendConfirmationEmail(_ req: Request, email: String, token: EmailConfirmationToken) async throws {
+    
+    let tokenId = try token.requireID().uuidString
+    
+    let query = Email.emailConfirmationRequest(
+      tokenId: tokenId,
+      email: email,
+      logger: req.logger
+    )
+    
+    try await req.sendEmail(query: query)
+  }
+}
+
+enum MailerSendEmail {
+  struct Request: Content, Codable {
+    struct Address: Content, Codable {
+      let email: String
+      let name: String
+    }
+    let from: Address
+    let to: [Address]
+    
+    let subject: String
+    let text: String
+    let html: String
+    
+    static var defaultContentType: HTTPMediaType {
+      .json
+    }
+  }
+  
+  struct Response: Content, Codable {
+    
+  }
+  
+  struct ValidationError: Codable, Swift.Error {
+    let message: String
+    let errors: [String: [String]]
+    
+    var localizedDescription: String {
+      message
+    }
+  }
+}
+
+extension Request {
+  
+  var apiKey: String? {
+    application.environment.mailerSendApiKey
+  }
+  
+  var sendEmail: URI {
+    "https://api.mailersend.com/v1/email"
+  }
+  
+  var autentiacted: HTTPHeaders {
+    guard let apiKey else {
+      logger.error("no MailerSend API Key")
+      return [:]
+    }
+    return ["Authorization" : "Bearer \(apiKey)"]
+  }
+  
+  func sendEmail(
+    query: MailerSendEmail.Request
+  ) async throws  {
+    
+    guard  !application.environment.emailsDisabled else {
+      logger.notice("sending real emails disabled, email that would have been sent: \(query)")
+      return
+    }
+    
+    guard !autentiacted.isEmpty else {
+      throw Abort(.internalServerError)
+    }
+       
+        
+    let response = try await client.post(
+      sendEmail,
+      headers: autentiacted,
+      content: query
+    )
+        
+    do {
+      let validationError = try response.content.decode(MailerSendEmail.ValidationError.self)
+      
+      throw validationError
+    } catch { }
+    
+    if
+      response.status != .accepted &&
+      response.status != .ok
+    {
+      logger.error("error sending email \(response.status)")
+      throw Abort(.internalServerError)
+    }
+      
+    logger.notice("sent email with subject \"\(query.subject)\" from \(query.from.email) to \(query.to.first!.email)")
   }
 }

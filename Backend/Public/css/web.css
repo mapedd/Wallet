@@ -1,3 +1,68 @@
 #blog h2 {
     margin: 0.5rem 0;
 }
+
+.current-month {
+  
+}
+
+td.other-month {
+  background: gray; 
+  color: red;
+}
+
+
+#previous {
+    float: left;
+}
+
+#next {
+    float: right;
+}
+
+
+.calendar {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+tr.weekly-calendar-row {
+  margin : 0px;
+  background-color: transparent;
+}
+
+
+table {
+/*  border-collapse: collapse;*/
+  width: 100%;
+}
+
+th, td {
+/*  text-align: left;*/
+  padding: 8px;
+}
+
+thead {
+  background: rgba(176, 224, 230, 0.5);
+}
+
+tr:nth-child(even) {
+/*  background: rgba(0, 128, 0, 0.3);*/
+/*  background: rgba(75, 0, 130, 1);*/
+  background: rgba(176, 224, 230, 0.3);
+}
+
+tr {
+  border-radius: 0px;
+}
+
+td:hover {
+  background-color: #ddd;
+}
+
+
+.calendar-cell {
+  display:block;
+  width: 100%;
+  height: 100%;
+}

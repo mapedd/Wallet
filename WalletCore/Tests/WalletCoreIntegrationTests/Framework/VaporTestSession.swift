@@ -10,11 +10,47 @@ import WalletCore
 import Vapor
 import XCTVapor
 
-struct VaporTestSession: URLSessionProtocol {
-  let app: Vapor.Application
+
+class VaporWebSocket: URLSessionWebSocketTaskProtocol {
+  
+  var app: Vapor.Application
+  
   init(app: Vapor.Application) {
     self.app = app
   }
+  
+  var code: URLSessionWebSocketTask.CloseCode = .noStatusReceived
+  var closeCode: URLSessionWebSocketTask.CloseCode {
+    code
+  }
+  
+  func resume() {
+    if code == .noStatusReceived {
+      code = .invalid
+    }
+  }
+  
+  func receive() async throws -> URLSessionWebSocketTask.Message {
+    return .string("")
+  }
+  
+  func send(_ message: URLSessionWebSocketTask.Message) async throws {
+      
+  }
+}
+
+struct VaporTestSession: URLSessionProtocol {
+  
+  let app: Vapor.Application
+  
+  init(app: Vapor.Application) {
+    self.app = app
+  }
+  
+  func webSocket(with url: URL) -> URLSessionWebSocketTaskProtocol {
+    VaporWebSocket(app: app)
+  }
+  
   func data(
     for request: URLRequest
   ) async throws -> (Data, URLResponse) {

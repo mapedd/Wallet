@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Utils
 
 struct BlogPostEditor: ModelEditorInterface {
     let model: BlogPostModel
@@ -23,7 +24,7 @@ struct BlogPostEditor: ModelEditorInterface {
         self.form = form
     }
 
-    @FormComponentBuilder
+    @ArrayBuilder<FormComponent>
     var formFields: [FormComponent] {
         ImageField("image", path: "blog/post")
             .read {

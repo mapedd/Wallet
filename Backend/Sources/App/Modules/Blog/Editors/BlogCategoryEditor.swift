@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Utils
 
 struct BlogCategoryEditor: ModelEditorInterface {
     let model: BlogCategoryModel
@@ -16,7 +17,7 @@ struct BlogCategoryEditor: ModelEditorInterface {
         self.form = form
     }
 
-    @FormComponentBuilder
+    @ArrayBuilder<FormComponent>
     var formFields: [FormComponent] {
         InputField("title")
             .config {

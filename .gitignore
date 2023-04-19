@@ -1,9 +1,10 @@
 ## User settings
 */xcuserdata/
 xcuserdata/
-Wallet.xcodeproj/xcuserdata/*
+**/xcuserdata/**
 
-
+**/xcschememanagement.plist
+**/Breakpoints_v2.xcbkptlist
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
@@ -33,3 +34,5 @@ Wallet.xcodeproj/xcuserdata/*
 
 Fastlane/test_output/
 Fastlane/report.xml
+
+**/_LocalSecrets.swift

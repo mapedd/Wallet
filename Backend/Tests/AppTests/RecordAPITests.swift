@@ -69,6 +69,7 @@ final class RecordAPITests: AppTestCase {
   
   func testCreatingRecords() async throws { 
     let app = try createTestApp()
+    
     defer {
       app.shutdown()
     }

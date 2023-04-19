@@ -8,19 +8,59 @@
 import Vapor
 import Fluent
 
+extension TimeInterval {
+  static func minutes(_ minutes: Int) -> TimeInterval {
+    return TimeInterval(minutes) * 60
+  }
+}
+
 public struct DateProvider {
+  
   public init(
+    calendar: Calendar = .autoupdatingCurrent,
     currentDate: @escaping () -> Date
   ) {
+    self.calendar = calendar
     self.currentDate = currentDate
   }
+  public var calendar: Calendar
   public var currentDate: () -> Date
   public var now: Date {
     currentDate()
   }
   
+  public func deleteAccountConfirmationValid(date: Date) -> Bool {
+    if date + .minutes(30) > now {
+      return false
+    } else {
+      return true
+    }
+  }
+  
+  public func emailConfirmationValid(date: Date) -> Bool {
+    if date + .minutes(30) > now {
+      return false
+    } else {
+      return true
+    }
+  }
   public var tokenExpiryDate: Date {
-    Date().addingTimeInterval(60)
+    now.addingTimeInterval(60)
+  }
+  
+  public var currentMonth: (month: Int, year: Int) {
+    let comps = calendar.dateComponents([.month, .year], from: now)
+    return (month: comps.month ?? 0, year: comps.year ?? 0)
+  }
+  
+  public var currentWeeksBegining: (day: Int, month: Int, year: Int) {
+    let weekBegining = calendar.startOfWeek(from: now)
+    let comps = calendar.dateComponents([.month, .year, .day], from: weekBegining)
+    return (
+      day: comps.day ?? 0,
+      month: comps.month ?? 0,
+      year: comps.year ?? 0
+    )
   }
 }
 

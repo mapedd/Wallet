@@ -1,78 +1,39 @@
 # .circleci/config.yml
 version: 2.1
 jobs:
-  build-and-test_ios:
+  build-and-test_all:
     macos:
-      xcode: 14.2.0
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: ios tests
+      xcode: 14.1.0
     steps:
       - run: brew install vapor
       - checkout
       - run: bundle install
       - run:
-          name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
-
-  build-and-test_mac:
-    macos:
-      xcode: 14.2.0
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: mac tests_mac_app
-    steps:
-      - run: brew install vapor
-      - checkout
-      - run: bundle install
+          name: Fastlane iOS test application
+          command: bundle exec fastlane ios tests_app
+#      - run:
+#          name: Fastlane iOS test WalletCore
+#          command: bundle exec fastlane ios tests_core
       - run:
-          name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
-          
-  build-and-test_server:
-    macos:
-      xcode: 14.2.0
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: mac tests_server
-    steps:
-      - run: brew install vapor
-      - checkout
-      - run: bundle install
+          name: Fastlane macOS test server
+          command: bundle exec fastlane mac tests_server
       - run:
-          name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
-      - store_test_results:
-          path: output/scan
-
-  adhoc:
-    macos:
-      xcode: 14.2.1
-    environment:
-      FL_OUTPUT_DIR: output
-      FASTLANE_LANE: adhoc
-    steps:
-      - checkout
-      - run: bundle install
+          name: Fastlane macOS test integration
+          command: bundle exec fastlane mac test_integration
       - run:
-          name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
-      - store_artifacts:
-          path: output
+          name: Fastlane mac test application
+          command: bundle exec fastlane mac tests_mac_app
+      - run:
+          name: Fastlane mac test WalletCore
+          command: bundle exec fastlane mac tests_mac_core
+      - run:
+          name: Fastlane mac build WaleltCLI
+          command: bundle exec fastlane mac tests_mac_walletcli
+      - run:
+          name: Fastlane mac build swift-secrets package
+          command: bundle exec fastlane mac tests_mac_swift_secrets
 
 workflows:
   build-test:
     jobs:
-      - build-and-test_ios
-      - build-and-test_mac
-      - build-and-test_server
+      - build-and-test_all

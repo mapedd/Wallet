@@ -7,25 +7,33 @@
 
 import Foundation
 import ComposableArchitecture
+import CustomDump
+import Logging
 import AppApi
+import WalletCoreDataModel
 
 enum LocalError : Error {
   case cannotCreateRecord
 }
 
 public struct Main : ReducerProtocol {
+  
+  let logger = Logger(label: "com.mapedd.wallet.main")
 
   public init() {}
   
   public struct State: Equatable {
-    init(
+    public init(
       editorState: Editor.State = .init(currency: .usd),
-      records: IdentifiedArrayOf<Record.State> = [],
+      records: IdentifiedArrayOf<MoneyRecord> = [],
       summaryState: Summary.State = .init(baseCurrencyCode: "USD"),
       title: String = "Wallet",
       editMode: State.EditMode = .inactive,
       statistics: Statistics.State? = nil,
-      categories: [MoneyRecord.Category] = []
+      categories: [MoneyRecord.Category] = [],
+      editedRecord: RecordDetails.State? = nil,
+      settings: Settings.State? = nil,
+      loading: Bool = false
     ) {
       self.editorState = editorState
       self.records = records
@@ -34,7 +42,9 @@ public struct Main : ReducerProtocol {
       self.editMode = editMode
       self.statistics = statistics
       self.categories = categories
-      
+      self.editedRecord = editedRecord
+      self.settings = settings
+      self.loading = loading
       recalculateTotal()
     }
     
@@ -46,21 +56,21 @@ public struct Main : ReducerProtocol {
     }
     
     public var editorState: Editor.State
-    public var records: IdentifiedArrayOf<Record.State>
+    public var records: IdentifiedArrayOf<MoneyRecord>
     public var summaryState: Summary.State
     public var title: String
     public var editMode: EditMode = .inactive
     public var statistics: Statistics.State?
     public var categories: [MoneyRecord.Category]
     public var conversions: ConversionResult?
-    
-    public var showStatistics: Bool {
-      statistics != nil
-    }
+    public var editedRecord: RecordDetails.State?
+    public var settings: Settings.State?
+    public var loading: Bool
+    public var initialLoadDone = false
     
     var currentCurrencyCode: Currency.Code {
       if let first = records.first {
-        return first.record.currencyCode
+        return first.currencyCode
       }
       return Currency.List.usd.code
     }
@@ -72,17 +82,17 @@ public struct Main : ReducerProtocol {
         return
       }
       
-      let sum = self.records.reduce(Decimal.zero, { partialResult, recordState in
-        let recordCurrency = recordState.record.currencyCode
+      let sum = self.records.reduce(Decimal.zero, { partialResult, record in
+        let recordCurrency = record.currencyCode
        guard
         let conversion: Float = conversions.data[recordCurrency]
         else {
           return partialResult
         }
-        let convertedAmount = recordState.record.amount / Decimal(floatLiteral: Double(conversion))
-        if recordState.record.type == .expense {
+        let convertedAmount = record.amount / Decimal(floatLiteral: Double(conversion))
+        if record.type == .expense {
           return partialResult - convertedAmount
-        } else if recordState.record.type == .income {
+        } else if record.type == .income {
           return partialResult + convertedAmount
         } else {
           fatalError("not handled record type")
@@ -98,68 +108,88 @@ public struct Main : ReducerProtocol {
         currency: .preview,
         categories: MoneyRecord.Category.previews
       ),
-      records: IdentifiedArray(uniqueElements: Record.State.sample),
+      records: IdentifiedArray(uniqueElements: [.init(
+        id: UUID(),
+        date: Date(),
+        title: "New Record",
+        notes: "Notes",
+        type: .expense,
+        amount: Decimal(string: "10.0")!,
+        currencyCode: "USD",
+        categories: []
+      )]),
       summaryState: .init(baseCurrencyCode: "USD"),
       title: "Wallet"
     )
     
   }
   
-  public enum Action {
+  public enum Action: Equatable {
     case editorAction(Editor.Action)
-    case recordAction(id: Record.State.ID, action: Record.Action)
+    case editRecord(PresentationAction<RecordDetails.Action>)
     case summaryAction(Summary.Action)
     case editModeChanged(State.EditMode)
     case delete(IndexSet)
-    case statisticsAction(Statistics.Action)
-    case detailsAction(Record.Action)
+    case statisticsAction(PresentationAction<Statistics.Action>)
+    case settings(PresentationAction<Settings.Action>)
     case showStatistics
     case hideStatistics
-    case logOut
-    case logOutButtonTapped
-    case mainViewAppeared
     
-    case loadingRecordsFailed(Swift.Error)
-    case loadedRecords([Record.State])
+    case settingsButtonTapped
+    case task
+    case refresh
     
-    case loadingCategoriesFailed(Swift.Error)
+    case recordChanged(UUID)
+    
+    case loadingRecordsFailed(String)
+    case loadedRecords([MoneyRecord])
+    
+    case loadingCategoriesFailed(String)
     case loadedCategories([MoneyRecord.Category])
     
     case loadedConversions(ConversionResult)
-    case loadingConversionsFailed(Swift.Error)
+    case loadingConversionsFailed(String)
     
-    case dismissDetails(Record.State?)
     
     case recordCreated(AppApi.Record.Detail)
-    case recordCreateFailed(Error)
+    case recordCreateFailed(String)
     
     case deleteSuccess
-    case deleteFailed(Error)
+    case deleteFailed(String)
     
     case updateSuccess
-    case updateFailed(Error)
+    case updateFailed(String)
+    
+    case didTapRecord(id: MoneyRecord.ID)
+    
+    case delegate(Delegate)
+    
+    public enum Delegate: Equatable {
+      case logOut
+      case deleteAccount
+    }
   }
   
   func deleting(_ record: MoneyRecord) -> EffectTask<Action> {
     var update = record.asUpdate
     update.updated = dateProvider.now
     update.deleted = dateProvider.now
-    
+
     return .task(
-      operation: {[update] in 
+      operation: {[update] in
         let _ = try await apiClient.updateRecord(update)
         return .deleteSuccess
       },
       catch: { error in
-        return .deleteFailed(error)
+        return .deleteFailed(error.localizedDescription)
       }
     )
   }
   
   func saving(_ record: MoneyRecord) -> EffectTask<Action> {
-    
+
     let categoryIds = record.categories.map { $0.id }
-    
+
     let update = AppApi.Record.Update(
       id: record.id,
       title: record.title,
@@ -170,14 +200,61 @@ public struct Main : ReducerProtocol {
       categoryIds: categoryIds,
       updated: dateProvider.now
     )
-    
+
     return .task(
       operation: {
         let _ = try await apiClient.updateRecord(update)
         return .updateSuccess
       },
       catch: { error in
-        return .updateFailed(error)
+        return .updateFailed(error.localizedDescription)
+      }
+    )
+  }
+  
+  
+  func moneyRecord(from editorState: Editor.State) -> MoneyRecord {
+    var categories: [MoneyRecord.Category] = []
+    if let newCategory = editorState.category {
+      categories.append(newCategory)
+    }
+    let newRecord = MoneyRecord(
+      id: .init(),
+      date: .init(),
+      title: editorState.text,
+      notes: "",
+      type: editorState.recordType,
+      amount: Decimal(string: editorState.amount) ?? Decimal.zero,
+      currencyCode: editorState.currency.code,
+      categories: categories
+    )
+    return newRecord
+  }
+  
+  func creating(newRecord: MoneyRecord) -> EffectTask<Action> {
+   
+    let update = AppApi.Record.Update(
+      id: newRecord.id,
+      title: newRecord.title,
+      amount: newRecord.amount,
+      type: newRecord.apiRecordType,
+      currencyCode: newRecord.currencyCode,
+      notes: newRecord.notes,
+      categoryIds: newRecord.categories.map(\.id),
+      updated: dateProvider.now
+    )
+    
+    return .task(
+      operation: {
+        if let record = try await apiClient.updateRecord(update) {
+          return .recordCreated(record)
+        }
+        else {
+          return .recordCreateFailed(LocalError.cannotCreateRecord.localizedDescription)
+        }
+      },
+      catch: { error in
+        return .recordCreateFailed(error.localizedDescription)
       }
     )
   }
@@ -194,59 +271,31 @@ public struct Main : ReducerProtocol {
     }
     Reduce { state, action in
       switch action {
+      case .refresh:
+        return .task(
+          operation: {
+            let records = try await apiClient.listRecords()
+            let recordStates = records.map { $0.asMoneyRecord }
+            return .loadedRecords(recordStates)
+          },
+          catch: { error in
+            return .loadingRecordsFailed(error.localizedDescription)
+          }
+        )
       case let .editorAction(editorAction):
         switch editorAction {
         case .addButtonTapped:
-          var categories: [MoneyRecord.Category] = []
-          if let newCategory = state.editorState.category {
-            categories.append(newCategory)
-          }
-          let newRecord = MoneyRecord(
-            id: .init(),
-            date: .init(),
-            title: state.editorState.text,
-            notes: "",
-            type: state.editorState.recordType,
-            amount: Decimal(string: state.editorState.amount) ?? Decimal.zero,
-            currencyCode: state.editorState.currency.code,
-            categories: categories
-          )
           
-          let recordState = Record.State(
-            record: newRecord
-          )
+          let newRecord = moneyRecord(from: state.editorState)
           
-          state.records.append(recordState)
+          state.records.append(newRecord)
           state.recalculateTotal()
           state.editorState = .init(
             currency: .preview,
             categories: state.editorState.categories
           )
           
-          let update = AppApi.Record.Update(
-            id: newRecord.id,
-            title: newRecord.title,
-            amount: newRecord.amount,
-            type: newRecord.apiRecordType,
-            currencyCode: newRecord.currencyCode,
-            notes: newRecord.notes,
-            categoryIds: categories.map(\.id),
-            updated: dateProvider.now
-          )
-          
-          return .task(
-            operation: {
-              if let record = try await apiClient.updateRecord(update) {
-                return .recordCreated(record)
-              }
-              else {
-                return .recordCreateFailed(LocalError.cannotCreateRecord)
-              }
-            },
-            catch: { error in
-              return .recordCreateFailed(error)
-            }
-          )
+          return creating(newRecord: newRecord)
           
         default:
           return .none
@@ -255,55 +304,33 @@ public struct Main : ReducerProtocol {
       case let .editModeChanged(editMode):
         state.editMode = editMode
         return .none
-      case .recordAction(let id, let recordAction):
-        switch recordAction {
-        case .detailsAction(let recordDetailsAction):
-          switch recordDetailsAction {
-          case .deleteRecordTapped:
-            if let record = state.records[id: id] {
-              state.records.remove(id: id)
-              state.recalculateTotal()
-              return deleting(record.record)
-            }
-            return .none
-          default:
-            return .none
-          }
-        case .setSheet(isPresented: let presented):
-          if !presented, let record = state.records[id: id] {
-            return saving(record.record)
-          }
-          return .none
-        default:
-          return .none
-        }
-        
+      
       case let .delete(indexSet):
-        var records = [Record.State]()
+        var records = [MoneyRecord]()
         for i in indexSet {
           records.append(state.records[i])
         }
-        
+
         state.records.remove(atOffsets: indexSet)
         state.recalculateTotal()
-        
-        let updates = records.map { recordState in
-          var update = recordState.record.asUpdate
+
+        let updates = records.map { record in
+          var update = record.asUpdate
           update.updated = dateProvider.now
           update.deleted = dateProvider.now
           return update
         }
-        
+
         return .task(
           operation: {
-            
+
             for update in updates {
               let _ = try await apiClient.updateRecord(update)
             }
             return .deleteSuccess
           },
           catch: { error in
-            return .deleteFailed(error)
+            return .deleteFailed(error.localizedDescription)
           }
         )
         
@@ -333,20 +360,34 @@ public struct Main : ReducerProtocol {
           }
         }
         
-      case .logOutButtonTapped:
-        return EffectTask(value: .logOut)
+      case .settingsButtonTapped:
+        state.settings = Settings.State(user: .init(email: "email", id: .init()))
+        return .none
         
-      case .mainViewAppeared:
+      case .settings(.presented(.delegate(.logOutRequested))):
+        return Effect(value: .delegate(.logOut))
+      case .settings(.presented(.delegate(.deleteAcountRequested))):
+        return Effect(value: .delegate(.deleteAccount))
+      case .task:
+
+        if state.initialLoadDone  {
+          return .none
+        }
+
+        state.initialLoadDone = true
+
+        state.loading = true
+
         let base = state.currentCurrencyCode
         return .merge(
           .task(
             operation: {
               let records = try await apiClient.listRecords()
-              let recordStates = records.map { $0.asRecordState }
+              let recordStates = records.map { $0.asMoneyRecord }
               return .loadedRecords(recordStates)
             },
             catch: { error in
-              return .loadingRecordsFailed(error)
+              return .loadingRecordsFailed(error.localizedDescription)
             }
           ),
           .task(
@@ -356,7 +397,7 @@ public struct Main : ReducerProtocol {
               return .loadedCategories(localCategeries)
             },
             catch: { error in
-              return .loadingCategoriesFailed(error)
+              return .loadingCategoriesFailed(error.localizedDescription)
             }
           ),
           .task(
@@ -365,14 +406,34 @@ public struct Main : ReducerProtocol {
               return .loadedConversions(conversions)
             },
             catch: { error in
-              return .loadingConversionsFailed(error)
+              return .loadingConversionsFailed(error.localizedDescription)
             }
-          )
+          ),
+          .fireAndForget {
+            do {
+              try await apiClient.subscribeToRecordChanges(UUID())
+            } catch {
+              logger.error("error subscribing to record changed \(error)")
+            }
+          },
+          .run { send in
+            logger.info("running websocket listener")
+            do {
+              for try await recordId in apiClient.recordsChanged() {
+                logger.info("received websocket message record change")
+                  await send(.recordChanged(recordId))
+              }
+            } catch {
+              logger.error("error receiving record changed \(error)")
+            }
+
+          }
         )
         
       case .loadedRecords(let records):
-        state.records = IdentifiedArrayOf<Record.State>(uniqueElements: records)
+        state.records = IdentifiedArray(uniqueElements: records)
         state.recalculateTotal()
+        state.loading = false
         return .none
       case .loadedCategories(let categories):
         state.editorState.categories = categories
@@ -381,33 +442,118 @@ public struct Main : ReducerProtocol {
         state.conversions = conversions
         state.recalculateTotal()
         return .none
-      default:
+        
+      case .recordChanged(let recordId):
+        // we should refresh record or fetch it here
+        logger.info("record chagned event \(recordId)")
+        return .none
+      case .didTapRecord(id: let recordId):
+        guard let record = state.records[id: recordId] else {
+          return .none
+        }
+        state.editedRecord = RecordDetails.State(
+          record: record,
+          availableCategories: state.categories
+        )
+        return .none
+      case .editRecord(.dismiss):
+        guard let record = state.editedRecord?.record
+        else { return .none }
+        let oldRecord = state.records[id: record.id]
+        
+        if oldRecord != record {
+          logger.notice("dismissed edit, changed detected, saving to API")
+          let message = Logger.Message(stringLiteral: diff(oldRecord, record)!)
+          logger.notice(message)
+          return saving(record)
+        }
+        logger.notice("dismissed edit, no changed detected")
+        return .none
+      case .editRecord(.presented(.alert(.presented(RecordDetails.Action.Alert.deleteConfirm)))):
+        
+        guard let edited = state.editedRecord else {
+          return .none
+        }
+        
+        state.records.remove(id: edited.record.id)
+        state.recalculateTotal()
+
+        let updates = [edited.record.asUpdate]
+
+        return .task(
+          operation: {
+
+            for update in updates {
+              let _ = try await apiClient.updateRecord(update)
+            }
+            return .deleteSuccess
+          },
+          catch: { error in
+            return .deleteFailed(error.localizedDescription)
+          }
+        )
+      
+      case .editRecord:
+        return .none
+      case .statisticsAction(_):
+        return .none
+      case .delegate:
+        return .none
+      case .loadingRecordsFailed(_):
+        state.loading = false
+        return .none
+      case .loadingCategoriesFailed(_):
+        return .none
+      case .loadingConversionsFailed(_):
+        return .none
+      case .recordCreated(_):
+        return .none
+      case .recordCreateFailed(_):
+        return .none
+      case .deleteSuccess:
+        return .none
+      case .deleteFailed(_):
+        return .none
+      case .updateSuccess:
+        return .none
+      case .updateFailed(_):
+        return .none
+      case .settings(.presented(.delegate(.attemptImport(let records)))):
+        let moneyRecords = records.map { $0.asMoneyRecord }
+        state.records.append(contentsOf: moneyRecords )
+        let updates = moneyRecords.map {
+          creating(newRecord: $0)
+        }
+        return .merge(updates)
+        
+      case .settings:
         return .none
       }
     }
-    .forEach(\.records, action: /Action.recordAction(id:action:)) {
-      Record()
+    .ifLet(\.editedRecord, action: /Action.editRecord) {
+      RecordDetails()
+    }
+    .ifLet(\.settings, action: /Action.settings) {
+      Settings()
     }
     .ifLet(\.statistics, action: /Action.statisticsAction) {
       Statistics()
     }
-    
+
   }
 }
 
 extension AppApi.Record.Detail {
-  var asRecordState: Record.State {
-    Record.State(
-      record: .init(
-        id: id,
-        date: created,
-        title: title,
-        notes: notes ?? "",
-        type: clientRecordType,
-        amount: amount,
-        currencyCode: currencyCode,
-        categories: categories.map { $0.asLocaleCategory }
-      )
+  var asMoneyRecord: MoneyRecord {
+    .init(
+      id: id,
+      date: created,
+      title: title,
+      notes: notes ?? "",
+      type: clientRecordType,
+      amount: amount,
+      currencyCode: currencyCode,
+      categories: categories.map { $0.asLocaleCategory }
     )
   }
 }

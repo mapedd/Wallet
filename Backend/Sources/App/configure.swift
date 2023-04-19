@@ -8,6 +8,7 @@
 import Vapor
 import Fluent
 import FluentSQLiteDriver
+//import SendGrid
 import Liquid
 import LiquidLocalDriver
 @_exported import AppApi
@@ -16,6 +17,18 @@ import LiquidLocalDriver
 extension Environment {
   var isComingSoon: Bool {
     Environment.get("COMING_SOON") != nil
+  }
+  
+  var emailsDisabled: Bool {
+    Environment.get("DISABLE_EMAILS") != nil
+  }
+  
+  var mailerSendApiKey: String? {
+    if self == .testing {
+      return "TEST_API_KEY"
+    } else {
+      return Secrets.mailerSendApiKey
+    }
   }
 }
 
@@ -75,7 +88,8 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     ApiModule(),
     BlogModule(),
     RecordModule(router: .init(dateProvider: dateProvider)),
-    CurrencyModule(router: .init(dateProvider: dateProvider))
+    CurrencyModule(router: .init(dateProvider: dateProvider)),
+    CalendarModule(router: .init(dateProvider: dateProvider))
   ]
   for module in modules {
     try module.boot(app)
@@ -88,6 +102,15 @@ public func configure(_ app: Application, dateProvider: DateProvider) throws {
     app.shutdown()
     return ""
   }
+  
+  let webSocketManager = WebsocketManager(app: app)
+  app.websocketManager = webSocketManager
+  
+  app.webSocket("channel") { _, ws in
+    webSocketManager.connect(ws)
+  }
+//
+//  app.sendgrid.initialize()
   
   /// use automatic database migration
   try app.autoMigrate().wait()

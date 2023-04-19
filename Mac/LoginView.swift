@@ -54,9 +54,10 @@ struct LoginView: View {
         
         Spacer()
       }
+      .alert(self.store.scope(state: \.alert), dismiss: .alertCancelTapped)
       .padding()
-      .ignoresSafeArea(.all, edges: .all)
-      .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
+//      .ignoresSafeArea(.all, edges: .all)
+//      .frame(width: screen!.width / 3.8, height: screen!.height / 2.0)
     }
   }
 }
@@ -65,7 +66,7 @@ struct LoginView_Previews: PreviewProvider {
   static var previews: some View {
     LoginView(
       store: .init(
-        initialState: .init(),
+        initialState: .init(alert: .userNotRegistered),
         reducer: Login()
       )
     )

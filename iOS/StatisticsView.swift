@@ -51,13 +51,8 @@ struct StatisticsView: View {
         .padding()
         
         List {
-          ForEachStore(
-            self.store.scope(
-              state: \.filtered,
-              action: Statistics.Action.recordAction(id:action:)
-            )
-          ) {
-            RecordView(store: $0)
+          ForEach(viewStore.filtered) {
+            RecordView(record: $0)
           }
         }
       }

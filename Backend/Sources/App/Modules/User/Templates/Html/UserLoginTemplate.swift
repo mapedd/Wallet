@@ -11,11 +11,7 @@ import SwiftHtml
 struct UserLoginTemplate: TemplateRepresentable {
   
   var context: UserLoginContext
-  
-  init(_ context: UserLoginContext) {
-    self.context = context
-  }
-  
+
   func indexTemplate(_ req:Request) -> WebIndexContext {
     .init(
       title: context.title,
@@ -35,6 +31,22 @@ struct UserLoginTemplate: TemplateRepresentable {
         .class("lead")
         
         context.form.render(req)
+        
+        if context.showForgotPassword {
+          Section {
+            A("Forgot your password?")
+              .href(UserRouter.Route.forgotPassword.href)
+            
+          }
+        }
+        
+        if context.showRegister {
+          Section {
+            A("Register")
+              .href(UserRouter.Route.register.href)
+          }
+        }
+        
       }
       .id("user-login")
       .class("container")

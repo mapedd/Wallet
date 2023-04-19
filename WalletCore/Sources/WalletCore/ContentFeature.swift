@@ -6,11 +6,13 @@
 //
 
 
-import SwiftUI
-import ComposableArchitecture
-import IdentifiedCollections
+
 import SwiftUINavigation
+import IdentifiedCollections
+import Logging
 import AppApi
+import ComposableArchitecture
+import WalletCoreDataModel
 
 public extension User.Token.Detail {
   var toLocalToken: Token {
@@ -23,19 +25,29 @@ public extension User.Token.Detail {
 }
 
 public struct Content: ReducerProtocol {
-
+  
+  let logger = Logger(label: "com.mapedd.wallet.content")
+  
   public init() {}
   
   public enum State: Equatable {
     case loggedIn(Main.State)
     case loggedOut(Login.State)
+    
+    public var logOutCommandDisabled: Bool {
+      if case .loggedIn = self {
+        return false
+      }
+      return true
+    }
   }
   
   public enum Action {
     case loggedIn(Main.Action)
     case loggedOut(Login.Action)
     case successfullyLoggedOut
-    case viewLoaded
+    case successfullyDeletedAccount
+    case task
   }
   
   @Dependency(\.apiClient) var apiClient
@@ -50,42 +62,98 @@ public struct Content: ReducerProtocol {
     }
     Reduce { state, action in
       switch action {
-      case .loggedOut(.loggedIn(let token)):
-        keychain.saveToken(token.toLocalToken)
-        state = .loggedIn(Main.State())
-      case .loggedIn(.logOut):
-        //        state.main.loading = true// show loading indicator
-        guard let _ = keychain.readToken() else {
-          state = .loggedOut(Login.State())
-          return .none
+      
+      case .loggedOut(let loggedOutAction):
+        if case .loggedIn(let token) = loggedOutAction {
+          keychain.saveToken(token.toLocalToken)
+          state = .loggedIn(Main.State())
         }
+        return .none
         
-        return .task(
-          operation: {
-            
-            let result = try await apiClient.signOut()
-            debugPrint("result \(result)")
-            return .successfullyLoggedOut
-          }, catch: { error in
-            // we need to log out even if it failed to not be stuck here forever
-            
-            return .successfullyLoggedOut
-          }
-        )
+      case .loggedIn(let loggedInAction):
+        if loggedInAction == .delegate(.logOut) {
+          return logOut(&state)
+        }
+        else if loggedInAction == .delegate(.deleteAccount) {
+          return deleteAccount(&state)
+        }
+        return .none
+        
       case .successfullyLoggedOut:
         keychain.saveToken(nil)
         state = .loggedOut(Login.State())
         return .none
-      case .viewLoaded:
-        if keychain.readToken() != nil {
-          state = .loggedIn(Main.State())
-        }
+      case .successfullyDeletedAccount:
+        keychain.saveToken(nil)
+        state = .loggedOut(Login.State(alert: .deleted))
         return .none
-      default:
-        return .none
+      case .task:
+//        return .none
+        return taskEffect(&state, logger: logger)
       }
-      return .none
     }
   }
+  
+  private func taskEffect(_ state: inout State, logger: Logger) -> EffectTask<Action> {
+    
+    switch state {
+    case .loggedOut:
+      if keychain.readToken() != nil  {
+        logger.notice("main view appeared, has stored credentials")
+        state = .loggedIn(
+          Main.State(
+            records: []
+          )
+        )
+      } else {
+        logger.notice("main view appeared, has no stored credentials, need log in ")
+      }
+      return .none
+    case .loggedIn:
+      logger.notice("main view appeared, already logged in ")
+      return .none
+      
+    }
+  }
+  
+  private func logOut(_ state: inout State) -> Effect<Action> {
+    
+    guard let _ = keychain.readToken() else {
+      state = .loggedOut(Login.State())
+      return .none
+    }
+    
+    return .task(
+      operation: {
+        
+        let result = try await apiClient.signOut()
+        debugPrint("result \(result)")
+        return .successfullyLoggedOut
+      }, catch: { error in
+        // we need to log out even if it failed to not be stuck here forever
+        
+        return .successfullyLoggedOut
+      }
+    )
+  }
+  
+  private func deleteAccount(_ state: inout State) -> Effect<Action> {
+    guard let _ = keychain.readToken() else {
+      state = .loggedOut(Login.State())
+      return .none
+    }
+    
+    return .task(
+      operation: {
+        
+        let result = try await apiClient.deleteAccount()
+        debugPrint("result \(result)")
+        return .successfullyDeletedAccount
+      }, catch: { error in
+        // we need to log out even if it failed to not be stuck here forever
+        
+        return .successfullyDeletedAccount
+      }
+    )
+  }
 }
-

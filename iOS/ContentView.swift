@@ -27,8 +27,8 @@ struct ContentView: View {
               .navigationBarTitle("Login")
           }
         }
-        .onAppear{
-          viewStore.send(.viewLoaded)
+        .task{
+          viewStore.send(.task)
         }
       }
     }

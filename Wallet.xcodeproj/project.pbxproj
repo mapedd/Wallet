@@ -15,15 +15,16 @@
 		042A3C5628DC780400772365 /* WalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5428DC780300772365 /* WalletApp.swift */; };
 		042A3C5928DC782800772365 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 042A3C5828DC782800772365 /* ComposableArchitecture */; };
 		042A3C6128DC7A2900772365 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042A3C5528DC780400772365 /* EditorView.swift */; };
-		043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */; };
+		043BAFD528CCF9C800A5D2CE /* RecordDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043BAFD428CCF9C800A5D2CE /* RecordDetailsView.swift */; };
 		0446E396294BC85000B62C95 /* AppApi in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E395294BC85000B62C95 /* AppApi */; };
-		0446E3992950A11D00B62C95 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 0446E3982950A11D00B62C95 /* SwiftUINavigation */; };
-		0446E39E2951E19E00B62C95 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* Login.swift */; };
+		0446E39E2951E19E00B62C95 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0446E39D2951E19E00B62C95 /* LoginView.swift */; };
 		0450C6CD2992C58D0074A6C7 /* WalletCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0450C6CC2992C58D0074A6C7 /* WalletCore */; };
 		0450C6CF2992CEAE0074A6C7 /* WalletCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0450C6CE2992CEAE0074A6C7 /* WalletCore */; };
 		04515E2029929A690022404B /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04515E1F29929A690022404B /* RecordView.swift */; };
 		04515E2229929DF60022404B /* RecordDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04515E2129929DF60022404B /* RecordDetailsView.swift */; };
 		0457C0E42978A7A8007ED1FD /* MultiPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0457C0E32978A7A7007ED1FD /* MultiPicker.swift */; };
+		0474B6A829C9D9A10078ED34 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474B6A729C9D9A10078ED34 /* SettingsView.swift */; };
+		047A194229CF28D5003B51C9 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047A194129CF28D5003B51C9 /* DocumentPickerView.swift */; };
 		048ACB3F299959830067F772 /* WalletiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048ACB3E299959830067F772 /* WalletiOSTests.swift */; };
 		04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3E9F28D79CFF00C327A4 /* MainView.swift */; };
 		04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */; };
@@ -32,7 +33,6 @@
 		04C5050C29919B7F008A6FE1 /* AppApi in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5050B29919B7F008A6FE1 /* AppApi */; };
 		04C5050E29919B89008A6FE1 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5050D29919B89008A6FE1 /* SwiftKeychainWrapper */; };
 		04C5051029919BB4008A6FE1 /* XCTestDynamicOverlay in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5050F29919BB4008A6FE1 /* XCTestDynamicOverlay */; };
-		04C5051329919CB7008A6FE1 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 04C5051229919CB7008A6FE1 /* SwiftUINavigation */; };
 		04C505192991AED6008A6FE1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C505172991AED6008A6FE1 /* LoginView.swift */; };
 		04C5051C2991AEF2008A6FE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C5051A2991AEF2008A6FE1 /* MainView.swift */; };
 		04C505242991B50D008A6FE1 /* WalletMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C505232991B50D008A6FE1 /* WalletMacTests.swift */; };
@@ -71,20 +71,23 @@
 		042A3C3428DC77B900772365 /* Wallet_Mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wallet_Mac.entitlements; sourceTree = "<group>"; };
 		042A3C5428DC780300772365 /* WalletApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletApp.swift; sourceTree = "<group>"; };
 		042A3C5528DC780400772365 /* EditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
-		043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetails.swift; sourceTree = "<group>"; };
-		0446E39D2951E19E00B62C95 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		043BAFD428CCF9C800A5D2CE /* RecordDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailsView.swift; sourceTree = "<group>"; };
+		0446E39D2951E19E00B62C95 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		04515E1F29929A690022404B /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		04515E2129929DF60022404B /* RecordDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailsView.swift; sourceTree = "<group>"; };
 		04560432298EE8C6005031A8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0457C0E32978A7A7007ED1FD /* MultiPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPicker.swift; sourceTree = "<group>"; };
+		0474B6A729C9D9A10078ED34 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		047A194129CF28D5003B51C9 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
+		047A194329CF32E8003B51C9 /* Wallet--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Wallet--iOS--Info.plist"; sourceTree = "<group>"; };
 		048ACB3C299959830067F772 /* WalletiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WalletiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		048ACB3E299959830067F772 /* WalletiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletiOSTests.swift; sourceTree = "<group>"; };
-		0498B58529965DC2004C2613 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = "<group>"; };
 		049CDBAB298D3CBB00ED3FC0 /* config.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = config.yml; path = .circleci/config.yml; sourceTree = "<group>"; };
 		049CDBB0298D3CC000ED3FC0 /* Appfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Appfile; sourceTree = "<group>"; };
 		049CDBB1298D3CC000ED3FC0 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		04AB3E9F28D79CFF00C327A4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoneyRecord+UI.swift"; sourceTree = "<group>"; };
+		04B96A4329D5E01000BD32E8 /* swift-secrets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swift-secrets"; sourceTree = "<group>"; };
 		04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewMultiPlatform.swift; sourceTree = "<group>"; };
 		04C505172991AED6008A6FE1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		04C5051A2991AEF2008A6FE1 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -109,7 +112,6 @@
 				042A3C5928DC782800772365 /* ComposableArchitecture in Frameworks */,
 				04C5050C29919B7F008A6FE1 /* AppApi in Frameworks */,
 				04C5051029919BB4008A6FE1 /* XCTestDynamicOverlay in Frameworks */,
-				04C5051329919CB7008A6FE1 /* SwiftUINavigation in Frameworks */,
 				04C5050E29919B89008A6FE1 /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +138,6 @@
 				04B868A1298ED1BA0031C525 /* XCTestDynamicOverlay in Frameworks */,
 				04CCED9128C2881C00C68DB8 /* ComposableArchitecture in Frameworks */,
 				0446E396294BC85000B62C95 /* AppApi in Frameworks */,
-				0446E3992950A11D00B62C95 /* SwiftUINavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,16 +198,18 @@
 			children = (
 				04CCED5328C2879600C68DB8 /* WalletApp.swift */,
 				04CCED5428C2879600C68DB8 /* ContentView.swift */,
-				0446E39D2951E19E00B62C95 /* Login.swift */,
+				0446E39D2951E19E00B62C95 /* LoginView.swift */,
 				04AB3E9F28D79CFF00C327A4 /* MainView.swift */,
 				04C1C8E528D9C5C1009E0B0A /* EditViewMultiPlatform.swift */,
-				043BAFD428CCF9C800A5D2CE /* RecordDetails.swift */,
+				043BAFD428CCF9C800A5D2CE /* RecordDetailsView.swift */,
 				0457C0E32978A7A7007ED1FD /* MultiPicker.swift */,
 				0421FC2C28C697A600487827 /* SummaryView.swift */,
 				0425AE5628C9356A0032A4FD /* StatisticsView.swift */,
 				04CCED9228C28E8D00C68DB8 /* EditorView.swift */,
 				04CCED9528C2AD6C00C68DB8 /* RecordView.swift */,
 				04AB3EA228D79EF400C327A4 /* MoneyRecord+UI.swift */,
+				047A194129CF28D5003B51C9 /* DocumentPickerView.swift */,
+				0474B6A729C9D9A10078ED34 /* SettingsView.swift */,
 				04CCED5528C2879800C68DB8 /* Assets.xcassets */,
 			);
 			path = iOS;
@@ -223,7 +226,8 @@
 		04CCED4D28C2879600C68DB8 = {
 			isa = PBXGroup;
 			children = (
-				0498B58529965DC2004C2613 /* Scripts */,
+				04B96A4329D5E01000BD32E8 /* swift-secrets */,
+				047A194329CF32E8003B51C9 /* Wallet--iOS--Info.plist */,
 				04DD65EE2992BA4700D227BD /* WalletCore */,
 				04560432298EE8C6005031A8 /* README.md */,
 				049CDBAC298D3CC000ED3FC0 /* fastlane */,
@@ -270,7 +274,6 @@
 				04C5050B29919B7F008A6FE1 /* AppApi */,
 				04C5050D29919B89008A6FE1 /* SwiftKeychainWrapper */,
 				04C5050F29919BB4008A6FE1 /* XCTestDynamicOverlay */,
-				04C5051229919CB7008A6FE1 /* SwiftUINavigation */,
 				0450C6CE2992CEAE0074A6C7 /* WalletCore */,
 			);
 			productName = "Wallet Mac";
@@ -329,7 +332,6 @@
 			packageProductDependencies = (
 				04CCED9028C2881C00C68DB8 /* ComposableArchitecture */,
 				0446E395294BC85000B62C95 /* AppApi */,
-				0446E3982950A11D00B62C95 /* SwiftUINavigation */,
 				04B868A0298ED1BA0031C525 /* XCTestDynamicOverlay */,
 				0450C6CC2992C58D0074A6C7 /* WalletCore */,
 			);
@@ -374,7 +376,6 @@
 			mainGroup = 04CCED4D28C2879600C68DB8;
 			packageReferences = (
 				04CCED8F28C2881C00C68DB8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 				0446E3A3295267FA00B62C95 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */,
 			);
@@ -466,11 +467,13 @@
 				0421FC2D28C697A600487827 /* SummaryView.swift in Sources */,
 				04CCED7D28C2879800C68DB8 /* ContentView.swift in Sources */,
 				04CCED7B28C2879800C68DB8 /* WalletApp.swift in Sources */,
-				0446E39E2951E19E00B62C95 /* Login.swift in Sources */,
+				0446E39E2951E19E00B62C95 /* LoginView.swift in Sources */,
 				04AB3EA028D79CFF00C327A4 /* MainView.swift in Sources */,
 				04C1C8E628D9C5C1009E0B0A /* EditViewMultiPlatform.swift in Sources */,
-				043BAFD528CCF9C800A5D2CE /* RecordDetails.swift in Sources */,
+				043BAFD528CCF9C800A5D2CE /* RecordDetailsView.swift in Sources */,
+				047A194229CF28D5003B51C9 /* DocumentPickerView.swift in Sources */,
 				04AB3EA328D79EF400C327A4 /* MoneyRecord+UI.swift in Sources */,
+				0474B6A829C9D9A10078ED34 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,12 +499,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Mac/Wallet_Mac.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mac/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = F8544XK3Q3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -511,10 +514,11 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mapedd.wallet.Wallet-Mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -527,12 +531,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Mac/Wallet_Mac.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mac/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = F8544XK3Q3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -542,10 +546,11 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mapedd.wallet.Wallet-Mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -754,6 +759,7 @@
 				DEVELOPMENT_TEAM = F8544XK3Q3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Wallet--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -784,6 +790,7 @@
 				DEVELOPMENT_TEAM = F8544XK3Q3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Wallet--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -856,14 +863,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swiftui-navigation.git";
-			requirement = {
-				kind = exactVersion;
-				version = 0.6.1;
-			};
-		};
 		0446E3A3295267FA00B62C95 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
@@ -884,8 +883,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
 			requirement = {
-				kind = exactVersion;
-				version = 0.50.1;
+				kind = revision;
+				revision = bcf5683aecdba339d309848c50b7f33fed887709;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -899,11 +898,6 @@
 		0446E395294BC85000B62C95 /* AppApi */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppApi;
-		};
-		0446E3982950A11D00B62C95 /* SwiftUINavigation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
-			productName = SwiftUINavigation;
 		};
 		0450C6CC2992C58D0074A6C7 /* WalletCore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -931,11 +925,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 04B8689F298ED1BA0031C525 /* XCRemoteSwiftPackageReference "xctest-dynamic-overlay" */;
 			productName = XCTestDynamicOverlay;
-		};
-		04C5051229919CB7008A6FE1 /* SwiftUINavigation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0446E3972950A11D00B62C95 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
-			productName = SwiftUINavigation;
 		};
 		04CCED9028C2881C00C68DB8 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

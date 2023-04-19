@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import AppApi
+import WalletCoreDataModel
 
 public extension Currency.List {
   static var examples: [Currency.List] {
@@ -81,7 +82,7 @@ public struct Editor: ReducerProtocol {
   
   
   
-  public enum Action:BindableAction {
+  public enum Action:BindableAction, Equatable {
     case binding(BindingAction<State>)
     case changeRecordType(MoneyRecord.RecordType)
     case addButtonTapped

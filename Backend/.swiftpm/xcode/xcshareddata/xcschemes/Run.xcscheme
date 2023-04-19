@@ -66,16 +66,17 @@
             argument = "migrate  --auto-migrate"
             isEnabled = "NO">
          </CommandLineArgument>
-         <CommandLineArgument
-            argument = ""
-            isEnabled = "YES">
-         </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "COMING_SOON"
             value = ""
-            isEnabled = "YES">
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "DISABLE_EMAILS"
+            value = "1"
+            isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "SERVER_URL"

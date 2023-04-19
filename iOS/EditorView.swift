@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import AppApi
 import WalletCore
+import WalletCoreDataModel
 
 struct EditorView: View {
   var store: StoreOf<Editor>

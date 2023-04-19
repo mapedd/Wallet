@@ -27,7 +27,7 @@ public struct Summary: ReducerProtocol {
     public var baseCurrencyCode: String
   }
   
-  public enum Action {
+  public enum Action: Equatable {
     case showSummaryButtonTapped
     case hideSummary
   }

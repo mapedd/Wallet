@@ -19,17 +19,24 @@ platform :ios do
 
   before_all do
     setup_circle_ci
-    unlock_keychain
+#    unlock_keychain
   end
 
   desc "Builds and tests iOS app"
-  lane :tests do
+  lane :tests_app do
     run_tests(
       project: "Wallet.xcodeproj",
       devices: ["iPhone 14"],
       scheme: "Wallet (iOS)"
     )
   end
+  
+  desc "Builds and tests WalletCore"
+  lane :tests_core do
+    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreTests\" test")
+  end
+  
+      
 
 end
 
@@ -37,21 +44,41 @@ platform :mac do
 
   before_all do
     setup_circle_ci
-    unlock_keychain
+    #unlock_keychain
   end
 
+  desc "Builds server and run unit tests"
   lane :tests_server do
     sh("cd ..")
     sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"AppTests\" test")
-    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreIntegrationTests\" test")
   end
   
-    desc "Builds and tests iOS app"
+  desc "bulds Core library and does integration tests app"
+  lane :test_integration do
+      sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreIntegrationTests\" test")
+  end
+  
+  desc "Builds and tests Mac app"
   lane :tests_mac_app do
-    #run_tests(
-    #  project: "Wallet.xcodeproj",
-    #  scheme: "Wallet Mac"
-    #)
+    run_tests(
+      project: "Wallet.xcodeproj",
+      scheme: "Wallet Mac"
+    )
+  end
+  
+  desc "Builds and tests WalletCore"
+  lane :tests_mac_core do
+    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreTests\" test")
+  end
+  
+  desc "Builds and tests WalletCLI"
+  lane :tests_mac_walletcli do
+    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"WalletCoreCLI\" build")
+  end
+  
+    desc "Builds and swift-secrets package"
+  lane :tests_mac_swift_secrets do
+    sh("xcodebuild -project \"../Wallet.xcodeproj\" -scheme \"swift-secrets\" build")
   end
 
 end

@@ -8,6 +8,7 @@
 @testable import App
 import XCTVapor
 import FluentKit
+import AppTestingHelpers
 
 class AppTestCase: XCTestCase {
   
@@ -20,7 +21,7 @@ class AppTestCase: XCTestCase {
   
   func createTestApp(dateProvider: DateProvider = .init(currentDate: { Date() })) throws -> Application {
     let app = Application(.testing)
-    
+    app.prepareCustomClient()
     do {
       try configure(app, dateProvider: dateProvider)
       try app.autoMigrate().wait()
@@ -52,7 +53,7 @@ class AppTestCase: XCTestCase {
   
   func register(_ userLogin: UserLogin, _ app: Application) throws -> User.Account.Detail {
     var user: User.Account.Detail?
-    try app.test(.POST, "/api/register/", beforeRequest: { req in
+    try app.test(.POST, UserRouter.Route.register.path, beforeRequest: { req in
       try req.content.encode(userLogin)
     }, afterResponse: { res in
       XCTAssertContent(User.Account.Detail.self, res) { content in
@@ -68,7 +69,7 @@ class AppTestCase: XCTestCase {
   
   func authenticate(_ user: UserLogin, _ app: Application) throws -> User.Token.Detail {
     var token: User.Token.Detail?
-    try app.test(.POST, "/api/sign-in/", beforeRequest: { req in
+    try app.test(.POST, UserRouter.Route.signIn.path, beforeRequest: { req in
       try req.content.encode(user)
     }, afterResponse: { res in
       XCTAssertContent(User.Token.Detail.self, res) { content in
@@ -84,7 +85,7 @@ class AppTestCase: XCTestCase {
   
   func signOut(_ token: String, _ app: Application) throws -> ActionResult {
     var result: ActionResult?
-    try app.test(.GET, "/api/sign-out/", beforeRequest: { req in
+    try app.test(.GET, UserRouter.Route.signOut.path, beforeRequest: { req in
       req.headers.bearerAuthorization = BearerAuthorization(token: token)
     }, afterResponse: { res in
       XCTAssertContent(ActionResult.self, res) { content in
@@ -106,7 +107,9 @@ class AppTestCase: XCTestCase {
     app: Application,
     login: UserLogin = .tomBob
   ) async throws -> User.Token.Detail {
+    app.prepareCustomClient()
     let _ = try register(login, app)
+    try await app.confirm(email: login.email)
     return try authenticate(login, app)
   }
 }

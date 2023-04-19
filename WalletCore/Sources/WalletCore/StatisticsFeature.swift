@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import AppApi
+import WalletCoreDataModel
 
 extension MoneyRecord {
   func apply(filter: Statistics.State.Filter) -> Bool {
@@ -24,9 +25,11 @@ public struct Statistics: ReducerProtocol {
 
   public init() {}
   
-  public struct State: Equatable {
+  public struct State: Equatable, Identifiable {
     
-    public var records: IdentifiedArrayOf<Record.State> = []
+    public var id = UUID()
+    
+    public var records: IdentifiedArrayOf<MoneyRecord> = []
     public var filter: Filter = .expenseType(.expense)
     public var dateFilter: Filter = .dateRange(.thisWeek)
     public var showDateFilter = false
@@ -122,11 +125,11 @@ public struct Statistics: ReducerProtocol {
     }
     
     public var filteredTotal: Decimal  {
-      let sum = filtered.reduce(Decimal.zero, { partialResult, recordState in
-        if recordState.record.type == .expense {
-          return partialResult - recordState.record.amount
-        } else if recordState.record.type == .income {
-          return partialResult + recordState.record.amount
+      let sum = filtered.reduce(Decimal.zero, { partialResult, record in
+        if record.type == .expense {
+          return partialResult - record.amount
+        } else if record.type == .income {
+          return partialResult + record.amount
         } else {
           fatalError("not handled record type")
         }
@@ -135,54 +138,49 @@ public struct Statistics: ReducerProtocol {
     }
     
     
-    func filter(using filter: Filter) -> IdentifiedArrayOf<Record.State> {
-      records.filter { recordState in
-        recordState.record.apply(filter: filter)
+    func filter(using filter: Filter) -> IdentifiedArrayOf<MoneyRecord> {
+      records.filter { record in
+        record.apply(filter: filter)
       }
     }
     
-    public var filtered: IdentifiedArrayOf<Record.State> {
+    public var filtered: IdentifiedArrayOf<MoneyRecord> {
       records
         .filter {
-          $0.record.apply(filter: self.dateFilter)
+          $0.apply(filter: self.dateFilter)
         }
         .filter {
-          $0.record.apply(filter: self.filter)
+          $0.apply(filter: self.filter)
         }
     }
     
     public static let preview = Self.init(records: [
-      Record.State(
-        record: .init(
-          id: .init(),
-          date: .init(),
-          title: "sample expense",
-          notes: "",
-          type: .expense,
-          amount: Decimal(123),
-          currencyCode: "EUR",
-          categories: []
-        )
+      .init(
+        id: .init(),
+        date: .init(),
+        title: "sample expense",
+        notes: "",
+        type: .expense,
+        amount: Decimal(123),
+        currencyCode: "EUR",
+        categories: []
       ),
-      Record.State(
-        record: .init(
-          id: .init(),
-          date: .init(),
-          title: "sample income",
-          notes: "",
-          type: .income,
-          amount: Decimal(222),
-          currencyCode: "EUR",
-          categories: []
-        )
+      .init(
+        id: .init(),
+        date: .init(),
+        title: "sample income",
+        notes: "",
+        type: .income,
+        amount: Decimal(222),
+        currencyCode: "EUR",
+        categories: []
       ),
     ],
                                    baseCurrency: "USD")
   }
   
-  public enum Action {
+  public enum Action: Equatable {
     case changeFilter(State.Filter)
-    case recordAction(id: Record.State.ID, action: Record.Action)
     case changeDateFilter(State.Filter)
   }
   
@@ -192,16 +190,10 @@ public struct Statistics: ReducerProtocol {
       case .changeFilter(let filter):
         state.filter = filter
         return .none
-      case .recordAction:
-        return .none
       case .changeDateFilter(let filter):
         state.dateFilter = filter
         return .none
       }
     }
-    .forEach(\.records, action: /Action.recordAction(id:action:)) {
-      Record()
-    }
-    
   }
 }

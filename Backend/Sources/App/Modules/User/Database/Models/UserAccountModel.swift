@@ -15,6 +15,10 @@ final class UserAccountModel: DatabaseModelInterface {
     struct v1 {
       static var email: FieldKey { "email" }
       static var password: FieldKey { "password" }
+      static var created: FieldKey { "created" }
+      static var updated: FieldKey { "updated" }
+      static var deleted: FieldKey { "deleted" }
+      static var emailConfirmed: FieldKey { "email_confirmed" }
     }
   }
   
@@ -25,6 +29,18 @@ final class UserAccountModel: DatabaseModelInterface {
   
   @Field(key: FieldKeys.v1.password)
   var password: String
+  
+  @Timestamp(key: FieldKeys.v1.created, on: .create, format: .iso8601)
+  var created: Date?
+  
+  @Timestamp(key: FieldKeys.v1.updated, on: .update, format: .iso8601)
+  var updated: Date?
+  
+  @Timestamp(key: FieldKeys.v1.deleted, on: .delete, format: .iso8601)
+  var deleted: Date?
+  
+  @Field(key: FieldKeys.v1.emailConfirmed)
+  var emailConfirmed: Date?
   
   @Children(for: \.$user)
   var records: [RecordModel]
