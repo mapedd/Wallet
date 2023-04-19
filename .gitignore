@@ -1,9 +1,9 @@
 ## User settings
-*/xcuserdata/
-xcuserdata/
-**/xcuserdata/**
+# */xcuserdata/
+# xcuserdata/
+# **/xcuserdata/**
 
-**/xcschememanagement.plist
+# **/xcschememanagement.plist
 **/Breakpoints_v2.xcbkptlist
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
